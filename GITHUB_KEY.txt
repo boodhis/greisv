@@ -1,1 +1,0 @@
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOK2fKVhsKbWkPUBDI8+/Sp0EfmsnWdybIQCf5mYtvJX homelab-obsid-deploy
