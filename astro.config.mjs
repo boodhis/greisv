@@ -41,6 +41,7 @@ export default defineConfig({
 						{ label: 'Transmission', slug: 'services/transmission' },
 						{ label: 'Navidrome', slug: 'services/navidrome' },
 						{ label: 'Immich', slug: 'services/immich' },
+						{ label: 'SOPDS (библиотека)', slug: 'services/sopds' },
 						{ label: 'MQTT / ESPHome', slug: 'services/mqtt' },
 					],
 				},
