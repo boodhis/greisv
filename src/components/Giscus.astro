@@ -1,0 +1,69 @@
+---
+// Giscus comments component
+// Uses GitHub Discussions for commenting
+---
+
+<div id="giscus-container" class="giscus"></div>
+
+<script>
+  // Giscus configuration
+  // Replace these values with your own after setting up Giscus
+  const GISCUS_CONFIG = {
+    repo: 'boodhis/greisv',
+    repoId: '', // Get this from https://giscus.app/
+    category: 'Announcements',
+    categoryId: '', // Get this from https://giscus.app/
+    mapping: 'pathname',
+    reactionsEnabled: '1',
+    emitMetadata: '0',
+    inputPosition: 'top',
+    theme: 'dark',
+    lang: 'ru'
+  };
+
+  // Load Giscus script
+  function loadGiscus() {
+    const container = document.getElementById('giscus-container');
+    if (!container) return;
+
+    // Check if Giscus is already loaded
+    if (document.querySelector('script.giscus-frame')) return;
+
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/widget.js';
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    
+    // Set attributes
+    Object.entries(GISCUS_CONFIG).forEach(([key, value]) => {
+      script.setAttribute('data-repo', GISCUS_CONFIG.repo);
+      script.setAttribute('data-repo-id', GISCUS_CONFIG.repoId);
+      script.setAttribute('data-category', GISCUS_CONFIG.category);
+      script.setAttribute('data-category-id', GISCUS_CONFIG.categoryId);
+      script.setAttribute('data-mapping', GISCUS_CONFIG.mapping);
+      script.setAttribute('data-reactions-enabled', GISCUS_CONFIG.reactionsEnabled);
+      script.setAttribute('data-emit-metadata', GISCUS_CONFIG.emitMetadata);
+      script.setAttribute('data-input-position', GISCUS_CONFIG.inputPosition);
+      script.setAttribute('data-theme', GISCUS_CONFIG.theme);
+      script.setAttribute('data-lang', GISCUS_CONFIG.lang);
+    });
+
+    container.appendChild(script);
+  }
+
+  // Load Giscus when page loads
+  document.addEventListener('DOMContentLoaded', loadGiscus);
+  
+  // Also try to load immediately in case DOMContentLoaded already fired
+  if (document.readyState === 'complete') {
+    loadGiscus();
+  }
+</script>
+
+<style>
+  .giscus {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--sl-color-gray-5);
+  }
+</style>
