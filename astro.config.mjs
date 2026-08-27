@@ -4,6 +4,7 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
+	site: 'https://boodhis.github.io/greisv/',
 	integrations: [
 		starlight({
 			title: 'Цифровая Крепость',

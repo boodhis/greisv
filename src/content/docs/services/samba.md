@@ -78,7 +78,7 @@ sudo systemctl enable smbd
 
 #### Linux/Mac
 ```bash
-#临时
+# Временно
 smbclient //192.168.1.100/Share -U iva
 
 # Постоянное монтирование
