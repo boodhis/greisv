@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Автоматическое выключение сервера — Цифровая Крепость</title>
+<meta name="description" content="Настройка таймера выключения сервера">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--line:#21262d;--text:#e6edf3;--dim:#8b98a8;--accent:#4fc3f7;--code:#1f6feb;--green:#3fb950;--tip:#1f6feb;--note:#8957e5}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;line-height:1.65;font-size:16px}
+.layout{display:flex;min-height:100vh}
+aside{width:270px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);padding:16px 12px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{font-size:17px;font-weight:700;color:var(--accent);padding:6px 10px 14px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.ngroup{margin-bottom:10px}
+.ngt{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);padding:6px 10px 4px}
+a.nli{display:block;padding:6px 12px;color:var(--text);text-decoration:none;border-radius:6px;font-size:14px}
+a.nli:hover{background:#21262d;color:#fff}
+a.nli.on{background:var(--accent);color:#04141f;font-weight:600}
+a.nmain{display:block;padding:7px 10px;color:var(--accent);text-decoration:none;font-weight:600;border-radius:6px;font-size:14px}
+a.nmain:hover{background:#21262d}
+main{flex:1;padding:40px 48px;max-width:860px}
+h1{font-size:30px;margin-bottom:6px;color:var(--accent)}
+.desc{color:var(--dim);margin-bottom:26px;font-size:16px}
+h2{font-size:23px;margin:30px 0 12px;color:var(--accent);border-bottom:1px solid var(--line);padding-bottom:6px}
+h3{font-size:19px;margin:24px 0 10px}
+h4{font-size:16px;margin:18px 0 8px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 16px 22px}
+li{margin:3px 0}
+a{color:var(--accent)}
+a:hover{text-decoration:none}
+code{background:#21262d;padding:2px 6px;border-radius:4px;font-family:ui-monospace,Consolas,monospace;font-size:.88em;color:var(--green)}
+pre{background:#0b0e14;border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto;margin:0 0 16px}
+pre code{background:transparent;padding:0;color:var(--green)}
+table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:14px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+th{background:var(--panel);color:var(--accent);font-weight:600}
+tr:nth-child(even) td{background:#14181f}
+hr{border:none;border-top:1px solid var(--line);margin:24px 0}
+em{color:var(--dim)}
+.callout{border-left:4px solid var(--tip);background:rgba(31,111,239,.08);border-radius:6px;padding:12px 14px;margin:0 0 16px}
+.callout-note{border-color:var(--note);background:rgba(137,87,229,.08)}
+.callout-warning{border-color:#e3b341;background:rgba(227,179,65,.08)}
+.callout-t{color:var(--accent);font-size:13px;text-transform:uppercase;letter-spacing:.04em}
+.callout-body p:last-child{margin-bottom:0}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);color:var(--dim);font-size:13px}
+@media(max-width:820px){.layout{flex-direction:column}aside{width:100%;height:auto;position:static}main{padding:24px 18px}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside><div class="brand">🛡️ Цифровая Крепость</div>
+<a class="nmain" href="../index.html">Главная</a>
+<div class="ngroup"><div class="ngt">С чего начать</div><a class="nli" href="../getting-started/index.html">Обзор</a><a class="nli" href="../getting-started/install-ubuntu.html">Установка Ubuntu</a><a class="nli" href="../getting-started/first-steps.html">Первые шаги</a><a class="nli" href="../getting-started/bootable-usb.html">Загрузочная флешка</a></div>
+<div class="ngroup"><div class="ngt">Homelab</div><a class="nli" href="../homelab/index.html">Концепция</a><a class="nli" href="../homelab/hardware.html">Железо</a><a class="nli" href="../homelab/network.html">Сеть</a><a class="nli" href="../homelab/server-reference.html">Справочник сервера</a></div>
+<div class="ngroup"><div class="ngt">Сервисы</div><a class="nli" href="../services/index.html">Обзор</a><a class="nli" href="../services/docker.html">Docker</a><a class="nli" href="../services/samba.html">Samba</a><a class="nli" href="../services/minidlna.html">MiniDLNA</a><a class="nli" href="../services/transmission.html">Transmission</a><a class="nli" href="../services/navidrome.html">Navidrome</a><a class="nli" href="../services/immich.html">Immich</a><a class="nli" href="../services/sopds.html">SOPDS</a><a class="nli" href="../services/mqtt.html">MQTT / ESPHome</a></div>
+<div class="ngroup"><div class="ngt">Гайды</div><a class="nli" href="../guides/index.html">Обзор</a><a class="nli" href="../guides/disk-health.html">Диски и SMART</a><a class="nli" href="../guides/diagnostics.html">Диагностика</a><a class="nli" href="../guides/backup.html">Бекапы</a><a class="nli" href="../guides/ssh.html">SSH</a><a class="nli" href="../guides/terminal.html">Терминал</a><a class="nli" href="../guides/wifi-fix.html">Wi-Fi фикс</a><a class="nli" href="../guides/auto-setup.html">Автосборка</a><a class="nli" href="../guides/journalctl.html">journalctl</a><a class="nli on" href="../guides/auto-shutdown.html">Авто-выключение</a></div>
+<div class="ngroup"><div class="ngt">Ресурсы</div><a class="nli" href="../resources/links.html">Ссылки</a><a class="nli" href="../resources/git-commands.html">Git команды</a><a class="nli" href="../resources/inxi.html">INXI</a><a class="nli" href="../resources/opencode-windows.html">OpenCode на Windows</a></div>
+<div class="ngroup"><div class="ngt">Хобби</div><a class="nli" href="../hobbies/index.html">Досуг</a><a class="nli" href="../hobbies/guitar.html">Гитара</a></div>
+</aside>
+<main>
+<h2>Автоматическое выключение сервера</h2>
+<p>Если сервер работает только для медиа и не нужен ночью, можно настроить автоматическое выключение. Это экономит электричество и продлевает жизнь железу.</p>
+<h3>Вариант 1: Разовое выключение</h3>
+<p>Когда сел смотреть фильм и знаешь, через сколько часов пойдёшь спать:</p>
+<pre><code># Выключить через 2 часа (120 минут)
+sudo shutdown -h +120
+
+# Выключить ровно в 23:30
+sudo shutdown -h 23:30</code></pre>
+<div class="callout callout-tip"><h4 class="callout-t">Разбор команды</h4><div class="callout-body"><ul><li><code>shutdown</code> — команда выключения/перезагрузки</li><li><code>-h</code> — выключение (halt)</li><li><code>+120</code> — через 120 минут</li><li><code>23:30</code> — в точное время</li></ul></div></div>
+<h4>Отмена таймера</h4>
+<p>Если передумал и хочешь продолжить работу:</p>
+<pre><code>sudo shutdown -c</code></pre>
+<div class="callout callout-tip"><h4 class="callout-t">Разбор команды</h4><div class="callout-body"><p><code>-c</code> — отмена запланированного выключения. Система напишет <code>Shutdown cancelled</code>.</p></div></div>
+<h3>Вариант 2: Постоянное расписание</h3>
+<p>Чтобы сервер автоматически выключался каждую ночь (например, в 01:30):</p>
+<pre><code>sudo crontab -e</code></pre>
+<p>Добавь в конец файла:</p>
+<pre><code>30 1 * * * /sbin/poweroff</code></pre>
+<div class="callout callout-tip"><h4 class="callout-t">Разбор команды</h4><div class="callout-body"><ul><li><code>30</code> — минуты (30 минут)</li><li><code>1</code> — часы (1 час ночи)</li><li><code><em> </em> *</code> — каждый день, каждый месяц, каждый день недели</li><li><code>/sbin/poweroff</code> — путь к команде безопасного выключения</li></ul></div></div>
+<p>Сохрани файл (<code>Ctrl+O</code>, <code>Enter</code>, <code>Ctrl+X</code>) и сервер будет выключаться каждую ночь в 01:30.</p>
+<h3>Проверка расписания</h3>
+<pre><code># Посмотреть текущее расписание
+sudo crontab -l
+
+# Удалить расписание
+sudo crontab -r</code></pre>
+<div class="callout callout-tip"><h4 class="callout-t">Разбор команды</h4><div class="callout-body"><ul><li><code>-l</code> — показать текущий crontab</li><li><code>-r</code> — удалить весь crontab</li></ul></div></div>
+<h3>Автоматическое включение</h3>
+<p>Сервер можно настроить на автоматическое включение при подаче питания:</p>
+<ol><li>Зайди в BIOS (Del или F2 при загрузке)</li><li>Найди раздел <strong>Power Management</strong></li><li>Включи опцию <strong>Restore on AC Power Loss</strong> (или аналогичную)</li><li>Сохрани и выйди</li></ol>
+<p>Теперь при включении питания (после отключения электричества) сервер автоматически запустится.</p>
+<h3>Готово!</h3>
+<p>Теперь ты можешь: - ✅ Выключать сервер по таймеру - ✅ Настраивать постоянное расписание - ✅ Автоматически включать сервер при подаче питания</p>
+<hr/>
+<p><em>Автоматическое выключение — простой способ экономить электричество и продлевать жизнь железу.</em></p>
+<footer>Цифровая Крепость — образовательный сайт о Linux и homelab. Все примеры проверены на реальном сервере.</footer>
+</main>
+</div>
+</body>
+</html>
