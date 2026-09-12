@@ -1,68 +1,73 @@
 # Цифровая Крепость
 
-Образовательный сайт о Linux и homelab-самостоятельности.
+Образовательный сайт о Linux, homelab и самостоятельном администрировании.
+Статический сайт на GitHub Pages: **https://boodhis.github.io/greisv/**
 
-Простой статичный HTML-сайт на GitHub Pages: `https://boodhis.github.io/greisv/`
+Проект собран максимально бесплатно и из открытого кода: только HTML/CSS/JS,
+никакого `npm` и сборки. Вся логика — в браузере (localStorage), сайт умеет
+работать офлайн (PWA).
+
+## Что внутри
+
+- **🔁 Тренажёр карточек** (`study/words.html`) — интервальное повторение
+  (слова, команды терминала, гитара, лады), прогресс в `localStorage`.
+- **🗒 Шпаргалки** (`study/cheatsheets.html`) — git, systemd, Docker, сеть.
+- **⚡ Электрика** (`electric/`) — безопасность, щиты и автоматы, кабели, умный дом.
+- **🏗 Манифест** (`manifest.html`) — принципы: бесплатно, открыто, офлайн.
+- **📴 PWA**: `sw.js` (офлайн-кеш), `manifest.webmanifest`, иконки.
+- **🎨 «Стена Крепости»** — холст на главной; роспись сохраняется в браузере.
+- Виджет **«Слово дня»** — в футере страниц.
 
 ## Структура
 
 ```
 /
-├── index.html          — Главная
-├── getting-started/    — С чего начать (Linux)
-├── homelab/            — Концепция, железо, сеть, сервер
-├── services/           — Сервисы (Docker, Samba, Navidrome, ...)
-├── guides/             — Гайды и инструкции
-├── resources/          — Полезные ссылки
-├── hobbies/            — Хобби (досуг, гитара)
-├── favicon.svg         — Иконка сайта
-└── _src/               — Исходники (генерируются по желанию)
-    ├── convert.py      — Конвертер Markdown → HTML
-    └── content-docs/   — Исходники контента в Markdown
+├── index.html                 — Главная (hero, карточки, стена)
+├── manifest.html              — Манифест проекта
+├── style.css                  — Единая тёмная тема
+├── sw.js / manifest.webmanifest / icon-192.png / icon-512.png — PWA/офлайн
+├── study/                     — «Обучение»: тренажёр, шпаргалки
+│   └── data/  deck.js · srs.js · wordday.js · widget.js
+├── electric/                  — «Электрика» (генерируется gen/gen_electric.py)
+├── getting-started/ homelab/ services/ guides/ resources/ hobbies/
+│                              — разделы-статьи (исторически первый контент)
+├── gen/                       — Генераторы (см. ниже)
+└── tests/test_site.py         — Проверки сайта
 ```
 
-Никакой сборки, никакого `npm`. Это просто HTML-файлы — их можно открыть сразу в браузере или закоммитить в git.
-
-## Как править сайт через VS Code (Remote-SSH)
-
-Сайт живёт на сервере `iva@192.168.0.244` в `~/greisv/`. Проще всего править его удалённо через VS Code:
-
-1. Открой VS Code.
-2. `Ctrl+Shift+P` → **Remote-SSH: Connect to Host…** → выбери/введи `iva@192.168.0.244` (вход по SSH-ключу).
-3. `File → Open Folder…` → укажи `~/greisv`.
-4. В проводнике слева открывай нужный `.html` (например `services/docker.html`) и правь текст.
-5. `Ctrl+S` — сохрани. Изменения сразу локальные в этом файле.
-6. Коммит: `Ctrl+Shift+G` (панель Git) → подпиши сообщение → жми **✓ Commit**, затем **↻ Sync/Push** (или в терминале: `git add . && git commit -m "..." && git push`).
-7. GitHub Actions автоматически задеплоит сайт на GitHub Pages. Через ~1 мин проверь на `https://boodhis.github.io/greisv/`.
-
-Полезные плагины: **Live Server** (правый клик по `index.html` → «Open with Live Server» для локального предпросмотра), **HTML CSS Support**.
-
-## Проще: как добавить/изменить страницу
-
-- **Поправить текст** — открой нужный `.html`, найди текст, отредактируй.
-- **Добавить пункт в навигацию** — открой любой `.html`, найди блок `<aside>…</aside>`, скопируй строку `<a class="nli" href="...">…</a>` и добавь новую.
-- **Добавить страницу** — скопируй существующий `.html`, переименуй, отредактируй содержимое `<main>…</main>`, добавь ссылку на неё в навигацию всех страниц.
-
-## Регенерация из Markdown-исходников (опционально)
-
-Если хочется вести контент в Markdown, а не в HTML:
-
-1. Отредактируй файл в `_src/content-docs/` (например `_src/content-docs/services/docker.md`).
-2. Сгенерируй сайт:
+## Быстрый старт
 
 ```bash
-cd ~/greisv
-python3 _src/convert.py
+git clone git@github.com:boodhis/greisv.git
+# или push-ключ: git clone git@github.com-greisv:boodhis/greisv.git
+cd greisv
+# правь нужный .html → git add -A && git commit -m "..." && git push
 ```
 
-Это пересоберёт все `.html` из `.md`-исходников.
+Push в `main` → GitHub Actions автоматически деплоит на GitHub Pages.
+
+## Генераторы (`gen/`)
+
+```bash
+python3 gen/gen_deck.py     # words.txt (с панели Heltec) → study/data/deck.js
+python3 gen/gen_electric.py # шаблон навигации + контент → electric/*.html
+python3 gen/gen_icons.py    # простые PNG-иконки для PWA (без зависимостей)
+python3 gen/inject.py       # инжектит навигацию/виджет/SW в старые страницы
+```
+
+Колоды карточек строятся из `gen/words.txt` (формат: `слово | транскрипция | перевод`,
+секция команд — после маркера `# --- терминал:`).
+
+## Тесты
+
+```bash
+python3 tests/test_site.py   # все ссылки целы, файлы на месте, ядро SRS
+```
 
 ## Деплой
 
-Автоматический: push в `main` → GitHub Actions (публикует файлы из корня) → GitHub Pages.
-
-URL: `https://boodhis.github.io/greisv/`
-```
+Автоматически: push → GitHub Actions → GitHub Pages. URL:
+`https://boodhis.github.io/greisv/`
 
 ## Лицензия
 

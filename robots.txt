@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://boodhis.github.io/greisv/sitemap.xml
