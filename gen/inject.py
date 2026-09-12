@@ -42,7 +42,7 @@ WALL_CONTROLS = ('<button id="wall-btn" class="btn ghost" title="Оставит�
                  '<button class="wc" data-c="#e3b341" style="background:#e3b341" title="Жёлтый"></button>\n'
                  '<button class="wc" data-c="#ff7ab6" style="background:#ff7ab6" title="Розовый"></button>\n'
                  '<button class="wc" data-c="#e6edf3" style="background:#e6edf3" title="Белый"></button>\n'
-                 '<button class="wclear" type="button">Стереть всё</button>\n'
+                 '<button id="wall-undo" class="wclear" type="button">↩ убрать надпись</button>\n'
                  '</div>\n'
                  '<div id="wall-hint" hidden>Рисуй прямо на подложке. Готово — кнопка справа внизу, выход — Esc</div>\n')
 WALL_CSS = """#bgwall{position:fixed;inset:0;z-index:90;pointer-events:none;touch-action:none}
