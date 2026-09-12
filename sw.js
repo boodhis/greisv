@@ -26,7 +26,9 @@ var ASSETS = [
 self.addEventListener("install", function (e) {
   e.waitUntil(
     caches.open(CACHE).then(function (c) {
-      return c.addAll(ASSETS);
+      return Promise.all(ASSETS.map(function (a) {
+        return c.add(a).catch(function () {});
+      }));
     }).then(function () { return self.skipWaiting(); })
   );
 });
