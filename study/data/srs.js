@@ -72,6 +72,7 @@ window.SRS = (function () {
     show: show,
     grade: grade,
     stats: stats,
+    load: load,
     reset: reset
   };
 })();
