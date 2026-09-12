@@ -3,35 +3,44 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Цифровая Крепость — Linux и homelab</title>
-<meta name="description" content="Образовательный сайт о Linux, homelab и самостоятельном администрировании. Пошаговые инструкции, реальные примеры, проверенные на практике.">
+<title>Цифровая Крепость — Linux, homelab, обучение</title>
+<meta name="description" content="Образовательный сайт о Linux, homelab и самостоятельном администрировании. Тренажёр слов, электрика, шпаргалки. Работает офлайн и бесплатно.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0d1117">
 </head>
 <body>
 <div class="layout">
 <aside>
 <div class="brand">🛡️ Цифровая Крепость</div>
-<a class="nmain on" href="index.html">Главная</a>
+<a class="nmain on" href="index.html">Главная</a><a class="nmain" href="manifest.html">Манифест</a>
 
-<div class="ngroup">
-<div class="ngt">С чего начать</div>
+<div class="ngroup"><div class="ngt">Обучение</div>
+<a class="nli" href="study/index.html">Обучение</a>
+<a class="nli" href="study/words.html">Тренажёр карточек</a>
+<a class="nli" href="study/cheatsheets.html">Шпаргалки</a></div>
+
+<div class="ngroup"><div class="ngt">Электрика</div>
+<a class="nli" href="electric/index.html">Раздел</a>
+<a class="nli" href="electric/safety.html">Безопасность</a>
+<a class="nli" href="electric/panels.html">Щиты и автоматы</a>
+<a class="nli" href="electric/wiring.html">Кабели и монтаж</a>
+<a class="nli" href="electric/smart.html">Умный дом</a></div>
+
+<div class="ngroup"><div class="ngt">С чего начать</div>
 <a class="nli" href="getting-started/index.html">Обзор</a>
 <a class="nli" href="getting-started/install-ubuntu.html">Установка Ubuntu</a>
 <a class="nli" href="getting-started/first-steps.html">Первые шаги</a>
-<a class="nli" href="getting-started/bootable-usb.html">Загрузочная флешка</a>
-</div>
+<a class="nli" href="getting-started/bootable-usb.html">Загрузочная флешка</a></div>
 
-<div class="ngroup">
-<div class="ngt">Homelab</div>
+<div class="ngroup"><div class="ngt">Homelab</div>
 <a class="nli" href="homelab/index.html">Концепция</a>
 <a class="nli" href="homelab/hardware.html">Железо</a>
 <a class="nli" href="homelab/network.html">Сеть</a>
-<a class="nli" href="homelab/server-reference.html">Справочник сервера</a>
-</div>
+<a class="nli" href="homelab/server-reference.html">Справочник сервера</a></div>
 
-<div class="ngroup">
-<div class="ngt">Сервисы</div>
+<div class="ngroup"><div class="ngt">Сервисы</div>
 <a class="nli" href="services/index.html">Обзор</a>
 <a class="nli" href="services/docker.html">Docker</a>
 <a class="nli" href="services/samba.html">Samba</a>
@@ -40,11 +49,9 @@
 <a class="nli" href="services/navidrome.html">Navidrome</a>
 <a class="nli" href="services/immich.html">Immich</a>
 <a class="nli" href="services/sopds.html">SOPDS</a>
-<a class="nli" href="services/mqtt.html">MQTT / ESPHome</a>
-</div>
+<a class="nli" href="services/mqtt.html">MQTT / ESPHome</a></div>
 
-<div class="ngroup">
-<div class="ngt">Гайды</div>
+<div class="ngroup"><div class="ngt">Гайды</div>
 <a class="nli" href="guides/index.html">Обзор</a>
 <a class="nli" href="guides/disk-health.html">Диски и SMART</a>
 <a class="nli" href="guides/diagnostics.html">Диагностика</a>
@@ -54,79 +61,125 @@
 <a class="nli" href="guides/wifi-fix.html">Wi-Fi фикс</a>
 <a class="nli" href="guides/auto-setup.html">Автосборка</a>
 <a class="nli" href="guides/journalctl.html">journalctl</a>
-<a class="nli" href="guides/auto-shutdown.html">Авто-выключение</a>
-</div>
+<a class="nli" href="guides/auto-shutdown.html">Авто-выключение</a></div>
 
-<div class="ngroup">
-<div class="ngt">Ресурсы</div>
+<div class="ngroup"><div class="ngt">Ресурсы</div>
 <a class="nli" href="resources/links.html">Ссылки</a>
 <a class="nli" href="resources/git-commands.html">Git команды</a>
 <a class="nli" href="resources/inxi.html">INXI</a>
-<a class="nli" href="resources/opencode-windows.html">OpenCode на Windows</a>
-</div>
+<a class="nli" href="resources/opencode-windows.html">OpenCode на Windows</a></div>
 
-<div class="ngroup">
-<div class="ngt">Хобби</div>
+<div class="ngroup"><div class="ngt">Хобби</div>
 <a class="nli" href="hobbies/index.html">Досуг</a>
 <a class="nli" href="hobbies/guitar.html">Гитара</a>
-</div>
+<a class="nli" href="hobbies/esp32.html">ESP32 / ESPHome</a></div>
 </aside>
 
 <main>
-<h2>Зачем это всё?</h2>
-<p><strong>Цифровая Крепость</strong> — это проект для тех, кто хочет:</p>
+<div class="hero">
+<pre class="banner">
+██████████    ████████    ██████████   ██████████   ██████████   ██████████    ██████████    ██████████
+██           ██      ██   ██      ██       ██       ██      ██   ██           ██            ██
+██           ██      ██   ██      ██       ██       ██      ██   ██           ██            ██
+██████████   ██      ██   ██████████       ██       ██████████   ██████████   ██████████    ██████████
+██           ██      ██   ███              ██       ███          ██                    ██            ██
+██           ██      ██   ██ ██            ██       ██ ██        ██                    ██            ██
+██           ██      ██   ██  ██           ██       ██  ██       ██                    ██            ██
+██           ██      ██   ██   ██          ██       ██   ██      ██           ██      ████   ██      ████
+██            ████████    ██    ████       ██       ██    ████   ██████████    ████████      ████████
+</pre>
+<h1>🛡️ Цифровая Крепость</h1>
+<p class="desc">Linux · homelab · обучение. Сайт-тренажёр, который работает офлайн и собирается из бесплатного открытого кода.</p>
+</div>
+
+<div class="buttons">
+<a class="btn primary" href="study/words.html">Начать учить слова</a>
+<a class="btn ghost" href="study/index.html">Курс обучения</a>
+<a class="btn ghost" href="manifest.html">Манифест проекта</a>
+</div>
+
+<div class="grid">
+<div class="card"><a href="study/words.html">
+<b>📖 Тренажёр карточек</b>
+<p>Интервальное повторение: английские слова, терминальные команды, гитара и ноты на грифе. Как на панели — но в полном вебе.</p>
+</a></div>
+<div class="card"><a href="study/cheatsheets.html">
+<b>🗒 Шпаргалки</b>
+<p>Git, systemd, Docker, диски, сеть. То, что нужно под рукой в терминале.</p>
+</a></div>
+<div class="card"><a href="electric/index.html">
+<b>⚡ Электрика</b>
+<p>Безопасность, щиты и автоматы, кабели и монтаж, умный дом. Ликбез для монтажников и хозяев.</p>
+</a></div>
+<div class="card"><a href="homelab/index.html">
+<b>🏠 Homelab</b>
+<p>Железо, сеть, референс сервера. Всё проверено на реальном сервере в этом доме.</p>
+</a></div>
+<div class="card"><a href="services/docker.html">
+<b>🐳 Сервисы</b>
+<p>Docker, Samba, Navidrome, Immich, SOPDS, MQTT. Сервисный стек хомлаба.</p>
+</a></div>
+<div class="card"><a href="manifest.html">
+<b>🏗 Манифест</b>
+<p>Зачем всё это и как устроено: бесплатно, открыто, офлайн, «как игра на Денди».</p>
+</a></div>
+</div>
+
+<h2>Что внутри</h2>
 <ul>
-<li>🐧 <strong>Перейти на Linux</strong> но боится что "всё сломается"</li>
-<li>🏠 <strong>Собрать homelab</strong> — домашнюю лабораторию для обучения и экспериментов</li>
-<li>🔧 <strong>Научиться настраивать серверы</strong> через реальные примеры</li>
-<li>📚 <strong>Найти ответы</strong> на частые вопросы по Linux</li>
+<li>🐧 <strong>Перейти на Linux</strong> и не бояться, что «всё сломается» — по разделу «С чего начать».</li>
+<li>📚 <strong>Учиться по нашему курсу</strong>: Linux, сети, Docker, автоматизация, хомлаб.</li>
+<li>🔄 <strong>Повторять слова с пользой</strong>: SRS-тренажёр хранит прогресс в браузере.</li>
+<li>🔌 <strong>Разобраться в электрике</strong> для монтажа и ремонта — раздел «Электрика».</li>
 </ul>
 
-<h3>Концепция</h3>
-<p>Это не просто набор команд. Это <strong>путеводитель</strong> по реальному homelab-проекту:</p>
-<ul>
-<li><strong>Живой сервер</strong>: Ubuntu Server 24.04 на старом ноутбуке Acer</li>
-<li><strong>Реальные сервисы</strong>: Docker, Samba, Navidrome, Immich, ESPHome</li>
-<li><strong>Практический опыт</strong>: все примеры проверены на практике</li>
-<li><strong>Открытый код</strong>: всё можно скопировать и адаптировать</li>
-</ul>
-
-<h3>Для кого этот сайт?</h3>
-<table>
-<thead><tr><th>Кто ты</th><th>Что найдёшь</th></tr></thead>
-<tbody>
-<tr><td>Новичок в Linux</td><td>Пошаговые инструкции по установке и первым шагам</td></tr>
-<tr><td>Энтузиаст homelab</td><td>Концепции, архитектура, выбор железа</td></tr>
-<tr><td>Системный администратор</td><td>Бест-практики, мониторинг, бекапы</td></tr>
-<tr><td>Программист</td><td>Автоматизация, Docker, CI/CD</td></tr>
-</tbody>
-</table>
-
-<h3>Как пользоваться сайтом?</h3>
-<ol>
-<li><strong>Начни с "С чего начать"</strong> — если ты новичок</li>
-<li><strong>Изучи раздел "Homelab"</strong> — если хочешь собрать свой сервер</li>
-<li><strong>Перейди к "Сервисам"</strong> — если хочешь настроить конкретные программы</li>
-<li><strong>Загляни в "Гайды"</strong> — если столкнулся с проблемой</li>
-</ol>
-
-<h3>Локальный превью</h3>
-<p>Хочешь запустить сайт у себя? Вот ссылка на dev-сервер:</p>
-<p><a href="http://192.168.0.244:4321">http://192.168.0.244:4321</a></p>
-
-<h3>Принципы проекта</h3>
-<ul>
-<li><strong>Открытый код</strong>: всё на GitHub, можно форкать и использовать</li>
-<li><strong>Практичность</strong>: только проверенные решения</li>
-<li><strong>Простота</strong>: объяснения без лишнего жаргона</li>
-<li><strong>Доступность</strong>: работает на старом железе</li>
-</ul>
+<h2>Стена Крепости</h2>
+<p>Оставь след — тут можно рисовать и писать пальцем. Роспись сохраняется прямо в браузере (localStorage), пиксели кодируются и не весят ни байта сервера.</p>
+<div id="wall-wrap">
+<canvas id="wall" aria-label="Стена Крепости — холст для надписей"></canvas>
+<button id="wall-clear" class="btn ghost">Очистить стену</button>
+</div>
 
 <hr>
-<p><em>Этот сайт — часть проекта "Цифровая Крепость". Все примеры проверены на реальном сервере.</em></p>
+<p><em>Сайт собирается из открытого кода, бесплатно хостится на GitHub Pages и умеет работать без интернета. Подробности — в <a href="manifest.html">манифесте</a>.</em></p>
 
-<footer>Цифровая Крепость — образовательный сайт о Linux и homelab. Все примеры проверены на реальном сервере.</footer>
+<div id="wordday"><div class="wd-t">Слово дня</div><div class="wd-w">…</div><div class="wd-ph"></div><div class="wd-t2"></div><div class="wd-hint">нажми, чтобы раскрыть перевод</div></div>
+
+<footer>Цифровая Крепость — образовательный сайт. Все примеры проверены на реальном сервере. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>
 </main>
 </div>
+
+<script src="study/data/wordday.js"></script>
+<script src="study/data/widget.js"></script>
+<script>
+var wall = document.getElementById('wall');
+(function () {
+  var c = wall, ctx = c.getContext('2d');
+  function size() {
+    c.width = c.offsetWidth * (window.devicePixelRatio || 1);
+    c.height = c.offsetHeight * (window.devicePixelRatio || 1);
+    ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+  }
+  size();
+  window.addEventListener('resize', function () { ctx.setTransform(1, 0, 0, 1, 0, 0); size(); paint(); });
+  var ink = '#4fc3f7', draw = false;
+  function pos(e) {
+    var r = c.getBoundingClientRect(), t = e.touches ? e.touches[0] : e;
+    return [t.clientX - r.left, t.clientY - r.top];
+  }
+  c.addEventListener('mousedown', function (e) { draw = true; ctx.beginPath(); ctx.moveTo.apply(ctx, pos(e)); e.preventDefault(); });
+  c.addEventListener('touchstart', function (e) { draw = true; ctx.beginPath(); ctx.moveTo.apply(ctx, pos(e)); e.preventDefault(); }, { passive: false });
+  window.addEventListener('mousemove', function (e) { if (!draw) return; ctx.strokeStyle = ink; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineTo.apply(ctx, pos(e)); ctx.stroke(); });
+  c.addEventListener('touchmove', function (e) { if (!draw) return; ctx.strokeStyle = ink; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineTo.apply(ctx, pos(e)); ctx.stroke(); e.preventDefault(); }, { passive: false });
+  window.addEventListener('mouseup', function () { draw = false; save(); });
+  c.addEventListener('touchend', function () { draw = false; save(); });
+  window.WALL_KEY = 'fortress_wall_v1';
+  function save() { try { localStorage.setItem(window.WALL_KEY, c.toDataURL()); } catch (e) {} }
+  function paint() { try { var d = localStorage.getItem(window.WALL_KEY); if (d) { var im = new Image(); im.onload = function () { ctx.drawImage(im, 0, 0); }; im.src = d; } } catch (e) {} }
+  paint();
+  document.getElementById('wall-clear').addEventListener('click', function () { ctx.clearRect(0, 0, c.width, c.height); try { localStorage.removeItem(window.WALL_KEY); } catch (e) {} });
+})();
+</script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js");}</script>
 </body>
 </html>

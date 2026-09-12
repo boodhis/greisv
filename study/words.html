@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Тренажёр карточек — Цифровая Крепость</title>
+<meta name="description" content="Тренажёр с интервальным повторением: английские слова, команды терминала, гитарные термины и ноты на грифе.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="layout">
+<aside>
+<div class="brand">🛡️ Цифровая Крепость</div>
+<a class="nmain" href="../index.html">Главная</a><a class="nmain" href="../manifest.html">Манифест</a>
+
+<div class="ngroup"><div class="ngt">Обучение</div>
+<a class="nli" href="../study/index.html">Обучение</a>
+<a class="nli on" href="../study/words.html">Тренажёр карточек</a>
+<a class="nli" href="../study/cheatsheets.html">Шпаргалки</a></div>
+
+<div class="ngroup"><div class="ngt">Электрика</div>
+<a class="nli" href="../electric/index.html">Раздел</a>
+<a class="nli" href="../electric/safety.html">Безопасность</a>
+<a class="nli" href="../electric/panels.html">Щиты и автоматы</a>
+<a class="nli" href="../electric/wiring.html">Кабели и монтаж</a>
+<a class="nli" href="../electric/smart.html">Умный дом</a></div>
+
+<div class="ngroup"><div class="ngt">С чего начать</div>
+<a class="nli" href="../getting-started/index.html">Обзор</a>
+<a class="nli" href="../getting-started/install-ubuntu.html">Установка Ubuntu</a>
+<a class="nli" href="../getting-started/first-steps.html">Первые шаги</a>
+<a class="nli" href="../getting-started/bootable-usb.html">Загрузочная флешка</a></div>
+
+<div class="ngroup"><div class="ngt">Homelab</div>
+<a class="nli" href="../homelab/index.html">Концепция</a>
+<a class="nli" href="../homelab/hardware.html">Железо</a>
+<a class="nli" href="../homelab/network.html">Сеть</a>
+<a class="nli" href="../homelab/server-reference.html">Справочник сервера</a></div>
+
+<div class="ngroup"><div class="ngt">Сервисы</div>
+<a class="nli" href="../services/index.html">Обзор</a>
+<a class="nli" href="../services/docker.html">Docker</a>
+<a class="nli" href="../services/samba.html">Samba</a>
+<a class="nli" href="../services/minidlna.html">MiniDLNA</a>
+<a class="nli" href="../services/transmission.html">Transmission</a>
+<a class="nli" href="../services/navidrome.html">Navidrome</a>
+<a class="nli" href="../services/immich.html">Immich</a>
+<a class="nli" href="../services/sopds.html">SOPDS</a>
+<a class="nli" href="../services/mqtt.html">MQTT / ESPHome</a></div>
+
+<div class="ngroup"><div class="ngt">Гайды</div>
+<a class="nli" href="../guides/index.html">Обзор</a>
+<a class="nli" href="../guides/disk-health.html">Диски и SMART</a>
+<a class="nli" href="../guides/diagnostics.html">Диагностика</a>
+<a class="nli" href="../guides/backup.html">Бекапы</a>
+<a class="nli" href="../guides/ssh.html">SSH</a>
+<a class="nli" href="../guides/terminal.html">Терминал</a>
+<a class="nli" href="../guides/wifi-fix.html">Wi-Fi фикс</a>
+<a class="nli" href="../guides/auto-setup.html">Автосборка</a>
+<a class="nli" href="../guides/journalctl.html">journalctl</a>
+<a class="nli" href="../guides/auto-shutdown.html">Авто-выключение</a></div>
+
+<div class="ngroup"><div class="ngt">Ресурсы</div>
+<a class="nli" href="../resources/links.html">Ссылки</a>
+<a class="nli" href="../resources/git-commands.html">Git команды</a>
+<a class="nli" href="../resources/inxi.html">INXI</a>
+<a class="nli" href="../resources/opencode-windows.html">OpenCode на Windows</a></div>
+
+<div class="ngroup"><div class="ngt">Хобби</div>
+<a class="nli" href="../hobbies/index.html">Досуг</a>
+<a class="nli" href="../hobbies/guitar.html">Гитара</a>
+<a class="nli" href="../hobbies/esp32.html">ESP32 / ESPHome</a></div>
+</aside>
+
+<main>
+<h1>🔁 Тренажёр карточек</h1>
+<p class="desc">Интервальное повторение работает как на нашей панели: «забыл» возвращает карточку через 2 минуты, «помню» — отправляет по расписанию <code>2·5·10·25·60…11520</code> мин. Прогресс живёт в твоём браузере.</p>
+
+<div class="chips" id="cats">
+<button data-cat="words" class="on">Слова</button>
+<button data-cat="cmds">Команды</button>
+<button data-cat="guitar">Гитара</button>
+<button data-cat="frets">Лады</button>
+<button data-cat="all">Всё</button>
+</div>
+
+<div id="stats"></div>
+
+<div id="trainer">
+<div id="card-front">…</div>
+<div id="card-ph"></div>
+<div id="card-ans"></div>
+<div class="t-actions">
+<button id="btn-reveal" class="primary">Показать перевод</button>
+<button id="btn-forgot" class="danger" style="display:none">Забыл</button>
+<button id="btn-ok" class="primary" style="display:none">Помню</button>
+</div>
+</div>
+
+<button id="btn-reset" class="btn ghost">Сбросить прогресс</button>
+
+<footer>Цифровая Крепость — образовательный сайт. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>
+</main>
+</div>
+
+<script src="../study/data/deck.js"></script>
+<script src="../study/data/srs.js"></script>
+<script>
+(function () {
+  var DECKS = {
+    words: { label: 'Слова', cards: window.SRS_WORDS },
+    cmds: { label: 'Команды', cards: window.SRS_CMDS },
+    guitar: { label: 'Гитара', cards: window.SRS_GUITAR },
+    frets: { label: 'Лады', cards: window.SRS_FRETS }
+  };
+  var cur = 'words', curCard = null;
+  var front = document.getElementById('card-front');
+  var ph = document.getElementById('card-ph');
+  var ans = document.getElementById('card-ans');
+  var bReveal = document.getElementById('btn-reveal');
+  var bForgot = document.getElementById('btn-forgot');
+  var bOk = document.getElementById('btn-ok');
+  var statsEl = document.getElementById('stats');
+  var last = null;
+
+  function deck() {
+    var items = cur === 'all'
+      ? Object.keys(DECKS).reduce(function (a, k) { return a.concat(DECKS[k].cards); }, [])
+      : DECKS[cur].cards;
+    return items;
+  }
+
+  function renderStats() {
+    var s = SRS.stats(deck());
+    statsEl.innerHTML = 'В колоде <b>' + s.total + '</b> · новых <b>' + s.fresh + '</b> · на повторе <b>' + s.learned + '</b> · к сроку <b>' + s.due + '</b>';
+  }
+
+  function next() {
+    curCard = SRS.pick(deck(), SRS.load(), last);
+    if (!curCard) { front.textContent = 'Колода пуста'; return; }
+    last = curCard[0];
+    front.textContent = curCard[0];
+    ph.textContent = curCard[1] ? '[' + curCard[1] + ']' : '';
+    ans.textContent = '';
+    bReveal.style.display = '';
+    bForgot.style.display = 'none';
+    bOk.style.display = 'none';
+    renderStats();
+    SRS.show(curCard);
+  }
+
+  document.getElementById('cats').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    cur = b.getAttribute('data-cat');
+    document.querySelectorAll('#cats button').forEach(function (x) { x.classList.remove('on'); });
+    b.classList.add('on');
+    last = null;
+    next();
+  });
+
+  bReveal.addEventListener('click', function () {
+    if (!curCard) return;
+    ans.textContent = curCard[2];
+    bReveal.style.display = 'none';
+    bForgot.style.display = '';
+    bOk.style.display = '';
+  });
+  bForgot.addEventListener('click', function () { SRS.grade(curCard, false); next(); });
+  bOk.addEventListener('click', function () { SRS.grade(curCard, true); next(); });
+  document.getElementById('btn-reset').addEventListener('click', function () { SRS.reset(); next(); });
+
+  next();
+})();
+</script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
+</body>
+</html>

@@ -52,8 +52,10 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);color:v
 <body>
 <div class="layout">
 <aside><div class="brand">🛡️ Цифровая Крепость</div>
-<a class="nmain" href="../index.html">Главная</a>
+<a class="nmain" href="../index.html">Главная</a><a class="nmain" href="../manifest.html">Манифест</a>
 <div class="ngroup"><div class="ngt">С чего начать</div><a class="nli" href="../getting-started/index.html">Обзор</a><a class="nli" href="../getting-started/install-ubuntu.html">Установка Ubuntu</a><a class="nli" href="../getting-started/first-steps.html">Первые шаги</a><a class="nli" href="../getting-started/bootable-usb.html">Загрузочная флешка</a></div>
+<div class="ngroup"><div class="ngt">Обучение</div><a class="nli" href="../study/index.html">Обучение</a><a class="nli" href="../study/words.html">Тренажёр карточек</a><a class="nli" href="../study/cheatsheets.html">Шпаргалки</a></div>
+<div class="ngroup"><div class="ngt">Электрика</div><a class="nli" href="../electric/index.html">Раздел</a><a class="nli" href="../electric/safety.html">Безопасность</a><a class="nli" href="../electric/panels.html">Щиты и автоматы</a><a class="nli" href="../electric/wiring.html">Кабели и монтаж</a><a class="nli" href="../electric/smart.html">Умный дом</a></div>
 <div class="ngroup"><div class="ngt">Homelab</div><a class="nli" href="../homelab/index.html">Концепция</a><a class="nli" href="../homelab/hardware.html">Железо</a><a class="nli" href="../homelab/network.html">Сеть</a><a class="nli" href="../homelab/server-reference.html">Справочник сервера</a></div>
 <div class="ngroup"><div class="ngt">Сервисы</div><a class="nli" href="../services/index.html">Обзор</a><a class="nli" href="../services/docker.html">Docker</a><a class="nli" href="../services/samba.html">Samba</a><a class="nli" href="../services/minidlna.html">MiniDLNA</a><a class="nli" href="../services/transmission.html">Transmission</a><a class="nli" href="../services/navidrome.html">Navidrome</a><a class="nli" href="../services/immich.html">Immich</a><a class="nli" href="../services/sopds.html">SOPDS</a><a class="nli" href="../services/mqtt.html">MQTT / ESPHome</a></div>
 <div class="ngroup"><div class="ngt">Гайды</div><a class="nli" href="../guides/index.html">Обзор</a><a class="nli" href="../guides/disk-health.html">Диски и SMART</a><a class="nli" href="../guides/diagnostics.html">Диагностика</a><a class="nli" href="../guides/backup.html">Бекапы</a><a class="nli" href="../guides/ssh.html">SSH</a><a class="nli" href="../guides/terminal.html">Терминал</a><a class="nli" href="../guides/wifi-fix.html">Wi-Fi фикс</a><a class="nli" href="../guides/auto-setup.html">Автосборка</a><a class="nli" href="../guides/journalctl.html">journalctl</a><a class="nli" href="../guides/auto-shutdown.html">Авто-выключение</a></div>
@@ -119,5 +121,9 @@ E|---0---</code></pre>
 <footer>Цифровая Крепость — образовательный сайт о Linux и homelab. Все примеры проверены на реальном сервере.</footer>
 </main>
 </div>
+<div id="wordday"><div class="wd-t">Слово дня</div><div class="wd-w">…</div><div class="wd-ph"></div><div class="wd-t2"></div><div class="wd-hint">нажми, чтобы раскрыть перевод</div></div>
+<script src="../study/data/wordday.js"></script>
+<script src="../study/data/widget.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
 </body>
 </html>

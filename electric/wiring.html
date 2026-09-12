@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🔌 Кабели и монтаж — Цифровая Крепость</title>
+<meta name="description" content="Цвета жил, маркировка, сечения, розетки и порядок работ от штробы до подключения.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="layout">
+<aside>
+<div class="brand">🛡️ Цифровая Крепость</div>
+<a class="nmain" href="../index.html">Главная</a><a class="nmain" href="../manifest.html">Манифест</a>
+
+<div class="ngroup"><div class="ngt">Обучение</div>
+<a class="nli" href="../study/index.html">Обучение</a>
+<a class="nli" href="../study/words.html">Тренажёр карточек</a>
+<a class="nli" href="../study/cheatsheets.html">Шпаргалки</a></div>
+
+<div class="ngroup"><div class="ngt">Электрика</div>
+<a class="nli" href="../electric/index.html">Раздел</a>
+<a class="nli" href="../electric/safety.html">Безопасность</a>
+<a class="nli" href="../electric/panels.html">Щиты и автоматы</a>
+<a class="nli" href="../electric/wiring.html">Кабели и монтаж</a>
+<a class="nli" href="../electric/smart.html">Умный дом</a></div>
+
+<div class="ngroup"><div class="ngt">С чего начать</div>
+<a class="nli" href="../getting-started/index.html">Обзор</a>
+<a class="nli" href="../getting-started/install-ubuntu.html">Установка Ubuntu</a>
+<a class="nli" href="../getting-started/first-steps.html">Первые шаги</a>
+<a class="nli" href="../getting-started/bootable-usb.html">Загрузочная флешка</a></div>
+
+<div class="ngroup"><div class="ngt">Homelab</div>
+<a class="nli" href="../homelab/index.html">Концепция</a>
+<a class="nli" href="../homelab/hardware.html">Железо</a>
+<a class="nli" href="../homelab/network.html">Сеть</a>
+<a class="nli" href="../homelab/server-reference.html">Справочник сервера</a></div>
+
+<div class="ngroup"><div class="ngt">Сервисы</div>
+<a class="nli" href="../services/index.html">Обзор</a>
+<a class="nli" href="../services/docker.html">Docker</a>
+<a class="nli" href="../services/samba.html">Samba</a>
+<a class="nli" href="../services/minidlna.html">MiniDLNA</a>
+<a class="nli" href="../services/transmission.html">Transmission</a>
+<a class="nli" href="../services/navidrome.html">Navidrome</a>
+<a class="nli" href="../services/immich.html">Immich</a>
+<a class="nli" href="../services/sopds.html">SOPDS</a>
+<a class="nli" href="../services/mqtt.html">MQTT / ESPHome</a></div>
+
+<div class="ngroup"><div class="ngt">Гайды</div>
+<a class="nli" href="../guides/index.html">Обзор</a>
+<a class="nli" href="../guides/disk-health.html">Диски и SMART</a>
+<a class="nli" href="../guides/diagnostics.html">Диагностика</a>
+<a class="nli" href="../guides/backup.html">Бекапы</a>
+<a class="nli" href="../guides/ssh.html">SSH</a>
+<a class="nli" href="../guides/terminal.html">Терминал</a>
+<a class="nli" href="../guides/wifi-fix.html">Wi-Fi фикс</a>
+<a class="nli" href="../guides/auto-setup.html">Автосборка</a>
+<a class="nli" href="../guides/journalctl.html">journalctl</a>
+<a class="nli" href="../guides/auto-shutdown.html">Авто-выключение</a></div>
+
+<div class="ngroup"><div class="ngt">Ресурсы</div>
+<a class="nli" href="../resources/links.html">Ссылки</a>
+<a class="nli" href="../resources/git-commands.html">Git команды</a>
+<a class="nli" href="../resources/inxi.html">INXI</a>
+<a class="nli" href="../resources/opencode-windows.html">OpenCode на Windows</a></div>
+
+<div class="ngroup"><div class="ngt">Хобби</div>
+<a class="nli" href="../hobbies/index.html">Досуг</a>
+<a class="nli" href="../hobbies/guitar.html">Гитара</a>
+<a class="nli" href="../hobbies/esp32.html">ESP32 / ESPHome</a></div>
+</aside>
+<main>
+<h1>🔌 Кабели и монтаж</h1>
+<p class="desc">Цвета жил, маркировка, сечения, розетки и порядок работ от штробы до подключения.</p>
+
+<h2>Цвета жил (важно!)</h2>
+<table><thead><tr><th>Цвет</th><th>Роль</th></tr></thead><tbody>
+<tr><td>Коричневый / чёрный</td><td>фаза (L)</td></tr>
+<tr><td>Синий</td><td>ноль (N)</td></tr>
+<tr><td>Жёлто-зелёный</td><td>заземление (PE)</td></tr>
+</tbody></table>
+<p>Перепутал? Ошибка грозит поражением током. Перед работой сомневаешься — <strong>проверь индикатором</strong>.</p>
+<h2>Сечение по нагрузке (медь)</h2>
+<table><thead><tr><th>Нагрузка</th><th>Сечение</th></tr></thead><tbody>
+<tr><td>Освещение LED</td><td>1.5 мм²</td></tr>
+<tr><td>Розетки</td><td>2.5 мм²</td></tr>
+<tr><td>Плита, бойлер, духовка</td><td>4–6 мм²</td></tr>
+<tr><td>Ввод в квартиру</td><td>6–10 мм²</td></tr>
+</tbody></table>
+<h2>Порядок монтажа</h2>
+<ol>
+<li>Проект: где какая линия, посчитай нагрузку.</li>
+<li>Штробы, кабель-каналы, гофра.</li>
+<li>Укладка кабеля <strong>цельным куском</strong> без сращиваний внутри стены.</li>
+<li>Монтаж подрозетников, вывод жил с запасом 10–15 см.</li>
+<li>Подключение в щит → проверка индикатором → УЗО/автоматы.</li>
+</ol>
+<h2>Частые ошибки</h2>
+<ul>
+<li>Скрутки вместо клеммников (Wago и т.п.) под нагрузкой.</li>
+<li>Сращивание внутри стены — только в распредкоробке с крышкой.</li>
+<li>Алюминий + медь напрямую — гальваническая пара, греется.</li>
+<li>Один автомат на всё — теряется селективность.</li>
+</ul>
+
+<footer>Цифровая Крепость — образовательный сайт. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>
+</main>
+</div>
+<div id="wordday" style="display:none"></div>
+<script src="../study/data/wordday.js"></script>
+<script src="../study/data/widget.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>📊 Щиты и автоматы — Цифровая Крепость</title>
+<meta name="description" content="Как устроен щит: автоматические выключатели, УЗО, дифавтоматы. Номиналы по сечению.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="layout">
+<aside>
+<div class="brand">🛡️ Цифровая Крепость</div>
+<a class="nmain" href="../index.html">Главная</a><a class="nmain" href="../manifest.html">Манифест</a>
+
+<div class="ngroup"><div class="ngt">Обучение</div>
+<a class="nli" href="../study/index.html">Обучение</a>
+<a class="nli" href="../study/words.html">Тренажёр карточек</a>
+<a class="nli" href="../study/cheatsheets.html">Шпаргалки</a></div>
+
+<div class="ngroup"><div class="ngt">Электрика</div>
+<a class="nli" href="../electric/index.html">Раздел</a>
+<a class="nli" href="../electric/safety.html">Безопасность</a>
+<a class="nli" href="../electric/panels.html">Щиты и автоматы</a>
+<a class="nli" href="../electric/wiring.html">Кабели и монтаж</a>
+<a class="nli" href="../electric/smart.html">Умный дом</a></div>
+
+<div class="ngroup"><div class="ngt">С чего начать</div>
+<a class="nli" href="../getting-started/index.html">Обзор</a>
+<a class="nli" href="../getting-started/install-ubuntu.html">Установка Ubuntu</a>
+<a class="nli" href="../getting-started/first-steps.html">Первые шаги</a>
+<a class="nli" href="../getting-started/bootable-usb.html">Загрузочная флешка</a></div>
+
+<div class="ngroup"><div class="ngt">Homelab</div>
+<a class="nli" href="../homelab/index.html">Концепция</a>
+<a class="nli" href="../homelab/hardware.html">Железо</a>
+<a class="nli" href="../homelab/network.html">Сеть</a>
+<a class="nli" href="../homelab/server-reference.html">Справочник сервера</a></div>
+
+<div class="ngroup"><div class="ngt">Сервисы</div>
+<a class="nli" href="../services/index.html">Обзор</a>
+<a class="nli" href="../services/docker.html">Docker</a>
+<a class="nli" href="../services/samba.html">Samba</a>
+<a class="nli" href="../services/minidlna.html">MiniDLNA</a>
+<a class="nli" href="../services/transmission.html">Transmission</a>
+<a class="nli" href="../services/navidrome.html">Navidrome</a>
+<a class="nli" href="../services/immich.html">Immich</a>
+<a class="nli" href="../services/sopds.html">SOPDS</a>
+<a class="nli" href="../services/mqtt.html">MQTT / ESPHome</a></div>
+
+<div class="ngroup"><div class="ngt">Гайды</div>
+<a class="nli" href="../guides/index.html">Обзор</a>
+<a class="nli" href="../guides/disk-health.html">Диски и SMART</a>
+<a class="nli" href="../guides/diagnostics.html">Диагностика</a>
+<a class="nli" href="../guides/backup.html">Бекапы</a>
+<a class="nli" href="../guides/ssh.html">SSH</a>
+<a class="nli" href="../guides/terminal.html">Терминал</a>
+<a class="nli" href="../guides/wifi-fix.html">Wi-Fi фикс</a>
+<a class="nli" href="../guides/auto-setup.html">Автосборка</a>
+<a class="nli" href="../guides/journalctl.html">journalctl</a>
+<a class="nli" href="../guides/auto-shutdown.html">Авто-выключение</a></div>
+
+<div class="ngroup"><div class="ngt">Ресурсы</div>
+<a class="nli" href="../resources/links.html">Ссылки</a>
+<a class="nli" href="../resources/git-commands.html">Git команды</a>
+<a class="nli" href="../resources/inxi.html">INXI</a>
+<a class="nli" href="../resources/opencode-windows.html">OpenCode на Windows</a></div>
+
+<div class="ngroup"><div class="ngt">Хобби</div>
+<a class="nli" href="../hobbies/index.html">Досуг</a>
+<a class="nli" href="../hobbies/guitar.html">Гитара</a>
+<a class="nli" href="../hobbies/esp32.html">ESP32 / ESPHome</a></div>
+</aside>
+<main>
+<h1>📊 Щиты и автоматы</h1>
+<p class="desc">Как устроен щит: автоматические выключатели, УЗО, дифавтоматы. Номиналы по сечению.</p>
+
+<h2>Что стоит в щите</h2>
+<table><thead><tr><th>Устройство</th><th>От чего защищает</th></tr></thead><tbody>
+<tr><td>Автоматический выключатель</td><td>перегрузка и короткое замыкание (линию)</td></tr>
+<tr><td>УЗО</td><td>утечку тока (человека)</td></tr>
+<tr><td>Дифавтомат</td><td>автомат + УЗО в одном корпусе</td></tr>
+<tr><td>Реле напряжения</td><td>скачки/пропадание фазы</td></tr>
+<tr><td>ГРОЗО/разрядник</td><td>грозовые перенапряжения</td></tr>
+</tbody></table>
+<h2>Номиналы: сечение → автомат</h2>
+<table><thead><tr><th>Сечение меди</th><th>Ток жилы</th><th>Автомат</th><th>Типично</th></tr></thead><tbody>
+<tr><td>1.5 мм²</td><td>16 А</td><td>10 А</td><td>освещение</td></tr>
+<tr><td>2.5 мм²</td><td>25 А</td><td>16 А</td><td>розетки</td></tr>
+<tr><td>4 мм²</td><td>32 А</td><td>25 А</td><td>плита/кондиционер</td></tr>
+<tr><td>6 мм²</td><td>40 А</td><td>32 А</td><td>ввод в квартиру</td></tr>
+</tbody></table>
+<p>Правило: автомат <strong>меньше</strong> длительного тока кабеля — кабель не должен пострадать раньше автомата.</p>
+<h2>Схема простого щита</h2>
+<pre class="ascii">ввод 220В
+  │
+  ├─ АВ вводной 32А ── реле напряжения ──┐
+  │                                      │
+  ├─ УЗО 40А/30мА ── АВ 16А ── розетки  │
+  │                └── АВ 10А ── свет    │
+  └─ УЗО 40А/30мА ── АВ 25А ── плита    │
+</pre>
+<div class="callout"><div class="callout-t">Главное</div><div class="callout-body"><p>УЗО и автомат — не одно и то же. УЗО без автомата не защитит от короткого замыкания, а автомат без УЗО — от утечки на человека.</p></div></div>
+
+<footer>Цифровая Крепость — образовательный сайт. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>
+</main>
+</div>
+<div id="wordday" style="display:none"></div>
+<script src="../study/data/wordday.js"></script>
+<script src="../study/data/widget.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
+</body>
+</html>

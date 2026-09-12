@@ -1,0 +1,17 @@
+{
+  "name": "Цифровая Крепость",
+  "short_name": "Крепость",
+  "description": "Linux, homelab и обучение: тренажёр карточек, шпаргалки, электрика. Работает офлайн.",
+  "start_url": "/greisv/index.html",
+  "scope": "/greisv/",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#0d1117",
+  "lang": "ru",
+  "dir": "ltr",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

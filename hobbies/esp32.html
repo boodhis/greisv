@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ESP32 / ESPHome — Цифровая Крепость</title>
+<meta name="description" content="ESP32 и ESPHome: прошивка плат, датчики, умные панели. Наша панель Heltec V3 — источник колод для тренажёра.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="layout">
+<aside>
+<div class="brand">🛡️ Цифровая Крепость</div>
+<a class="nmain" href="../index.html">Главная</a><a class="nmain" href="../manifest.html">Манифест</a>
+
+<div class="ngroup"><div class="ngt">Обучение</div>
+<a class="nli" href="../study/index.html">Обучение</a>
+<a class="nli" href="../study/words.html">Тренажёр карточек</a>
+<a class="nli" href="../study/cheatsheets.html">Шпаргалки</a></div>
+
+<div class="ngroup"><div class="ngt">Электрика</div>
+<a class="nli" href="../electric/index.html">Раздел</a>
+<a class="nli" href="../electric/safety.html">Безопасность</a>
+<a class="nli" href="../electric/panels.html">Щиты и автоматы</a>
+<a class="nli" href="../electric/wiring.html">Кабели и монтаж</a>
+<a class="nli" href="../electric/smart.html">Умный дом</a></div>
+
+<div class="ngroup"><div class="ngt">С чего начать</div>
+<a class="nli" href="../getting-started/index.html">Обзор</a>
+<a class="nli" href="../getting-started/install-ubuntu.html">Установка Ubuntu</a>
+<a class="nli" href="../getting-started/first-steps.html">Первые шаги</a>
+<a class="nli" href="../getting-started/bootable-usb.html">Загрузочная флешка</a></div>
+
+<div class="ngroup"><div class="ngt">Homelab</div>
+<a class="nli" href="../homelab/index.html">Концепция</a>
+<a class="nli" href="../homelab/hardware.html">Железо</a>
+<a class="nli" href="../homelab/network.html">Сеть</a>
+<a class="nli" href="../homelab/server-reference.html">Справочник сервера</a></div>
+
+<div class="ngroup"><div class="ngt">Сервисы</div>
+<a class="nli" href="../services/index.html">Обзор</a>
+<a class="nli" href="../services/docker.html">Docker</a>
+<a class="nli" href="../services/samba.html">Samba</a>
+<a class="nli" href="../services/minidlna.html">MiniDLNA</a>
+<a class="nli" href="../services/transmission.html">Transmission</a>
+<a class="nli" href="../services/navidrome.html">Navidrome</a>
+<a class="nli" href="../services/immich.html">Immich</a>
+<a class="nli" href="../services/sopds.html">SOPDS</a>
+<a class="nli" href="../services/mqtt.html">MQTT / ESPHome</a></div>
+
+<div class="ngroup"><div class="ngt">Гайды</div>
+<a class="nli" href="../guides/index.html">Обзор</a>
+<a class="nli" href="../guides/disk-health.html">Диски и SMART</a>
+<a class="nli" href="../guides/diagnostics.html">Диагностика</a>
+<a class="nli" href="../guides/backup.html">Бекапы</a>
+<a class="nli" href="../guides/ssh.html">SSH</a>
+<a class="nli" href="../guides/terminal.html">Терминал</a>
+<a class="nli" href="../guides/wifi-fix.html">Wi-Fi фикс</a>
+<a class="nli" href="../guides/auto-setup.html">Автосборка</a>
+<a class="nli" href="../guides/journalctl.html">journalctl</a>
+<a class="nli" href="../guides/auto-shutdown.html">Авто-выключение</a></div>
+
+<div class="ngroup"><div class="ngt">Ресурсы</div>
+<a class="nli" href="../resources/links.html">Ссылки</a>
+<a class="nli" href="../resources/git-commands.html">Git команды</a>
+<a class="nli" href="../resources/inxi.html">INXI</a>
+<a class="nli" href="../resources/opencode-windows.html">OpenCode на Windows</a></div>
+
+<div class="ngroup"><div class="ngt">Хобби</div>
+<a class="nli" href="../hobbies/index.html">Досуг</a>
+<a class="nli" href="../hobbies/guitar.html">Гитара</a>
+<a class="nli on" href="../hobbies/esp32.html">ESP32 / ESPHome</a></div>
+</aside>
+
+<main>
+<h1>🔩 ESP32 / ESPHome</h1>
+<p class="desc">Маленькие платы за пару сотен рублей, которые делают дом умным. ESPHome — это YAML-конфиги вместо C++.</p>
+
+<h2>Наша панель Heltec V3</h2>
+<p>Это та самая умная панель, у которой интервальное повторение слов: экран, Wi-Fi-модуль, кнопки. Она по счёту и хранит прогресс (интервалы <code>2·5·10·25·60…11520</code> мин), а её словарь — источник колод «Слова» и «Команды» в <a href="../study/words.html">тренажёре</a>.</p>
+
+<h2>Easiest start: ESPHome</h2>
+<ul>
+<li>Установил <code>esphome</code> (pip) или контейнер на сервере.</li>
+<li>Написал YAML: <code>esp32 → api / wifi / sensor / switch</code>.</li>
+<li>Зашил по Wi-Fi: <code>esphome run my.yaml</code>.</li>
+</ul>
+<pre><code>esphome:
+  name: kitchen-sensor
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+wifi:
+  ssid: "Home"
+  password: "secret"
+sensor:
+  - platform: dht
+    pin: GPIO4
+    temperature:
+      name: "Kitchen temperature"
+    humidity:
+      name: "Kitchen humidity"</code></pre>
+
+<h2>Связки</h2>
+<ul>
+<li><strong>MQTT</strong> — умный дом на шине «издатель/подписчик». Раздел <a href="../services/mqtt.html">MQTT / ESPHome</a>.</li>
+<li><strong>Электрика</strong> — только когда освоил <a href="../electric/safety.html">безопасность</a>.</li>
+<li><strong>Homelab</strong> — брокер и автоматика крутятся на сервере <a href="../homelab/index.html">homelab</a>.</li>
+</ul>
+
+<footer>Цифровая Крепость — образовательный сайт. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>
+</main>
+</div>
+<div id="wordday" style="display:none"></div>
+<script src="../study/data/wordday.js"></script>
+<script src="../study/data/widget.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
+</body>
+</html>
