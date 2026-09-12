@@ -1,6 +1,6 @@
-/* Service Worker: кэширует весь сайт и даёт офлайн-режим.
-   Регистрируется на всех страницах: navigator.serviceWorker.register("sw.js"). */
-var CACHE = "fortress-v1";
+/* Service Worker: офлайн-режим.
+   Стратегия network-first (свежесть важнее кэша), offline — из кэша. */
+var CACHE = "fortress-v2";
 var ASSETS = [
   "./",
   "index.html",
@@ -44,13 +44,15 @@ self.addEventListener("fetch", function (e) {
   if (e.request.method !== "GET") return;
   if (url.origin !== location.origin) return;
   e.respondWith(
-    caches.match(e.request).then(function (hit) {
-      return hit || fetch(e.request).then(function (res) {
+    fetch(e.request).then(function (res) {
+      if (res.ok) {
         var copy = res.clone();
         caches.open(CACHE).then(function (c) { c.put(e.request, copy); });
-        return res;
-      }).catch(function () {
-        return caches.match("./index.html");
+      }
+      return res;
+    }).catch(function () {
+      return caches.match(e.request).then(function (hit) {
+        return hit || caches.match("./index.html");
       });
     })
   );

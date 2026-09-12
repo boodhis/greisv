@@ -77,27 +77,8 @@
 </aside>
 
 <main>
-<div class="hero">
-<pre class="banner">
-██████████    ████████    ██████████   ██████████   ██████████   ██████████    ██████████    ██████████
-██           ██      ██   ██      ██       ██       ██      ██   ██           ██            ██
-██           ██      ██   ██      ██       ██       ██      ██   ██           ██            ██
-██████████   ██      ██   ██████████       ██       ██████████   ██████████   ██████████    ██████████
-██           ██      ██   ███              ██       ███          ██                    ██            ██
-██           ██      ██   ██ ██            ██       ██ ██        ██                    ██            ██
-██           ██      ██   ██  ██           ██       ██  ██       ██                    ██            ██
-██           ██      ██   ██   ██          ██       ██   ██      ██           ██      ████   ██      ████
-██            ████████    ██    ████       ██       ██    ████   ██████████    ████████      ████████
-</pre>
 <h1>🛡️ Цифровая Крепость</h1>
-<p class="desc">Linux · homelab · обучение. Сайт-тренажёр, который работает офлайн и собирается из бесплатного открытого кода.</p>
-</div>
-
-<div class="buttons">
-<a class="btn primary" href="study/words.html">Начать учить слова</a>
-<a class="btn ghost" href="study/index.html">Курс обучения</a>
-<a class="btn ghost" href="manifest.html">Манифест проекта</a>
-</div>
+<p class="desc">Linux · homelab · обучение. Функциональные разделы — сразу под заголовком.</p>
 
 <div class="grid">
 <div class="card"><a href="study/words.html">
@@ -137,9 +118,6 @@
 <h2>Стена Крепости</h2>
 <p>Подложка страницы — это и есть стена: жми «✏️ Стена» в правом нижнем углу и оставляй надписи прямо на фоне сайта. Надписи сохраняются в браузере — приведи друзей, пусть оставят след.</p>
 
-<hr>
-<p><em>Сайт собирается из открытого кода, бесплатно хостится на GitHub Pages и умеет работать без интернета. Подробности — в <a href="manifest.html">манифесте</a>.</em></p>
-
 <div id="wordday"><div class="wd-t">Слово дня</div><div class="wd-w">…</div><div class="wd-ph"></div><div class="wd-t2"></div><div class="wd-hint">нажми, чтобы раскрыть перевод</div></div>
 
 <footer>Цифровая Крепость — образовательный сайт. Все примеры проверены на реальном сервере. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>
@@ -148,7 +126,6 @@
 
 <script src="study/data/wordday.js"></script>
 <script src="study/data/widget.js"></script>
-<script src="js/wall.js"></script>
 <button id="wall-btn" class="btn ghost" title="Оставить надпись на стене-подложке">✏️ Стена</button>
 <div id="wall-bar" hidden>
 <button class="wc on" data-c="#4fc3f7" style="background:#4fc3f7" title="Голубой"></button>
@@ -159,6 +136,7 @@
 <button class="wclear" type="button">Стереть всё</button>
 </div>
 <div id="wall-hint" hidden>Рисуй прямо на подложке. Готово — кнопка справа внизу, выход — Esc</div>
+<script src="js/wall.js"></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js");}</script>
 </body>
 </html>

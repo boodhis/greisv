@@ -77,6 +77,9 @@ def inject_old(path):
     if 'id="wordday"' not in html and "</body>" in html:
         html = html.replace("</body>", WIDGET + "</body>", 1)
         changed += 1
+    if "max-width:860px" in html:
+        html = html.replace("max-width:860px", "max-width:1180px")
+        changed += 1
     if html != orig:
         with open(path, "w", encoding="utf-8") as f:
             f.write(html)
