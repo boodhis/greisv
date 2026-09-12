@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
+<canvas id="bgwall" aria-hidden="true"></canvas>
 <div class="layout">
 <aside>
 <div class="brand">🛡️ Цифровая Крепость</div>
@@ -113,6 +114,17 @@ switch:
 <div id="wordday" style="display:none"></div>
 <script src="../study/data/wordday.js"></script>
 <script src="../study/data/widget.js"></script>
+<button id="wall-btn" class="btn ghost" title="Оставить надпись на стене-подложке">✏️ Стена</button>
+<div id="wall-bar" hidden>
+<button class="wc on" data-c="#4fc3f7" style="background:#4fc3f7" title="Голубой"></button>
+<button class="wc" data-c="#3fb950" style="background:#3fb950" title="Зелёный"></button>
+<button class="wc" data-c="#e3b341" style="background:#e3b341" title="Жёлтый"></button>
+<button class="wc" data-c="#ff7ab6" style="background:#ff7ab6" title="Розовый"></button>
+<button class="wc" data-c="#e6edf3" style="background:#e6edf3" title="Белый"></button>
+<button class="wclear" type="button">Стереть всё</button>
+</div>
+<div id="wall-hint" hidden>Рисуй прямо на подложке. Готово — кнопка справа внизу, выход — Esc</div>
+<script src="../js/wall.js"></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
 </body>
 </html>
