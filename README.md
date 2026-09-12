@@ -22,9 +22,10 @@
 
 ```
 /
-├── index.html                 — Главная (hero, карточки, стена)
+├── index.html                 — Главная (hero, карточки, стена-подложка)
 ├── manifest.html              — Манифест проекта
 ├── style.css                  — Единая тёмная тема
+├── js/wall.js                 — Стена-подложка для надписей (весь экран)
 ├── sw.js / manifest.webmanifest / icon-192.png / icon-512.png — PWA/офлайн
 ├── study/                     — «Обучение»: тренажёр, шпаргалки
 │   └── data/  deck.js · srs.js · wordday.js · widget.js

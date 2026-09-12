@@ -68,9 +68,11 @@ em { color: var(--dim); }
 .callout-t { color: var(--accent); font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
 .callout-body p:last-child { margin-bottom: 0; }
 
-.hero { text-align: center; padding: 18px 0 6px; }
-.hero .banner { font-family: ui-monospace, Consolas, monospace; font-size: 13px; line-height: 1.25; letter-spacing: .5px; color: var(--accent); white-space: pre; overflow-x: auto; text-shadow: 0 0 12px rgba(79,195,247,.45); margin: 0 auto 18px; }
-.hero .desc { color: var(--dim); font-size: 18px; margin-bottom: 22px; }
+.hero { position: relative; overflow: hidden; text-align: center; padding: 42px 0 8px; margin-bottom: 10px; }
+.hero::before { content: ""; position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); width: 86%; height: 140%; background: radial-gradient(ellipse at center, rgba(79,195,247,.13), transparent 68%); pointer-events: none; }
+.hero .banner { position: absolute; left: 50%; top: 44%; transform: translate(-50%, -50%); font-family: ui-monospace, Consolas, monospace; font-size: clamp(2px, 1.35vw, 15px); line-height: 1.35; letter-spacing: .5px; color: var(--accent); opacity: .15; white-space: pre; text-shadow: 0 0 14px rgba(79,195,247,.35); pointer-events: none; user-select: none; }
+.hero h1 { position: relative; margin: 0 0 8px; font-size: clamp(26px, 6vw, 46px); letter-spacing: .01em; text-shadow: 0 0 24px rgba(79,195,247,.4); }
+.hero .desc { position: relative; color: var(--dim); font-size: clamp(15px, 3vw, 19px); margin-bottom: 24px; }
 .buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
 .btn { display: inline-block; padding: 11px 20px; border-radius: 999px; font-weight: 600; text-decoration: none; }
 .btn.primary { background: var(--grad); color: #04141f; }
@@ -106,10 +108,18 @@ em { color: var(--dim); }
 #wordday.revealed .wd-t2 { display: block; }
 #wordday .wd-hint { font-size: 12px; color: var(--dim); opacity: .7; margin-top: 6px; }
 
-/* Стена Крепости */
-#wall-wrap { margin: 8px 0 18px; }
-#wall { width: 100%; height: 300px; background: #0b0e14; border: 1px solid var(--line); border-radius: 10px; touch-action: none; cursor: crosshair; display: block; }
-#wall-clear { margin-top: 8px; font-size: 13px; }
+/* Стена Крепости — подложка на весь экран для надписей */
+#bgwall { position: fixed; inset: 0; z-index: 90; pointer-events: none; touch-action: none; }
+body.drawing { cursor: crosshair; }
+body.drawing #bgwall { pointer-events: auto; }
+body.drawing main, body.drawing aside { pointer-events: none; }
+#wall-btn { position: fixed; right: 16px; bottom: 16px; z-index: 120; }
+#wall-btn.on { background: var(--grad); color: #04141f; }
+#wall-bar { position: fixed; right: 16px; bottom: 64px; z-index: 120; display: flex; gap: 6px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 6px 10px; box-shadow: 0 8px 24px rgba(0,0,0,.45); }
+#wall-bar .wc { width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(255,255,255,.22); cursor: pointer; padding: 0; }
+#wall-bar .wc.on { border-color: #fff; box-shadow: 0 0 8px currentColor; }
+#wall-bar .wclear { background: none; border: 0; color: var(--dim); cursor: pointer; font-size: 12px; padding: 4px 6px; }
+#wall-hint { position: fixed; left: 50%; bottom: 12px; transform: translateX(-50%); z-index: 110; background: rgba(13,17,23,.92); border: 1px solid var(--line); padding: 7px 16px; border-radius: 999px; font-size: 12px; color: var(--dim); white-space: nowrap; }
 
 .chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 18px; }
 .chips button { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; cursor: pointer; }
@@ -131,7 +141,7 @@ footer a { color: var(--dim); }
   .layout { flex-direction: column; }
   aside { width: 100%; height: auto; position: static; }
   main { padding: 24px 18px; }
-  .hero .banner { font-size: 9px; }
+  #wall-hint { font-size: 11px; white-space: normal; width: 88%; text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }

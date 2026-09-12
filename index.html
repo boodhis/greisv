@@ -11,6 +11,7 @@
 <meta name="theme-color" content="#0d1117">
 </head>
 <body>
+<canvas id="bgwall" aria-hidden="true"></canvas>
 <div class="layout">
 <aside>
 <div class="brand">🛡️ Цифровая Крепость</div>
@@ -134,11 +135,7 @@
 </ul>
 
 <h2>Стена Крепости</h2>
-<p>Оставь след — тут можно рисовать и писать пальцем. Роспись сохраняется прямо в браузере (localStorage), пиксели кодируются и не весят ни байта сервера.</p>
-<div id="wall-wrap">
-<canvas id="wall" aria-label="Стена Крепости — холст для надписей"></canvas>
-<button id="wall-clear" class="btn ghost">Очистить стену</button>
-</div>
+<p>Подложка страницы — это и есть стена: жми «✏️ Стена» в правом нижнем углу и оставляй надписи прямо на фоне сайта. Надписи сохраняются в браузере — приведи друзей, пусть оставят след.</p>
 
 <hr>
 <p><em>Сайт собирается из открытого кода, бесплатно хостится на GitHub Pages и умеет работать без интернета. Подробности — в <a href="manifest.html">манифесте</a>.</em></p>
@@ -151,35 +148,17 @@
 
 <script src="study/data/wordday.js"></script>
 <script src="study/data/widget.js"></script>
-<script>
-var wall = document.getElementById('wall');
-(function () {
-  var c = wall, ctx = c.getContext('2d');
-  function size() {
-    c.width = c.offsetWidth * (window.devicePixelRatio || 1);
-    c.height = c.offsetHeight * (window.devicePixelRatio || 1);
-    ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
-  }
-  size();
-  window.addEventListener('resize', function () { ctx.setTransform(1, 0, 0, 1, 0, 0); size(); paint(); });
-  var ink = '#4fc3f7', draw = false;
-  function pos(e) {
-    var r = c.getBoundingClientRect(), t = e.touches ? e.touches[0] : e;
-    return [t.clientX - r.left, t.clientY - r.top];
-  }
-  c.addEventListener('mousedown', function (e) { draw = true; ctx.beginPath(); ctx.moveTo.apply(ctx, pos(e)); e.preventDefault(); });
-  c.addEventListener('touchstart', function (e) { draw = true; ctx.beginPath(); ctx.moveTo.apply(ctx, pos(e)); e.preventDefault(); }, { passive: false });
-  window.addEventListener('mousemove', function (e) { if (!draw) return; ctx.strokeStyle = ink; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineTo.apply(ctx, pos(e)); ctx.stroke(); });
-  c.addEventListener('touchmove', function (e) { if (!draw) return; ctx.strokeStyle = ink; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineTo.apply(ctx, pos(e)); ctx.stroke(); e.preventDefault(); }, { passive: false });
-  window.addEventListener('mouseup', function () { draw = false; save(); });
-  c.addEventListener('touchend', function () { draw = false; save(); });
-  window.WALL_KEY = 'fortress_wall_v1';
-  function save() { try { localStorage.setItem(window.WALL_KEY, c.toDataURL()); } catch (e) {} }
-  function paint() { try { var d = localStorage.getItem(window.WALL_KEY); if (d) { var im = new Image(); im.onload = function () { ctx.drawImage(im, 0, 0); }; im.src = d; } } catch (e) {} }
-  paint();
-  document.getElementById('wall-clear').addEventListener('click', function () { ctx.clearRect(0, 0, c.width, c.height); try { localStorage.removeItem(window.WALL_KEY); } catch (e) {} });
-})();
-</script>
+<script src="js/wall.js"></script>
+<button id="wall-btn" class="btn ghost" title="Оставить надпись на стене-подложке">✏️ Стена</button>
+<div id="wall-bar" hidden>
+<button class="wc on" data-c="#4fc3f7" style="background:#4fc3f7" title="Голубой"></button>
+<button class="wc" data-c="#3fb950" style="background:#3fb950" title="Зелёный"></button>
+<button class="wc" data-c="#e3b341" style="background:#e3b341" title="Жёлтый"></button>
+<button class="wc" data-c="#ff7ab6" style="background:#ff7ab6" title="Розовый"></button>
+<button class="wc" data-c="#e6edf3" style="background:#e6edf3" title="Белый"></button>
+<button class="wclear" type="button">Стереть всё</button>
+</div>
+<div id="wall-hint" hidden>Рисуй прямо на подложке. Готово — кнопка справа внизу, выход — Esc</div>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js");}</script>
 </body>
 </html>

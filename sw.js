@@ -8,6 +8,7 @@ var ASSETS = [
   "style.css",
   "favicon.svg",
   "manifest.webmanifest",
+  "js/wall.js",
   "study/index.html",
   "study/words.html",
   "study/cheatsheets.html",
