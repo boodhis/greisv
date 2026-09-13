@@ -9,12 +9,12 @@
     if (!c) return;
 
     var st = document.createElement('style');
-    st.textContent = 'body.deleting #bgwall{cursor:grabbing}#wall-bar.deleting .wdots{opacity:.3;pointer-events:none}body.deleting .wc.on{border-color:transparent;box-shadow:none}body.deleting #wall-bar .wclear.on{color:#4fc3f7}';
+    st.textContent = 'body.deleting #bgwall{cursor:grabbing}#wall-bar.deleting .wdots{opacity:.3;pointer-events:none}body.deleting .wc.on{border-color:transparent;box-shadow:none}body.deleting #wall-bar .wclear.on{color:#35e6e0}';
     document.head.appendChild(st);
 
     var ctx = c.getContext('2d');
     var KEY = 'fortress_bgwall_v3_' + encodeURIComponent(location.pathname);
-    var COLORS = ['#4fc3f7', '#3fb950', '#e3b341', '#ff7ab6', '#e6edf3'];
+    var COLORS = ['#35e6e0', '#3ef06a', '#ffe14d', '#ff55f0', '#d9f7d0'];
     var MAX_STROKES = 80;
     var HIT = 26;
     var color = COLORS[0];
@@ -119,7 +119,14 @@
     var hint = document.getElementById('wall-hint');
     var del = document.getElementById('wall-undo');
 
-    function setHint(t) { if (hint) hint.textContent = t; }
+    var hintTimer = null;
+    function setHint(t) {
+      if (!t || !hint) return;
+      hint.textContent = t;
+      hint.hidden = false;
+      clearTimeout(hintTimer);
+      hintTimer = setTimeout(function () { if (hint) hint.hidden = true; }, 5000);
+    }
     function setActive(on) {
       active = on;
       document.body.classList.toggle('drawing', on);

@@ -7,6 +7,10 @@
 <meta name="description" content="Цвета жил, маркировка, сечения, розетки и порядок работ от штробы до подключения.">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="stylesheet" href="../style.css">
+<style>
+body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.65;background:repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 1px,transparent 1px 3px)}
+h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
+</style>
 </head>
 <body>
 <canvas id="bgwall" aria-hidden="true"></canvas>
@@ -115,11 +119,11 @@
 <script src="../study/data/widget.js"></script>
 <button id="wall-btn" class="btn ghost" title="Оставить надпись на стене-подложке">✏️ Стена</button>
 <div id="wall-bar" hidden>
-<button class="wc on" data-c="#4fc3f7" style="background:#4fc3f7" title="Голубой"></button>
-<button class="wc" data-c="#3fb950" style="background:#3fb950" title="Зелёный"></button>
-<button class="wc" data-c="#e3b341" style="background:#e3b341" title="Жёлтый"></button>
-<button class="wc" data-c="#ff7ab6" style="background:#ff7ab6" title="Розовый"></button>
-<button class="wc" data-c="#e6edf3" style="background:#e6edf3" title="Белый"></button>
+<button class="wc on" data-c="#35e6e0" style="background:#35e6e0" title="Голубой"></button>
+<button class="wc" data-c="#3ef06a" style="background:#3ef06a" title="Зелёный"></button>
+<button class="wc" data-c="#ffe14d" style="background:#ffe14d" title="Жёлтый"></button>
+<button class="wc" data-c="#ff55f0" style="background:#ff55f0" title="Розовый"></button>
+<button class="wc" data-c="#d9f7d0" style="background:#d9f7d0" title="Белый"></button>
 <button id="wall-undo" class="wclear" type="button">⌫ Удалить надпись</button>
 </div>
 <div id="wall-hint" hidden>Рисуй прямо на подложке. Готово — кнопка справа внизу, выход — Esc</div>

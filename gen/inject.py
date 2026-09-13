@@ -37,11 +37,11 @@ HOMELAB = '<div class="ngroup"><div class="ngt">Homelab</div>'
 WALL_CANVAS = '<canvas id="bgwall" aria-hidden="true"></canvas>'
 WALL_CONTROLS = ('<button id="wall-btn" class="btn ghost" title="Оставить надпись на стене-подложке">✏️ Стена</button>\n'
                  '<div id="wall-bar" hidden>\n'
-                 '<button class="wc on" data-c="#4fc3f7" style="background:#4fc3f7" title="Голубой"></button>\n'
-                 '<button class="wc" data-c="#3fb950" style="background:#3fb950" title="Зелёный"></button>\n'
-                 '<button class="wc" data-c="#e3b341" style="background:#e3b341" title="Жёлтый"></button>\n'
-                 '<button class="wc" data-c="#ff7ab6" style="background:#ff7ab6" title="Розовый"></button>\n'
-                 '<button class="wc" data-c="#e6edf3" style="background:#e6edf3" title="Белый"></button>\n'
+                 '<button class="wc on" data-c="#35e6e0" style="background:#35e6e0" title="Голубой"></button>\n'
+                 '<button class="wc" data-c="#3ef06a" style="background:#3ef06a" title="Зелёный"></button>\n'
+                 '<button class="wc" data-c="#ffe14d" style="background:#ffe14d" title="Жёлтый"></button>\n'
+                 '<button class="wc" data-c="#ff55f0" style="background:#ff55f0" title="Розовый"></button>\n'
+                 '<button class="wc" data-c="#d9f7d0" style="background:#d9f7d0" title="Белый"></button>\n'
                  '<button id="wall-undo" class="wclear" type="button">⌫ Удалить надпись</button>\n'
                  '</div>\n'
                  '<div id="wall-hint" hidden>Рисуй прямо на подложке. Готово — кнопка справа внизу, выход — Esc</div>\n')
@@ -49,14 +49,14 @@ WALL_CSS = """#bgwall{position:fixed;inset:0;z-index:90;pointer-events:none;touc
 body.drawing{cursor:crosshair}
 body.drawing #bgwall{pointer-events:auto}
 body.drawing main,body.drawing aside{pointer-events:none}
-#wall-btn{position:fixed;right:16px;bottom:16px;z-index:120;padding:11px 20px;border-radius:999px;font-weight:600;border:1px solid #21262d;color:#e6edf3;background:#161b22;cursor:pointer;font-family:inherit;font-size:14px}
-#wall-btn.on{background:linear-gradient(135deg,#4fc3f7,#7c4dff);color:#04141f}
-#wall-bar{position:fixed;right:16px;bottom:64px;z-index:120;display:flex;gap:6px;align-items:center;background:#161b22;border:1px solid #21262d;border-radius:999px;padding:6px 10px;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+#wall-btn{position:fixed;right:16px;bottom:16px;z-index:120;padding:11px 20px;border-radius:999px;font-weight:600;border:1px solid #1c2b1f;color:#d9f7d0;background:#0a140d;cursor:pointer;font-family:inherit;font-size:14px}
+#wall-btn.on{background:linear-gradient(135deg,#35e6e0,#ffe14d);color:#04141f}
+#wall-bar{position:fixed;right:12px;top:50%;bottom:auto;transform:translateY(-50%);z-index:120;display:flex;flex-direction:column;gap:8px;align-items:center;background:#0a140d;border:1px solid #1c2b1f;border-radius:12px;padding:10px 7px;box-shadow:0 8px 24px rgba(0,0,0,.45)}
 #wall-bar .wc{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.22);cursor:pointer;padding:0}
 #wall-bar .wc.on{border-color:#fff;box-shadow:0 0 8px currentColor}
-#wall-bar .wclear{background:none;border:0;color:#8b98a8;cursor:pointer;font-size:12px;padding:4px 6px}
-#wall-hint{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:110;background:rgba(13,17,23,.92);border:1px solid #21262d;padding:7px 16px;border-radius:999px;font-size:12px;color:#8b98a8;white-space:nowrap}
-@media(max-width:820px){#wall-hint{font-size:11px;white-space:normal;width:88%;text-align:center}}"""
+#wall-bar .wclear{writing-mode:vertical-rl;background:none;border:0;color:#7ba87c;cursor:pointer;font-size:11px;padding:2px 4px;letter-spacing:.08em}
+#wall-hint{position:fixed;right:16px;bottom:108px;left:auto;transform:none;z-index:115;max-width:min(430px,82vw);background:rgba(5,11,6,.94);border:1px solid #1c2b1f;padding:8px 14px;border-radius:10px;font-size:12px;line-height:1.45;color:#7ba87c;white-space:normal;pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.4)}
+@media(max-width:820px){#wall-hint{font-size:11px;white-space:normal;width:auto;right:12px;bottom:104px;left:12px;text-align:left}}"""
 
 
 def inject_old(path):
