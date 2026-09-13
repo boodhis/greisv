@@ -16,120 +16,23 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 </head>
 <body>
 <canvas id="bgwall" aria-hidden="true"></canvas>
-<div class="layout">
-<aside>
+<canvas id="graph"></canvas>
+<div class="layout graph-layout">
+<main class="graph-main">
+<div class="ghead">
 <div class="brand">🛡️ Цифровая Крепость</div>
-<a class="nmain on" href="index.html">Главная</a><a class="nmain" href="manifest.html">Манифест</a>
-
-<div class="ngroup"><div class="ngt">Обучение</div>
-<a class="nli" href="study/index.html">Обучение</a>
-<a class="nli" href="study/words.html">Тренажёр карточек</a>
-<a class="nli" href="study/cheatsheets.html">Шпаргалки</a></div>
-
-<div class="ngroup"><div class="ngt">Электрика</div>
-<a class="nli" href="electric/index.html">Раздел</a>
-<a class="nli" href="electric/safety.html">Безопасность</a>
-<a class="nli" href="electric/panels.html">Щиты и автоматы</a>
-<a class="nli" href="electric/wiring.html">Кабели и монтаж</a>
-<a class="nli" href="electric/smart.html">Умный дом</a></div>
-
-<div class="ngroup"><div class="ngt">С чего начать</div>
-<a class="nli" href="getting-started/index.html">Обзор</a>
-<a class="nli" href="getting-started/install-ubuntu.html">Установка Ubuntu</a>
-<a class="nli" href="getting-started/first-steps.html">Первые шаги</a>
-<a class="nli" href="getting-started/bootable-usb.html">Загрузочная флешка</a></div>
-
-<div class="ngroup"><div class="ngt">Homelab</div>
-<a class="nli" href="homelab/index.html">Концепция</a>
-<a class="nli" href="homelab/hardware.html">Железо</a>
-<a class="nli" href="homelab/network.html">Сеть</a>
-<a class="nli" href="homelab/server-reference.html">Справочник сервера</a><a class="nli" href="homelab/sopds-web.html">Проект: Библиотека</a></div>
-
-<div class="ngroup"><div class="ngt">Сервисы</div>
-<a class="nli" href="services/index.html">Обзор</a>
-<a class="nli" href="services/docker.html">Docker</a>
-<a class="nli" href="services/samba.html">Samba</a>
-<a class="nli" href="services/minidlna.html">MiniDLNA</a>
-<a class="nli" href="services/transmission.html">Transmission</a>
-<a class="nli" href="services/navidrome.html">Navidrome</a>
-<a class="nli" href="services/immich.html">Immich</a>
-<a class="nli" href="services/sopds.html">SOPDS</a>
-<a class="nli" href="services/mqtt.html">MQTT / ESPHome</a></div>
-
-<div class="ngroup"><div class="ngt">Гайды</div>
-<a class="nli" href="guides/index.html">Обзор</a>
-<a class="nli" href="guides/disk-health.html">Диски и SMART</a>
-<a class="nli" href="guides/diagnostics.html">Диагностика</a>
-<a class="nli" href="guides/backup.html">Бекапы</a>
-<a class="nli" href="guides/ssh.html">SSH</a>
-<a class="nli" href="guides/terminal.html">Терминал</a>
-<a class="nli" href="guides/wifi-fix.html">Wi-Fi фикс</a>
-<a class="nli" href="guides/auto-setup.html">Автосборка</a>
-<a class="nli" href="guides/journalctl.html">journalctl</a>
-<a class="nli" href="guides/auto-shutdown.html">Авто-выключение</a></div>
-
-<div class="ngroup"><div class="ngt">Ресурсы</div>
-<a class="nli" href="resources/links.html">Ссылки</a>
-<a class="nli" href="resources/git-commands.html">Git команды</a>
-<a class="nli" href="resources/inxi.html">INXI</a>
-<a class="nli" href="resources/opencode-windows.html">OpenCode на Windows</a></div>
-
-<div class="ngroup"><div class="ngt">Хобби</div>
-<a class="nli" href="hobbies/index.html">Досуг</a>
-<a class="nli" href="hobbies/guitar.html">Гитара</a>
-<a class="nli" href="hobbies/esp32.html">ESP32 / ESPHome</a></div>
-</aside>
-
-<main>
-<h1>🛡️ Цифровая Крепость</h1>
-<p class="desc">Linux · homelab · обучение. Функциональные разделы — сразу под заголовком.</p>
-
-<div class="grid">
-<div class="card"><a href="study/words.html">
-<b>📖 Тренажёр карточек</b>
-<p>Интервальное повторение: английские слова, терминальные команды, гитара и ноты на грифе. Как на панели — но в полном вебе.</p>
-</a></div>
-<div class="card"><a href="study/cheatsheets.html">
-<b>🗒 Шпаргалки</b>
-<p>Git, systemd, Docker, диски, сеть. То, что нужно под рукой в терминале.</p>
-</a></div>
-<div class="card"><a href="electric/index.html">
-<b>⚡ Электрика</b>
-<p>Безопасность, щиты и автоматы, кабели и монтаж, умный дом. Ликбез для монтажников и хозяев.</p>
-</a></div>
-<div class="card"><a href="homelab/index.html">
-<b>🏠 Homelab</b>
-<p>Железо, сеть, референс сервера. Всё проверено на реальном сервере в этом доме.</p>
-</a></div>
-<div class="card"><a href="services/docker.html">
-<b>🐳 Сервисы</b>
-<p>Docker, Samba, Navidrome, Immich, SOPDS, MQTT. Сервисный стек хомлаба.</p>
-</a></div>
-<div class="card"><a href="manifest.html">
-<b>🏗 Манифест</b>
-<p>Зачем всё это и как устроено: бесплатно, открыто, офлайн, «как игра на Денди».</p>
-</a></div>
+<div id="wordday" class="headline"><div class="wd-t">Слово дня</div><div class="wd-w">…</div><div class="wd-ph"></div><div class="wd-t2"></div><div class="wd-hint">нажми, чтобы раскрыть перевод</div></div>
+<p class="desc">Linux · homelab · обучение. Навигация — карта-граф: тяни узел мышью, крути колесо надписи — и жми, чтобы открыть раздел.</p>
 </div>
-
-<h2>Что внутри</h2>
-<ul>
-<li>🐧 <strong>Перейти на Linux</strong> и не бояться, что «всё сломается» — по разделу «С чего начать».</li>
-<li>📚 <strong>Учиться по нашему курсу</strong>: Linux, сети, Docker, автоматизация, хомлаб.</li>
-<li>🔄 <strong>Повторять слова с пользой</strong>: SRS-тренажёр хранит прогресс в браузере.</li>
-<li>🔌 <strong>Разобраться в электрике</strong> для монтажа и ремонта — раздел «Электрика».</li>
-</ul>
-
-<h2>Стена Крепости</h2>
-<p>Подложка страницы — это и есть стена: жми «✏️ Стена» в правом нижнем углу и оставляй надписи прямо на фоне сайта. Надписи сохраняются в браузере — приведи друзей, пусть оставят след.</p>
-
-<div id="wordday"><div class="wd-t">Слово дня</div><div class="wd-w">…</div><div class="wd-ph"></div><div class="wd-t2"></div><div class="wd-hint">нажми, чтобы раскрыть перевод</div></div>
-
-<footer>Цифровая Крепость — образовательный сайт. Все примеры проверены на реальном сервере. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>
+<footer class="graph-footer">Цифровая Крепость — образовательный сайт. Все примеры проверены на реальном сервере. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>
 </main>
 </div>
 
+<div id="graph-hint" class="ghint">колесо — масштаб · тяни пустоту — сдвиг · тяни узел — переставить · клик по узлу — переход</div>
+
 <script src="study/data/wordday.js"></script>
 <script src="study/data/widget.js"></script>
+<script src="js/graph.js"></script>
 <button id="wall-btn" class="btn ghost" title="Оставить надпись на стене-подложке">✏️ Стена</button>
 <div id="wall-bar" hidden>
 <button class="wc on" data-c="#35e6e0" style="background:#35e6e0" title="Голубой"></button>
