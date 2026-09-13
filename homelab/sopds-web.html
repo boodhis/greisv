@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SOPDS — Цифровая Крепость</title>
-<meta name="description" content="Персональная библиотека электронных книг">
+<title>Проект «Библиотека» — веб-морда SOPDS — Цифровая Крепость</title>
+<meta name="description" content="Проект пересборки веб-морды SOPDS: стек, архитектура, шаги, статус">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <style>
 :root{--bg:#0d1117;--panel:#161b22;--line:#21262d;--text:#e6edf3;--dim:#8b98a8;--accent:#4fc3f7;--code:#1f6feb;--green:#3fb950;--tip:#1f6feb;--note:#8957e5}
@@ -45,6 +45,9 @@ em{color:var(--dim)}
 .callout-warning{border-color:#e3b341;background:rgba(227,179,65,.08)}
 .callout-t{color:var(--accent);font-size:13px;text-transform:uppercase;letter-spacing:.04em}
 .callout-body p:last-child{margin-bottom:0}
+.tag{display:inline-block;padding:1px 9px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:12px;color:var(--dim);margin:0 6px 6px 0}
+.tag.ok{color:var(--green)}
+.tag.todo{color:#e3b341}
 footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);color:var(--dim);font-size:13px}
 @media(max-width:820px){.layout{flex-direction:column}aside{width:100%;height:auto;position:static}main{padding:24px 18px}}
 </style>
@@ -57,52 +60,71 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);color:v
 <div class="ngroup"><div class="ngt">С чего начать</div><a class="nli" href="../getting-started/index.html">Обзор</a><a class="nli" href="../getting-started/install-ubuntu.html">Установка Ubuntu</a><a class="nli" href="../getting-started/first-steps.html">Первые шаги</a><a class="nli" href="../getting-started/bootable-usb.html">Загрузочная флешка</a></div>
 <div class="ngroup"><div class="ngt">Обучение</div><a class="nli" href="../study/index.html">Обучение</a><a class="nli" href="../study/words.html">Тренажёр карточек</a><a class="nli" href="../study/cheatsheets.html">Шпаргалки</a></div>
 <div class="ngroup"><div class="ngt">Электрика</div><a class="nli" href="../electric/index.html">Раздел</a><a class="nli" href="../electric/safety.html">Безопасность</a><a class="nli" href="../electric/panels.html">Щиты и автоматы</a><a class="nli" href="../electric/wiring.html">Кабели и монтаж</a><a class="nli" href="../electric/smart.html">Умный дом</a></div>
-<div class="ngroup"><div class="ngt">Homelab</div><a class="nli" href="../homelab/index.html">Концепция</a><a class="nli" href="../homelab/hardware.html">Железо</a><a class="nli" href="../homelab/network.html">Сеть</a><a class="nli" href="../homelab/server-reference.html">Справочник сервера</a></div>
-<div class="ngroup"><div class="ngt">Сервисы</div><a class="nli" href="../services/index.html">Обзор</a><a class="nli" href="../services/docker.html">Docker</a><a class="nli" href="../services/samba.html">Samba</a><a class="nli" href="../services/minidlna.html">MiniDLNA</a><a class="nli" href="../services/transmission.html">Transmission</a><a class="nli" href="../services/navidrome.html">Navidrome</a><a class="nli" href="../services/immich.html">Immich</a><a class="nli on" href="../services/sopds.html">SOPDS</a><a class="nli" href="../services/mqtt.html">MQTT / ESPHome</a></div>
+<div class="ngroup"><div class="ngt">Homelab</div><a class="nli" href="../homelab/index.html">Концепция</a><a class="nli" href="../homelab/hardware.html">Железо</a><a class="nli" href="../homelab/network.html">Сеть</a><a class="nli" href="../homelab/server-reference.html">Справочник сервера</a><a class="nli on" href="../homelab/sopds-web.html">Проект: Библиотека</a></div>
+<div class="ngroup"><div class="ngt">Сервисы</div><a class="nli" href="../services/index.html">Обзор</a><a class="nli" href="../services/docker.html">Docker</a><a class="nli" href="../services/samba.html">Samba</a><a class="nli" href="../services/minidlna.html">MiniDLNA</a><a class="nli" href="../services/transmission.html">Transmission</a><a class="nli" href="../services/navidrome.html">Navidrome</a><a class="nli" href="../services/immich.html">Immich</a><a class="nli" href="../services/sopds.html">SOPDS</a><a class="nli" href="../services/mqtt.html">MQTT / ESPHome</a></div>
 <div class="ngroup"><div class="ngt">Гайды</div><a class="nli" href="../guides/index.html">Обзор</a><a class="nli" href="../guides/disk-health.html">Диски и SMART</a><a class="nli" href="../guides/diagnostics.html">Диагностика</a><a class="nli" href="../guides/backup.html">Бекапы</a><a class="nli" href="../guides/ssh.html">SSH</a><a class="nli" href="../guides/terminal.html">Терминал</a><a class="nli" href="../guides/wifi-fix.html">Wi-Fi фикс</a><a class="nli" href="../guides/auto-setup.html">Автосборка</a><a class="nli" href="../guides/journalctl.html">journalctl</a><a class="nli" href="../guides/auto-shutdown.html">Авто-выключение</a></div>
 <div class="ngroup"><div class="ngt">Ресурсы</div><a class="nli" href="../resources/links.html">Ссылки</a><a class="nli" href="../resources/git-commands.html">Git команды</a><a class="nli" href="../resources/inxi.html">INXI</a><a class="nli" href="../resources/opencode-windows.html">OpenCode на Windows</a></div>
 <div class="ngroup"><div class="ngt">Хобби</div><a class="nli" href="../hobbies/index.html">Досуг</a><a class="nli" href="../hobbies/guitar.html">Гитара</a></div>
 </aside>
 <main>
-<h2>SOPDS: Библиотека книг</h2>
-<p><strong>SOPDS</strong> (Simple OPDS Server) — это персональный сервер электронных книг с веб-интерфейсом. Удобный способ читать и скачивать книги с любого устройства в домашней сети.</p>
-<div class="callout callout-note"><h4 class="callout-t">Новая веб-морда каталога</h4><div class="callout-body"><p>Тот же каталог в современном интерфейсе — поиск за доли секунды, читалка FB2, скачивание и озвучка, избранное: <a href="http://192.168.0.101:8091">http://192.168.0.101:8091</a>. Открытый доступ — только локальная сеть. Подробности проекта (стек, архитектура, шаги): <a href="../homelab/sopds-web.html">Проект «Библиотека»</a>.</p></div></div>
-<h3>Что это даёт</h3>
-<ul><li>📚 Доступ к коллекции книг с телефона, планшета, компьютера</li><li>🔍 Поиск по авторам, жанрам, названиям</li><li>📥 Скачивание в FB2, EPUB, TXT</li><li>🌐 Веб-интерфейс и OPDS-каталог для читалок</li></ul>
-<h3>Установка через Docker</h3>
-<pre><code>services:
-  sopds:
-    image: zveronline/sopds:latest
-    platform: linux/amd64
-    container_name: sopds
-    ports:
-      - &quot;8081:8001&quot;
-    volumes:
-      - /mnt/minis/flibusta:/library:ro
-      - ./sopds_db:/var/lib/sopds
-    environment:
-      - SOPDS_LANGUAGE=ru
-    restart: always</code></pre>
-<div class="callout callout-tip"><h4 class="callout-t">Разбор конфига</h4><div class="callout-body"><ul><li><code>platform: linux/amd64</code> — обязателен для больших библиотек</li><li><code>ports: 8081:8001</code> — внешний порт 8081, внутренний 8001</li><li><code>volumes</code> — папка с книгами и база данных</li></ul></div></div>
-<h3>Критические настройки</h3>
-<p>После запуска зайди в <strong>Admin → Constance</strong> и настрой:</p>
-<table><thead><tr><th>Параметр</th><th>Значение</th><th>Зачем</th></tr></thead><tbody><tr><td><code>SOPDS_ROOT_LIB</code></td><td><code>/library</code></td><td>Путь к книгам внутри контейнера</td></tr><tr><td><code>SOPDS_INPX_ENABLE</code></td><td><code>True</code></td><td>Использовать .inpx индекс (без этого 300ГБ сканируются вечность)</td></tr><tr><td><code>SOPDS_INPX_LANGS</code></td><td><code>ru, ru-RU</code></td><td>Фильтр языков</td></tr><tr><td><code>SOPDS_ZIPCODEPAGE</code></td><td><code>cp866</code></td><td>Русские имена в ZIP</td></tr><tr><td><code>SOPDS_MAXITEMS</code></td><td><code>20</code></td><td>Лимит на страницу</td></tr><tr><td><code>SOPDS_SPLITITEMS</code></td><td><code>100</code></td><td>Ускорение меню</td></tr></tbody></table>
-<h3>Полезные команды</h3>
-<pre><code># Принудительный запуск сканера
-docker exec -d sopds python3 manage.py sopds_scanner scan
+<h1>Проект «Библиотека»</h1>
+<p class="desc">Пересборка веб-морды SOPDS «на современные рельсы»: что это, на чём основано, как работает и что готово.</p>
 
-# Проверка нагрузки
-htop | grep sopds
+<div class="callout"><div class="callout-t">Что это</div><div class="callout-body">
+<p>Задача-ветка (от юзера): «пересобрать всю петрушку — веб-морда SOPDS, поиск, всё что к ней прикручено». Вместо старого интерфейса на чужих Django/Foundation-шаблонах — чистый современный тёмный интерфейс с быстрым поиском по всей библиотеке. База и каталог книг не трогаются. Работает в dev-инстансе на <code>http://192.168.0.101:8091</code>; прод <code>:8081</code> остаётся нетронутым.</p>
+</div></div>
 
-# Права доступа
-sudo chmod -R 755 /mnt/minis/flibusta</code></pre>
-<div class="callout callout-tip"><h4 class="callout-t">Разбор команды</h4><div class="callout-body"><ul><li><code>docker exec</code> — выполнить команду в запущенном контейнере</li><li><code>manage.py sopds_scanner scan</code> — запустить сканирование библиотеки</li><li><code>htop</code> — интерактивный диспетчер задач</li></ul></div></div>
-<h3>Доступ</h3>
-<table><thead><tr><th>Интерфейс</th><th>URL</th></tr></thead><tbody><tr><td>Новая веб-морда (dev)</td><td><a href="http://192.168.0.101:8091">http://192.168.0.101:8091</a></td></tr><tr><td>Веб-интерфейс (SOPDS)</td><td><code>http://192.168.0.244:8081</code></td></tr><tr><td>OPDS-каталог</td><td><code>http://192.168.0.244:8081/opds</code></td></tr></tbody></table>
-<h3>Готово!</h3>
-<p>Теперь ты знаешь: - ✅ Что такое SOPDS и зачем он нужен - ✅ Как установить через Docker - ✅ Как настроить для больших коллекций - ✅ Как управлять сканированием</p>
+<h2>На чём основано</h2>
+<table><thead><tr><th>Слой</th><th>Технология</th><th>Зачем</th></tr></thead><tbody>
+<tr><td><strong>Бэкенд</strong></td><td>FastAPI (Python 3.12, uvicorn)</td><td>Один язык, без Node.js; серверные страницы и JSON</td></tr>
+<tr><td><strong>Фронт</strong></td><td>HTMX + vanilla JS (<code>static/bib.js</code>)</td><td>Живой поиск, подгрузка, состояние в local-time</td></tr>
+<tr><td><strong>Данные</strong></td><td>PostgreSQL каталога SOPDS (read-only)</td><td>397 671 книга; поиск по названию/автору/серии/жанру</td></tr>
+<tr><td><strong>Архивы</strong></td><td>FB2-архивы <code>/mnt/devlib</code> (176 zip)</td><td>Чтение FB2, скачивание, обложки</td></tr>
+<tr><td><strong>Озвучка</strong></td><td>Фабрика <code>audiobook.php</code> на сервере</td><td>edge-tts / piper / gtts, очередь → worker → m4b</td></tr>
+</tbody></table>
+
+<h2>Как это работает</h2>
+<h3>Архитектура</h3>
+<pre><code>Браузер (карточки, поиск, читалка)
+   │  :8091  uvicorn ← FastAPI (app.py)
+   ├─→ PostgreSQL каталога   → поиск, карточки, жанры (&lt;0.1 с)
+   ├─→ /mnt/devlib/*.zip     → чтение fb2, скачивание, /cover/{id}
+   │
+   └─→ Озвучка: /voice/{id} → audiobook.php?add=1 (сервер 192.168.0.244)
+        └→ очередь → worker → edge/piper/gtts → m4b с главами</code></pre>
+
+<h3>Ключевые страницы</h3>
+<table><thead><tr><th>Роут</th><th>Что делает</th></tr></thead><tbody>
+<tr><td><code>/</code></td><td>Главная: случайные подборки (12 книг + 3 жанровых блока) + «За последнее время…»</td></tr>
+<tr><td><code>/search?q=…</code></td><td>Живой поиск (название/автор/серия), фильтры «только русские», сортировка</td></tr>
+<tr><td><code>/book/{id}</code></td><td>Карточка книги: аннотация, обложка, читать/скачать/озвучить</td></tr>
+<tr><td><code>/read/{id}</code></td><td>Читалка FB2 с сохранением позиции и трекингом «читаю»</td></tr>
+<tr><td><code>/cover/{id}</code></td><td>Превью обложки (извлекается из fb2, кэш на диск)</td></tr>
+<tr><td><code>/voice/{id}</code></td><td>Переход на фабрику озвучки (edge/piper/gtts)</td></tr>
+<tr><td><code>/favs</code>, <code>/books_json</code></td><td>Избранное и история (localStorage) + данные для карточек</td></tr>
+</tbody></table>
+
+<h2>Шаги (как собирали)</h2>
+<ol>
+<li><strong>Разведка</strong> — вытащили с сервера шаблоны, views, логику фильтра «русские» и кнопку озвучки; локальная копия <code>~/sopds-dev</code>.</li>
+<li><strong>Выбор стека</strong> — FastAPI + HTMX (договорились с юзером).</li>
+<li><strong>Веб-морда</strong> — поиск &lt;0.1 с по каталогу, тёмная тема, карточки, пагинация, инфинити.</li>
+<li><strong>Главная</strong> — случайные подборки разных направлений + история «читал/скачивал/озвучивал».</li>
+<li><strong>Чтение и библиотека</strong> — читалка FB2, избранное, прогресс чтения (всё локально в браузере, без авторизации).</li>
+<li><strong>Озвучка</strong> — кнопка «🎧 Озвучить» e2e: фикс бага «всё пропущено как дубликат», движки edge/piper/gtts, 7 голосов.</li>
+<li><strong>Обложки</strong> — превью в карточках из fb2-архивов с кэшем на диск.</li>
+<li><strong>Осталось</strong> — деплой на сервер (чтение каталога 397 671 и переключение :8081) и store-функционал (добавление/правка книг).</li>
+</ol>
+
+<h2>Статус</h2>
+<p><span class="tag ok">✓ dev :8091 работает</span><span class="tag ok">✓ поиск &lt;0.1 с</span><span class="tag ok">✓ главная-подборки</span><span class="tag ok">✓ история/избранное</span><span class="tag ok">✓ озвучка (3 движка)</span><span class="tag ok">✓ обложки</span><span class="tag todo">⏳ деплой :8081</span><span class="tag todo">⏳ store</span></p>
+
+<div class="callout callout-warning"><div class="callout-t">Важно</div><div class="callout-body">
+<p>Каталог читается только на чтение, прод <code>:8081</code> не трогаем до готовности деплоя. Поиск/тексты — на русском (язык по умолчанию). Смотрите также: <a href="../services/sopds.html">страница сервиса SOPDS</a>.</p>
+</div></div>
+
 <hr/>
-<p><em>SOPDS — удобный способ сделать свою библиотеку доступной из любой точки дома.</em></p>
+<p><em>Лина работы: по одной задаче с фиксацией (коммит), расход токенов учитывается в <a href="https://boodhis.github.io/greisv/">журнале агента</a>.</em></p>
 <footer>Цифровая Крепость — образовательный сайт о Linux и homelab. Все примеры проверены на реальном сервере.</footer>
 </main>
 </div>

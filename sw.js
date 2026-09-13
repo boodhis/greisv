@@ -49,6 +49,7 @@ var ASSETS = [
   "homelab/index.html",
   "homelab/network.html",
   "homelab/server-reference.html",
+  "homelab/sopds-web.html",
   "resources/git-commands.html",
   "resources/index.html",
   "resources/inxi.html",
