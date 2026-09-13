@@ -72,6 +72,32 @@ def test_key_pages():
         assert (ROOT / rel).exists(), f"нет {rel}"
 
 
+def _sw_assets():
+    sw = (ROOT / "sw.js").read_text(encoding="utf-8")
+    m = re.search(r'var ASSETS = \[(.*?)\];', sw, re.S)
+    assert m, "в sw.js нет массива ASSETS"
+    return set(re.findall(r'"([^"]+)"', m.group(1)))
+
+
+def test_sw_precache_covers_all_pages():
+    assets = _sw_assets()
+    missing = []
+    for p in all_html_files():
+        rel = p.relative_to(ROOT).as_posix()
+        if rel not in assets and "./" + rel not in assets:
+            missing.append(rel)
+    assert not missing, "не в precache sw.js: " + ", ".join(missing)
+
+
+def test_sitemap_covers_all_pages():
+    sitemap = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
+    locs = set(re.findall(r'<loc>https://boodhis\.github\.io/greisv/([^<]*)</loc>', sitemap))
+    locs = {x if x else "index.html" for x in locs}
+    missing = [p.relative_to(ROOT).as_posix() for p in all_html_files()
+               if p.relative_to(ROOT).as_posix() not in locs]
+    assert not missing, "не в sitemap.xml: " + ", ".join(missing)
+
+
 def test_trainer_tags():
     words = (ROOT / "study/words.html").read_text(encoding="utf-8")
     srs = (ROOT / "study/data/srs.js").read_text(encoding="utf-8")
