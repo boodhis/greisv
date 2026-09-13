@@ -126,7 +126,7 @@ ls -la /mnt/storage/backups/</code></pre>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
 <style>
 #bgwall{position:fixed;inset:0;z-index:90;pointer-events:none;touch-action:none}
-body.drawing{cursor:crosshair}
+body.drawing{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><circle cx='8' cy='8' r='3' fill='%2335e6e0' stroke='%23000' stroke-opacity='.5'/></svg>") 8 8,crosshair}
 body.drawing #bgwall{pointer-events:auto}
 body.drawing main,body.drawing aside{pointer-events:none}
 #wall-btn{position:fixed;right:16px;bottom:16px;z-index:120;padding:11px 20px;border-radius:999px;font-weight:600;border:1px solid #1c2b1f;color:#d9f7d0;background:#0a140d;cursor:pointer;font-family:inherit;font-size:14px}
