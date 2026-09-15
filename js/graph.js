@@ -151,10 +151,21 @@
   var zoom = 1, offX = 0, offY = 0, hover = null;
 
   function fit() {
-    zoom = Math.min(W, H) / (R * 1.08);
-    if (zoom < 0.12) zoom = 0.12;
-    offX = W / 2;
-    offY = H / 2;
+    var minX = 1e9, maxX = -1e9, minY = 1e9, maxY = -1e9;
+    for (var i = 0; i < nodes.length; i++) {
+      var o = nodes[i];
+      if (o.x < minX) minX = o.x;
+      if (o.x > maxX) maxX = o.x;
+      if (o.y < minY) minY = o.y;
+      if (o.y > maxY) maxY = o.y;
+    }
+    var w = (maxX - minX) || 1, h = (maxY - minY) || 1;
+    var m = Math.min(W, H) * 0.04;
+    zoom = Math.min((W - 2 * m) / w, (H - 2 * m) / h);
+    if (zoom < 0.08) zoom = 0.08;
+    if (zoom > 10) zoom = 10;
+    offX = W / 2 - (minX + maxX) / 2 * zoom;
+    offY = H / 2 - (minY + maxY) / 2 * zoom;
   }
   function toScreen(o) { return { x: o.x * zoom + offX, y: o.y * zoom + offY }; }
   function toWorld(sx, sy) { return { x: (sx - offX) / zoom, y: (sy - offY) / zoom }; }
@@ -216,10 +227,14 @@
   }
 
   /* ---- цикл ---- */
-  var raf = null;
+  var raf = null, settling = 420;
   function frame(ts) {
-    step(true);
+    step(settling > 0);
     draw();
+    if (settling > 0) {
+      settling--;
+      if (settling === 0) fit();
+    }
     raf = requestAnimationFrame(frame);
     void ts;
   }
@@ -234,14 +249,13 @@
     fit();
   }
 
-  window.addEventListener('resize', resize);
-  resize();
-
   for (var i = 0; i < nodes.length; i++) {
     nodes[i].x = (Math.random() - 0.5) * R * 0.55;
     nodes[i].y = (Math.random() - 0.5) * R * 0.55;
   }
-  for (var w = 0; w < 420; w++) step(false);
+
+  window.addEventListener('resize', function () { resize(); });
+  resize();
   raf = requestAnimationFrame(frame);
 
   /* ---- ввод ---- */

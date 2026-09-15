@@ -19,28 +19,20 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 <canvas id="graph"></canvas>
 <div class="layout graph-layout">
 <main class="graph-main">
-<footer class="graph-footer">
-<div id="wordday" class="headline"><div class="wd-t">Слово дня</div><div class="wd-w">…</div><div class="wd-ph"></div><div class="wd-t2"></div><div class="wd-hint">нажми, чтобы раскрыть перевод</div></div>
-<div class="gft-note">🛡️ Цифровая Крепость — образовательный сайт. Все примеры проверены на реальном сервере. · <a href="https://github.com/boodhis/greisv">Исходный код</a></div>
-</footer>
+<div id="gft-note" class="graph-note">🛡️ Цифровая Крепость — образовательный сайт. Все примеры проверены на реальном сервере. · <a href="https://github.com/boodhis/greisv">Исходный код</a></div>
 </main>
 </div>
 
-<div id="graph-hint" class="ghint">колесо — масштаб · тяни пустоту — сдвиг · тяни узел — переставить · клик по узлу — переход</div>
-
-<script src="study/data/wordday.js"></script>
-<script src="study/data/widget.js"></script>
 <script src="js/graph.js"></script>
-<button id="wall-btn" class="btn ghost" title="Оставить надпись на стене-подложке">✏️ Стена</button>
-<div id="wall-bar" hidden>
+<div id="wall-bar" class="wall-combo">
+<button id="wall-btn" title="Рисовать на стене">✏️</button>
 <button class="wc on" data-c="#35e6e0" style="background:#35e6e0" title="Голубой"></button>
 <button class="wc" data-c="#3ef06a" style="background:#3ef06a" title="Зелёный"></button>
 <button class="wc" data-c="#ffe14d" style="background:#ffe14d" title="Жёлтый"></button>
 <button class="wc" data-c="#ff55f0" style="background:#ff55f0" title="Розовый"></button>
 <button class="wc" data-c="#d9f7d0" style="background:#d9f7d0" title="Белый"></button>
-<button id="wall-undo" class="wclear" type="button">⌫ Удалить надпись</button>
+<button id="wall-undo" type="button" title="Удалить надпись">⌫</button>
 </div>
-<div id="wall-hint" hidden>Рисуй прямо на подложке. Готово — кнопка справа внизу, выход — Esc</div>
 <script src="js/wall.js"></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js");}</script>
 </body>
