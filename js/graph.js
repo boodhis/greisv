@@ -104,7 +104,22 @@
   nodes.forEach(function (n) { n.deg = deg[n.id]; });
 
   /* ---- физика ---- */
-  var R = 1040, damp = 0.82;
+  var damp = 0.82;
+  var LIMX = 440, LIMY = 320;      /* границы мира = половина окна */
+  var REP = 190000, CAP = 26;      /* сила отталкивания */
+  var LINKLEN = 150;               /* длина пружины связи */
+
+  /* Пружины/отталкивание подгоняем под размер окна, чтобы граф заполнял его
+     без масштабирования (zoom по умолчанию 1, мировые координаты ≈ экранные). */
+  function computeScale() {
+    LIMX = Math.max(120, W * 0.46);
+    LIMY = Math.max(120, H * 0.44);
+    var cell = Math.sqrt((LIMX * 2 * LIMY * 2) / Math.max(1, nodes.length));
+    LINKLEN = cell * 1.05;
+    var k = LINKLEN / 150;
+    REP = 190000 * k;
+    CAP = 26 * k;
+  }
 
   function step(kick) {
     var i, a, b, dx, dy, d2, d, f;
@@ -113,8 +128,8 @@
         a = nodes[i]; b = nodes[j];
         dx = a.x - b.x; dy = a.y - b.y;
         d2 = dx * dx + dy * dy + 1;
-        f = 190000 / d2;
-        if (f > 26) f = 26;
+        f = REP / d2;
+        if (f > CAP) f = CAP;
         dx /= Math.sqrt(d2); dy /= Math.sqrt(d2);
         a.vx += f * dx; a.vy += f * dy;
         b.vx -= f * dx; b.vy -= f * dy;
@@ -124,7 +139,7 @@
       a = links[i][0]; b = links[i][1];
       dx = b.x - a.x; dy = b.y - a.y;
       d = Math.sqrt(dx * dx + dy * dy) || 1;
-      f = (d - 150) * 0.02;
+      f = (d - LINKLEN) * 0.02;
       dx /= d; dy /= d;
       a.vx += f * dx; a.vy += f * dy;
       b.vx -= f * dx; b.vy -= f * dy;
@@ -139,33 +154,22 @@
       }
       a.vx *= damp; a.vy *= damp;
       a.x += a.vx; a.y += a.vy;
-      var lim = R * 0.42;
-      if (a.x > lim) { a.x = lim; a.vx *= -0.3; }
-      if (a.x < -lim) { a.x = -lim; a.vx *= -0.3; }
-      if (a.y > lim) { a.y = lim; a.vy *= -0.3; }
-      if (a.y < -lim) { a.y = -lim; a.vy *= -0.3; }
+      if (a.x > LIMX) { a.x = LIMX; a.vx *= -0.3; }
+      if (a.x < -LIMX) { a.x = -LIMX; a.vx *= -0.3; }
+      if (a.y > LIMY) { a.y = LIMY; a.vy *= -0.3; }
+      if (a.y < -LIMY) { a.y = -LIMY; a.vy *= -0.3; }
     }
   }
 
   /* ---- вид ---- */
   var zoom = 1, offX = 0, offY = 0, hover = null;
 
+  /* Без авто-масштабирования: мир уже размером с окно, центрируем 1:1.
+     Колесо/перетаскивание остаются для ручного зума и панорамы. */
   function fit() {
-    var minX = 1e9, maxX = -1e9, minY = 1e9, maxY = -1e9;
-    for (var i = 0; i < nodes.length; i++) {
-      var o = nodes[i];
-      if (o.x < minX) minX = o.x;
-      if (o.x > maxX) maxX = o.x;
-      if (o.y < minY) minY = o.y;
-      if (o.y > maxY) maxY = o.y;
-    }
-    var w = (maxX - minX) || 1, h = (maxY - minY) || 1;
-    var m = Math.min(W, H) * 0.04;
-    zoom = Math.min((W - 2 * m) / w, (H - 2 * m) / h);
-    if (zoom < 0.08) zoom = 0.08;
-    if (zoom > 10) zoom = 10;
-    offX = W / 2 - (minX + maxX) / 2 * zoom;
-    offY = H / 2 - (minY + maxY) / 2 * zoom;
+    zoom = 1;
+    offX = W / 2;
+    offY = H / 2;
   }
   function toScreen(o) { return { x: o.x * zoom + offX, y: o.y * zoom + offY }; }
   function toWorld(sx, sy) { return { x: (sx - offX) / zoom, y: (sy - offY) / zoom }; }
@@ -231,10 +235,7 @@
   function frame(ts) {
     step(settling > 0);
     draw();
-    if (settling > 0) {
-      settling--;
-      if (settling === 0) fit();
-    }
+    if (settling > 0) settling--;
     raf = requestAnimationFrame(frame);
     void ts;
   }
@@ -246,12 +247,15 @@
     cv.height = Math.round(H * dpr);
     cv.style.width = W + 'px';
     cv.style.height = H + 'px';
+    computeScale();
     fit();
   }
 
+  W = window.innerWidth; H = window.innerHeight;
+  computeScale();
   for (var i = 0; i < nodes.length; i++) {
-    nodes[i].x = (Math.random() - 0.5) * R * 0.55;
-    nodes[i].y = (Math.random() - 0.5) * R * 0.55;
+    nodes[i].x = (Math.random() - 0.5) * 2 * LIMX * 0.9;
+    nodes[i].y = (Math.random() - 0.5) * 2 * LIMY * 0.9;
   }
 
   window.addEventListener('resize', function () { resize(); });

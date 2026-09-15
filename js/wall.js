@@ -1,15 +1,14 @@
 /* Стена Крепости — подложка на весь экран для надписей.
    Подложка НЕЗАВИСИМА для каждой страницы: ключ хранилища включает путь страницы.
-   «⌫ Удалить надпись» включает режим удаления — появляется курсор, клик по
-   надписи убирает именно её (выборочно). Общие классы .drawing/.deleting
-   задаются в статическом CSS страницы; режимные мелочи инжектятся здесь. */
+   Режим рисования включается кликом по цветному кружку (отдельной кнопки нет).
+   Круглая кнопка «🗑» включает режим удаления — клик по надписи убирает именно её. */
 (function () {
   function init() {
     var c = document.getElementById('bgwall');
     if (!c) return;
 
     var st = document.createElement('style');
-    st.textContent = 'body.deleting #bgwall{cursor:grabbing}#wall-bar.deleting .wdots{opacity:.3;pointer-events:none}body.deleting .wc.on{border-color:transparent;box-shadow:none}body.deleting #wall-bar .wclear.on{color:#35e6e0}';
+    st.textContent = 'body.deleting #bgwall{cursor:grabbing}';
     document.head.appendChild(st);
 
     var ctx = c.getContext('2d');
@@ -118,44 +117,34 @@
     var bar = document.getElementById('wall-bar');
     var hint = document.getElementById('wall-hint');
     var del = document.getElementById('wall-undo');
+    var legacy = !!btn;   /* старые страницы с кнопкой «✏️ Стена» */
 
-    var hintTimer = null;
-    function setHint(t) {
-      if (!t || !hint) return;
-      hint.textContent = t;
-      hint.hidden = false;
-      clearTimeout(hintTimer);
-      hintTimer = setTimeout(function () { if (hint) hint.hidden = true; }, 5000);
-    }
     function setActive(on) {
       active = on;
       document.body.classList.toggle('drawing', on);
       if (!on) exitDelete();
-      if (btn) {
-        btn.classList.toggle('on', on);
-        btn.textContent = on ? '✅ Готово' : '✏️ Стена';
-      }
-      if (bar) bar.hidden = !on;
+      if (btn) { btn.classList.toggle('on', on); btn.textContent = on ? '✅ Готово' : '✏️ Стена'; }
+      if (legacy && bar) bar.hidden = !on;
       if (hint) hint.hidden = !on;
-      if (on && !deleting) setHint('Рисуй прямо на подложке. Готово — кнопка справа внизу, выход — Esc');
     }
     function exitDelete() {
       if (!deleting) return;
       deleting = false;
       document.body.classList.remove('deleting');
       if (bar) bar.classList.remove('deleting');
-      if (del) { del.classList.remove('on'); del.textContent = '⌫ Удалить надпись'; }
-      if (active && hint) setHint('Рисуй прямо на подложке. Готово — кнопка справа внизу, выход — Esc');
+      if (del) del.classList.remove('on');
     }
     function enterDelete() {
-      if (!active) setActive(true);
       if (deleting) return;
+      active = true;
+      document.body.classList.add('drawing');
+      if (legacy && bar) bar.hidden = false;
       deleting = true;
       document.body.classList.add('deleting');
       if (bar) bar.classList.add('deleting');
-      if (del) { del.classList.add('on'); del.textContent = '✅ Готово'; }
-      if (hint) { hint.hidden = false; setHint('Кликни по надписи, которую нужно убрать · выход — Esc'); }
+      if (del) del.classList.add('on');
     }
+
     if (btn) btn.addEventListener('click', function () { setActive(!active); });
     if (del) del.addEventListener('click', function () { deleting ? exitDelete() : enterDelete(); });
     window.addEventListener('keydown', function (e) {
@@ -167,17 +156,19 @@
     var dots = bar ? bar.querySelectorAll('.wc') : [];
     Array.prototype.forEach.call(dots, function (b) {
       b.addEventListener('click', function () {
-        if (deleting) return;
+        if (deleting) exitDelete();
+        var isOn = b.classList.contains('on');
+        if (!legacy && active && isOn) { setActive(false); return; }
         color = b.getAttribute('data-c');
         Array.prototype.forEach.call(dots, function (x) { x.classList.remove('on'); });
         b.classList.add('on');
+        if (!active) setActive(true);
       });
     });
 
     size();
     window.addEventListener('resize', function () { size(); reflow(); });
     reflow();
-    setActive(false);
   }
 
   if (document.readyState === 'loading') {

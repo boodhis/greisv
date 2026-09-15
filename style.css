@@ -136,8 +136,12 @@ body.drawing main, body.drawing aside { pointer-events: none; }
 #wall-btn.on { background: var(--grad); color: #04141f; }
 #wall-bar { position: fixed; right: 12px; top: 50%; bottom: auto; transform: translateY(-50%); z-index: 120; display: flex; flex-direction: column; gap: 8px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 7px; box-shadow: 0 8px 24px rgba(0,0,0,.45); }
 #wall-bar .wc { width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(255,255,255,.22); cursor: pointer; padding: 0; }
+#wall-bar .wc:hover { transform: scale(1.15); }
 #wall-bar .wc.on { border-color: #fff; box-shadow: 0 0 8px currentColor; }
 #wall-bar .wclear { writing-mode: vertical-rl; background: none; border: 0; color: var(--dim); cursor: pointer; font-size: 11px; padding: 2px 4px; letter-spacing: .08em; }
+#wall-undo { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); color: var(--dim); cursor: pointer; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center; padding: 0; }
+#wall-undo:hover { color: #f97583; border-color: #d73a49; }
+#wall-undo.on { color: var(--accent); border-color: var(--accent); box-shadow: 0 0 8px rgba(53,230,224,.5); }
 #wall-hint { position: fixed; right: 16px; bottom: 108px; left: auto; transform: none; z-index: 115; max-width: min(430px, 82vw); background: rgba(5,11,6,.94); border: 1px solid var(--line); padding: 8px 14px; border-radius: 10px; font-size: 12px; line-height: 1.45; color: var(--dim); white-space: normal; pointer-events: none; box-shadow: 0 6px 18px rgba(0,0,0,.4); }
 .chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 18px; }
 .chips button { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; cursor: pointer; }

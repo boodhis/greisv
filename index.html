@@ -17,21 +17,16 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 <body>
 <canvas id="bgwall" aria-hidden="true"></canvas>
 <canvas id="graph"></canvas>
-<div class="layout graph-layout">
-<main class="graph-main">
-<div id="gft-note" class="graph-note">🛡️ Цифровая Крепость — образовательный сайт. Все примеры проверены на реальном сервере. · <a href="https://github.com/boodhis/greisv">Исходный код</a></div>
-</main>
-</div>
+<main class="graph-main"></main>
 
 <script src="js/graph.js"></script>
 <div id="wall-bar" class="wall-combo">
-<button id="wall-btn" title="Рисовать на стене">✏️</button>
-<button class="wc on" data-c="#35e6e0" style="background:#35e6e0" title="Голубой"></button>
-<button class="wc" data-c="#3ef06a" style="background:#3ef06a" title="Зелёный"></button>
-<button class="wc" data-c="#ffe14d" style="background:#ffe14d" title="Жёлтый"></button>
-<button class="wc" data-c="#ff55f0" style="background:#ff55f0" title="Розовый"></button>
-<button class="wc" data-c="#d9f7d0" style="background:#d9f7d0" title="Белый"></button>
-<button id="wall-undo" type="button" title="Удалить надпись">⌫</button>
+<button class="wc on" data-c="#35e6e0" style="background:#35e6e0" title="Голубой — рисовать"></button>
+<button class="wc" data-c="#3ef06a" style="background:#3ef06a" title="Зелёный — рисовать"></button>
+<button class="wc" data-c="#ffe14d" style="background:#ffe14d" title="Жёлтый — рисовать"></button>
+<button class="wc" data-c="#ff55f0" style="background:#ff55f0" title="Розовый — рисовать"></button>
+<button class="wc" data-c="#d9f7d0" style="background:#d9f7d0" title="Белый — рисовать"></button>
+<button id="wall-undo" type="button" title="Удалить надпись">🗑</button>
 </div>
 <script src="js/wall.js"></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js");}</script>
