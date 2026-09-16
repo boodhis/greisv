@@ -36,8 +36,27 @@ aside {
 .ngt {
   font-size: 12px; text-transform: uppercase; letter-spacing: .06em;
   color: var(--dim); padding: 6px 10px 4px;
+  cursor: pointer; user-select: none;
+  display: flex; align-items: center; justify-content: space-between;
+  border-radius: 6px;
 }
+.ngt:hover { color: #fff; background: #1c2b1f; }
+.ngroup.open > .ngt { color: var(--accent); }
+.ngroup.open > .ngt::after { content: "–"; }
+.ngt::after { content: "+"; color: var(--dim); font-weight: 600; }
 a.nli { display: block; padding: 6px 12px; color: var(--text); text-decoration: none; border-radius: 6px; font-size: 14px; }
+.ngroup > a.nli { display: none; }
+.ngroup.open > a.nli { display: block; animation: tentacle .3s both; transform-origin: left center; }
+.ngroup.open > a.nli:nth-of-type(1) { animation-delay: .02s; }
+.ngroup.open > a.nli:nth-of-type(2) { animation-delay: .07s; }
+.ngroup.open > a.nli:nth-of-type(3) { animation-delay: .12s; }
+.ngroup.open > a.nli:nth-of-type(4) { animation-delay: .17s; }
+.ngroup.open > a.nli:nth-of-type(5) { animation-delay: .22s; }
+.ngroup.open > a.nli:nth-of-type(6) { animation-delay: .27s; }
+@keyframes tentacle {
+  from { opacity: 0; transform: translateX(-10px) scaleX(.6); }
+  to { opacity: 1; transform: none; }
+}
 a.nli:hover { background: #1c2b1f; color: #fff; }
 a.nli.on { background: var(--accent); color: #04141f; font-weight: 600; }
 a.nmain { display: block; padding: 7px 10px; color: var(--accent); text-decoration: none; font-weight: 600; border-radius: 6px; font-size: 14px; }

@@ -113,6 +113,23 @@ def inject_wall(path, prefix):
     return changed
 
 
+NAV_SCRIPT = '<script src="{prefix}js/nav.js"></script>\n'
+
+
+def inject_nav(path, prefix):
+    with open(path, "r", encoding="utf-8") as f:
+        html = f.read()
+    if 'js/nav.js' in html or 'class="ngroup"' not in html:
+        return 0
+    orig = html
+    html = html.replace("</body>", NAV_SCRIPT.format(prefix=prefix) + "</body>", 1)
+    if html != orig:
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(html)
+        return 1
+    return 0
+
+
 def all_pages():
     found = []
     for root, dirs, files in os.walk(ROOT):
@@ -132,6 +149,7 @@ def main():
     pages = all_pages()
     n_old = 0
     n_wall = 0
+    n_nav = 0
     for path in pages:
         rel = os.path.relpath(path, ROOT)
         parts = rel.split(os.sep)
@@ -148,8 +166,12 @@ def main():
             if c:
                 n_wall += 1
             changed += c
+        c = inject_nav(path, prefix)
+        if c:
+            n_nav += 1
+        changed += c
         print(("+" if changed else "="), rel)
-    print(f"Страниц обработано: {len(pages)}  | old-инъекций: {n_old}  | стен: {n_wall}")
+    print(f"Страниц обработано: {len(pages)}  | old-инъекций: {n_old}  | стен: {n_wall}  | навигация: {n_nav}")
 
 
 if __name__ == "__main__":
