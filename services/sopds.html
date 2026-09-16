@@ -103,7 +103,7 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 <main>
 <h2>SOPDS: Библиотека книг</h2>
 <p><strong>SOPDS</strong> (Simple OPDS Server) — это персональный сервер электронных книг с веб-интерфейсом. Удобный способ читать и скачивать книги с любого устройства в домашней сети.</p>
-<div class="callout callout-note"><h4 class="callout-t">Новая веб-морда каталога</h4><div class="callout-body"><p>Тот же каталог в современном интерфейсе — поиск за доли секунды, читалка FB2, скачивание и озвучка, избранное: <a href="http://192.168.0.101:8091">http://192.168.0.101:8091</a>. Открытый доступ — только локальная сеть. Подробности проекта (стек, архитектура, шаги): <a href="../homelab/sopds-web.html">Проект «Библиотека»</a>.</p></div></div>
+<div class="callout callout-note"><h4 class="callout-t">Новая веб-морда каталога</h4><div class="callout-body"><p>Тот же каталог в современном интерфейсе — поиск за доли секунды, читалка FB2, скачивание и озвучка, избранное: <a href="http://192.168.0.244:8091">http://192.168.0.244:8091</a>. Открытый доступ — только локальная сеть. Подробности проекта (стек, архитектура, шаги): <a href="../homelab/sopds-web.html">Проект «Библиотека»</a>.</p></div></div>
 <h3>Что это даёт</h3>
 <ul><li>📚 Доступ к коллекции книг с телефона, планшета, компьютера</li><li>🔍 Поиск по авторам, жанрам, названиям</li><li>📥 Скачивание в FB2, EPUB, TXT</li><li>🌐 Веб-интерфейс и OPDS-каталог для читалок</li></ul>
 <h3>Установка через Docker</h3>
@@ -135,7 +135,7 @@ htop | grep sopds
 sudo chmod -R 755 /mnt/minis/flibusta</code></pre>
 <div class="callout callout-tip"><h4 class="callout-t">Разбор команды</h4><div class="callout-body"><ul><li><code>docker exec</code> — выполнить команду в запущенном контейнере</li><li><code>manage.py sopds_scanner scan</code> — запустить сканирование библиотеки</li><li><code>htop</code> — интерактивный диспетчер задач</li></ul></div></div>
 <h3>Доступ</h3>
-<table><thead><tr><th>Интерфейс</th><th>URL</th></tr></thead><tbody><tr><td>Новая веб-морда (dev)</td><td><a href="http://192.168.0.101:8091">http://192.168.0.101:8091</a></td></tr><tr><td>Веб-интерфейс (SOPDS)</td><td><code>http://192.168.0.244:8081</code></td></tr><tr><td>OPDS-каталог</td><td><code>http://192.168.0.244:8081/opds</code></td></tr></tbody></table>
+<table><thead><tr><th>Интерфейс</th><th>URL</th></tr></thead><tbody><tr><td>Новая веб-морда (dev)</td><td><a href="http://192.168.0.244:8091">http://192.168.0.244:8091</a></td></tr><tr><td>Веб-интерфейс (SOPDS)</td><td><code>http://192.168.0.244:8081</code></td></tr><tr><td>OPDS-каталог</td><td><code>http://192.168.0.244:8081/opds</code></td></tr></tbody></table>
 <h3>Готово!</h3>
 <p>Теперь ты знаешь: - ✅ Что такое SOPDS и зачем он нужен - ✅ Как установить через Docker - ✅ Как настроить для больших коллекций - ✅ Как управлять сканированием</p>
 <hr/>
