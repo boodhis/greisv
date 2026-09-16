@@ -71,6 +71,19 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 .layout main{padding-top:76px}
 @media(max-width:820px){.fnav .frow a{font-size:12px;padding:5px 8px}.layout main{padding-top:70px}}
 </style>
+<style>
+/* Заметки страницы: одна кнопка, одно текстовое поле */
+#nts-btn{position:fixed;right:16px;bottom:16px;z-index:120;width:46px;height:46px;border-radius:50%;border:1px solid #1c2b1f;background:#0a140d;color:#d9f7d0;cursor:pointer;font-size:18px;line-height:1;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+#nts-btn:hover{color:#35e6e0;border-color:#35e6e0}
+#nts-btn.on{background:linear-gradient(135deg,#35e6e0,#ffe14d);color:#04141f;border-color:transparent}
+#nts{position:fixed;right:16px;bottom:74px;z-index:120;width:min(360px,calc(100vw - 32px));background:#0a140d;border:1px solid #1c2b1f;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+#nts[hidden]{display:none}
+.nts-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #1c2b1f;font-size:12px;color:#35e6e0;text-transform:uppercase;letter-spacing:.08em}
+.nts-x{background:none;border:0;color:#7ba87c;cursor:pointer;font-size:14px;padding:2px 6px}
+.nts-x:hover{color:#fff}
+.nts-t{width:100%;min-height:140px;max-height:40vh;resize:vertical;background:#050a06;color:#d9f7d0;border:0;padding:12px;font-family:inherit;font-size:14px;line-height:1.6;border-radius:0 0 12px 12px;outline:none}
+.nts-t::placeholder{color:#4a6a4c}
+</style>
 </head>
 <body>
 <div class="fnav">
@@ -86,8 +99,6 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 <a href="../resources/index.html" style="--c:#ff55f0"><span class="td"></span>Ресурсы</a>
 <a href="../hobbies/index.html" class="on" style="--c:#d9f7d0"><span class="td"></span>Досуг</a></nav>
 </div>
-
-<canvas id="bgwall" aria-hidden="true"></canvas>
 <div class="layout">
 <main>
 <h2>Хобби и досуг</h2>
@@ -108,30 +119,6 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 <script src="../study/data/wordday.js"></script>
 <script src="../study/data/widget.js"></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
-<style>
-#bgwall{position:fixed;inset:0;z-index:90;pointer-events:none;touch-action:none}
-body.drawing{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><circle cx='8' cy='8' r='3' fill='%2335e6e0' stroke='%23000' stroke-opacity='.5'/></svg>") 8 8,crosshair}
-body.drawing #bgwall{pointer-events:auto}
-body.drawing main,body.drawing aside{pointer-events:none}
-#wall-btn{position:fixed;right:16px;bottom:16px;z-index:120;padding:11px 20px;border-radius:999px;font-weight:600;border:1px solid #1c2b1f;color:#d9f7d0;background:#0a140d;cursor:pointer;font-family:inherit;font-size:14px}
-#wall-btn.on{background:linear-gradient(135deg,#35e6e0,#ffe14d);color:#04141f}
-#wall-bar{position:fixed;right:12px;top:50%;bottom:auto;transform:translateY(-50%);z-index:120;display:flex;flex-direction:column;gap:8px;align-items:center;background:#0a140d;border:1px solid #1c2b1f;border-radius:12px;padding:10px 7px;box-shadow:0 8px 24px rgba(0,0,0,.45)}
-#wall-bar .wc{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.22);cursor:pointer;padding:0}
-#wall-bar .wc.on{border-color:#fff;box-shadow:0 0 8px currentColor}
-#wall-bar .wclear{writing-mode:vertical-rl;background:none;border:0;color:#7ba87c;cursor:pointer;font-size:11px;padding:2px 4px;letter-spacing:.08em}
-#wall-hint{position:fixed;right:16px;bottom:108px;left:auto;transform:none;z-index:115;max-width:min(430px,82vw);background:rgba(5,11,6,.94);border:1px solid #1c2b1f;padding:8px 14px;border-radius:10px;font-size:12px;line-height:1.45;color:#7ba87c;white-space:normal;pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.4)}
-@media(max-width:820px){#wall-hint{font-size:11px;white-space:normal;width:auto;right:12px;bottom:104px;left:12px;text-align:left}}
-</style>
-<button id="wall-btn" class="btn ghost" title="Оставить надпись на стене-подложке">✏️ Стена</button>
-<div id="wall-bar" hidden>
-<button class="wc on" data-c="#35e6e0" style="background:#35e6e0" title="Голубой"></button>
-<button class="wc" data-c="#3ef06a" style="background:#3ef06a" title="Зелёный"></button>
-<button class="wc" data-c="#ffe14d" style="background:#ffe14d" title="Жёлтый"></button>
-<button class="wc" data-c="#ff55f0" style="background:#ff55f0" title="Розовый"></button>
-<button class="wc" data-c="#d9f7d0" style="background:#d9f7d0" title="Белый"></button>
-<button id="wall-undo" class="wclear" type="button">⌫ Удалить надпись</button>
-</div>
-<div id="wall-hint" hidden>Рисуй прямо на подложке. Готово — кнопка справа внизу, выход — Esc</div>
-<script src="../js/wall.js"></script>
+<script src="../js/notes.js"></script>
 </body>
 </html>

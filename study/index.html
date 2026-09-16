@@ -26,8 +26,6 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 <a href="../resources/index.html" style="--c:#ff55f0"><span class="td"></span>Ресурсы</a>
 <a href="../hobbies/index.html" style="--c:#d9f7d0"><span class="td"></span>Досуг</a></nav>
 </div>
-
-<canvas id="bgwall" aria-hidden="true"></canvas>
 <div class="layout">
 <main>
 <h1>📚 Обучение</h1>
@@ -65,16 +63,6 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 <script src="../study/data/wordday.js"></script>
 <script src="../study/data/widget.js"></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
-<button id="wall-btn" class="btn ghost" title="Оставить надпись на стене-подложке">✏️ Стена</button>
-<div id="wall-bar" hidden>
-<button class="wc on" data-c="#35e6e0" style="background:#35e6e0" title="Голубой"></button>
-<button class="wc" data-c="#3ef06a" style="background:#3ef06a" title="Зелёный"></button>
-<button class="wc" data-c="#ffe14d" style="background:#ffe14d" title="Жёлтый"></button>
-<button class="wc" data-c="#ff55f0" style="background:#ff55f0" title="Розовый"></button>
-<button class="wc" data-c="#d9f7d0" style="background:#d9f7d0" title="Белый"></button>
-<button id="wall-undo" class="wclear" type="button">⌫ Удалить надпись</button>
-</div>
-<div id="wall-hint" hidden>Рисуй прямо на подложке. Готово — кнопка справа внизу, выход — Esc</div>
-<script src="../js/wall.js"></script>
+<script src="../js/notes.js"></script>
 </body>
 </html>

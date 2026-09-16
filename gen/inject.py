@@ -7,9 +7,10 @@
      снятие <aside>, тонкая рамка вокруг окна с узлами-точками разделов
      (у текущего раздела подсветка .on); для страниц без style.css —
      inline-CSS рамки;
-  3) стена-подложка (во все страницы, кроме корневого index.html):
-     canvas #bgwall, кнопка «✏️ Стена», палитра, подсказка, js/wall.js;
-  4) вычистка старых подключений js/nav.js (аккордеон отменён).
+  3) заметки страницы (во все страницы): кнопка-кружок «📝» + текстовое поле,
+     js/notes.js; для страниц без style.css — inline-CSS заметок;
+  4) вычистка старого: стена-рисовалка (bgwall, wall-* , js/wall.js, inline wall CSS)
+     и подключения js/nav.js.
 
 Запуск из корня проекта:  python3 gen/inject.py
 """
@@ -56,20 +57,6 @@ SECTION_KEYS = {
     "resources": "res", "hobbies": "hobby",
 }
 
-
-def fnav_markup(prefix, cur):
-    row = []
-    for key, label, href, c in FNAV_LINKS:
-        on = ' class="on"' if key == cur else ""
-        href = href.format(pf=prefix)
-        row.append('<a href="{href}"{on} style="--c:{c}"><span class="td"></span>{label}</a>'.format(
-            href=href, on=on, c=c, label=label))
-    return ('<div class="fnav">\n'
-            '<i class="cor ctl"></i><i class="cor ctr"></i><i class="cor cbl"></i><i class="cor cbr"></i>\n'
-            '<nav class="frow">' + "\n".join(row) + "</nav>\n"
-            "</div>\n")
-
-
 FRAME_CSS = """/* Рамка-бар в стиле графа: тонкая полоса вокруг окна */
 .fnav{position:fixed;inset:0;z-index:40;pointer-events:none}
 .fnav::before{content:"";position:absolute;inset:8px;border:1px solid #1c2b1f;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(5,11,6,.55),0 0 26px rgba(53,230,224,.05)}
@@ -88,29 +75,17 @@ FRAME_CSS = """/* Рамка-бар в стиле графа: тонкая по�
 .layout main{padding-top:76px}
 @media(max-width:820px){.fnav .frow a{font-size:12px;padding:5px 8px}.layout main{padding-top:70px}}"""
 
-WALL_CANVAS = '<canvas id="bgwall" aria-hidden="true"></canvas>'
-WALL_CONTROLS = ('<button id="wall-btn" class="btn ghost" title="Оставить надпись на стене-подложке">✏️ Стена</button>\n'
-                 '<div id="wall-bar" hidden>\n'
-                 '<button class="wc on" data-c="#35e6e0" style="background:#35e6e0" title="Голубой"></button>\n'
-                 '<button class="wc" data-c="#3ef06a" style="background:#3ef06a" title="Зелёный"></button>\n'
-                 '<button class="wc" data-c="#ffe14d" style="background:#ffe14d" title="Жёлтый"></button>\n'
-                 '<button class="wc" data-c="#ff55f0" style="background:#ff55f0" title="Розовый"></button>\n'
-                 '<button class="wc" data-c="#d9f7d0" style="background:#d9f7d0" title="Белый"></button>\n'
-                 '<button id="wall-undo" class="wclear" type="button">⌫ Удалить надпись</button>\n'
-                 '</div>\n'
-                 '<div id="wall-hint" hidden>Рисуй прямо на подложке. Готово — кнопка справа внизу, выход — Esc</div>\n')
-WALL_CSS = """#bgwall{position:fixed;inset:0;z-index:90;pointer-events:none;touch-action:none}
-body.drawing{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><circle cx='8' cy='8' r='3' fill='%2335e6e0' stroke='%23000' stroke-opacity='.5'/></svg>") 8 8,crosshair}
-body.drawing #bgwall{pointer-events:auto}
-body.drawing main,body.drawing aside{pointer-events:none}
-#wall-btn{position:fixed;right:16px;bottom:16px;z-index:120;padding:11px 20px;border-radius:999px;font-weight:600;border:1px solid #1c2b1f;color:#d9f7d0;background:#0a140d;cursor:pointer;font-family:inherit;font-size:14px}
-#wall-btn.on{background:linear-gradient(135deg,#35e6e0,#ffe14d);color:#04141f}
-#wall-bar{position:fixed;right:12px;top:50%;bottom:auto;transform:translateY(-50%);z-index:120;display:flex;flex-direction:column;gap:8px;align-items:center;background:#0a140d;border:1px solid #1c2b1f;border-radius:12px;padding:10px 7px;box-shadow:0 8px 24px rgba(0,0,0,.45)}
-#wall-bar .wc{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.22);cursor:pointer;padding:0}
-#wall-bar .wc.on{border-color:#fff;box-shadow:0 0 8px currentColor}
-#wall-bar .wclear{writing-mode:vertical-rl;background:none;border:0;color:#7ba87c;cursor:pointer;font-size:11px;padding:2px 4px;letter-spacing:.08em}
-#wall-hint{position:fixed;right:16px;bottom:108px;left:auto;transform:none;z-index:115;max-width:min(430px,82vw);background:rgba(5,11,6,.94);border:1px solid #1c2b1f;padding:8px 14px;border-radius:10px;font-size:12px;line-height:1.45;color:#7ba87c;white-space:normal;pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.4)}
-@media(max-width:820px){#wall-hint{font-size:11px;white-space:normal;width:auto;right:12px;bottom:104px;left:12px;text-align:left}}"""
+NOTES_CSS = """/* Заметки страницы: одна кнопка, одно текстовое поле */
+#nts-btn{position:fixed;right:16px;bottom:16px;z-index:120;width:46px;height:46px;border-radius:50%;border:1px solid #1c2b1f;background:#0a140d;color:#d9f7d0;cursor:pointer;font-size:18px;line-height:1;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+#nts-btn:hover{color:#35e6e0;border-color:#35e6e0}
+#nts-btn.on{background:linear-gradient(135deg,#35e6e0,#ffe14d);color:#04141f;border-color:transparent}
+#nts{position:fixed;right:16px;bottom:74px;z-index:120;width:min(360px,calc(100vw - 32px));background:#0a140d;border:1px solid #1c2b1f;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+#nts[hidden]{display:none}
+.nts-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #1c2b1f;font-size:12px;color:#35e6e0;text-transform:uppercase;letter-spacing:.08em}
+.nts-x{background:none;border:0;color:#7ba87c;cursor:pointer;font-size:14px;padding:2px 6px}
+.nts-x:hover{color:#fff}
+.nts-t{width:100%;min-height:140px;max-height:40vh;resize:vertical;background:#050a06;color:#d9f7d0;border:0;padding:12px;font-family:inherit;font-size:14px;line-height:1.6;border-radius:0 0 12px 12px;outline:none}
+.nts-t::placeholder{color:#4a6a4c}"""
 
 
 def inject_old(path):
@@ -139,12 +114,44 @@ def inject_old(path):
     return changed
 
 
+def inject_notes(path, prefix):
+    with open(path, "r", encoding="utf-8") as f:
+        html = f.read()
+    orig = html
+    changed = 0
+    if "js/notes.js" not in html and "</body>" in html:
+        html = html.replace("</body>", '<script src="' + prefix + 'js/notes.js"></script>\n</body>', 1)
+        changed += 1
+    if "style.css" not in html and "js/notes.js" in html and "<style>" not in html:
+        pass
+    if "style.css" not in html and ".nts-t{" not in html and "</head>" in html:
+        html = html.replace("</head>", "<style>\n" + NOTES_CSS + "\n</style>\n</head>", 1)
+        changed += 1
+    if html != orig:
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(html)
+    return changed
+
+
 def _cur_key(parts):
     if parts[0] in SECTION_KEYS:
         return SECTION_KEYS[parts[0]]
     if parts[-1] == "manifest.html":
         return "manifest"
     return ""
+
+
+def fnav_markup(prefix, cur):
+    row = []
+    for key, label, href, c in FNAV_LINKS:
+        on = ' class="on"' if key == cur else ""
+        href = href.format(pf=prefix)
+        row.append('<a href="{href}"{on} style="--c:{c}"><span class="td"></span>{label}</a>'.format(
+            href=href, on=on, c=c, label=label))
+    return ('<div class="fnav">\n'
+            '<i class="cor ctl"></i><i class="cor ctr"></i><i class="cor cbl"></i><i class="cor cbr"></i>\n'
+            '<nav class="frow">' + "\n".join(row) + "</nav>\n"
+            "</div>\n")
 
 
 def inject_frame(path, prefix):
@@ -172,47 +179,24 @@ def inject_frame(path, prefix):
     return changed
 
 
-def html_sniff(path):
-    with open(path, "r", encoding="utf-8") as f:
-        return f.read()
-
-
-def strip_navjs(path):
-    with open(path, "r", encoding="utf-8") as f:
-        html = f.read()
-    new = re.sub(r"\s*<script[^>]*src=\"[^\"]*js/nav\.js\"[^>]*></script>\s*", "\n", html)
-    if new != html:
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(new)
-        return 1
-    return 0
-
-
-def inject_wall(path, prefix):
-    if 'id="bgwall"' in html_sniff(path):
-        return 0
+def strip_old_wall(path):
+    """Вычищает рисовалку «стена»: canvas, кнопки, подсказку, js/wall.js,
+    инлайн-блок wall-css и подключения js/nav.js."""
     with open(path, "r", encoding="utf-8") as f:
         html = f.read()
     orig = html
-    changed = 0
-    if "<body" in html:
-        m = re.search(r"(<body[^>]*>)", html)
-        if m:
-            html = html.replace(m.group(1), m.group(1) + "\n" + WALL_CANVAS, 1)
-            changed += 1
-    if "</body>" in html:
-        if "style.css" not in html:
-            style = "<style>\n" + WALL_CSS + "\n</style>\n"
-        else:
-            style = ""
-        block = (style + WALL_CONTROLS +
-                 '<script src="' + prefix + 'js/wall.js"></script>\n')
-        html = html.replace("</body>", block + "</body>", 1)
-        changed += 1
+    html = re.sub(r"\s*<canvas id=\"bgwall\"[^>]*></canvas>\s*", "\n", html)
+    html = re.sub(r"\s*<button id=\"wall-btn\"[\s\S]*?</button>\s*", "\n", html)
+    html = re.sub(r"\s*<div id=\"wall-bar\"[\s\S]*?</div>\s*", "\n", html)
+    html = re.sub(r"\s*<div id=\"wall-hint\"[^>]*>.*?</div>\s*", "\n", html)
+    html = re.sub(r"\s*<script[^>]*src=\"[^\"]*js/wall\.js\"[^>]*></script>\s*", "\n", html)
+    html = re.sub(r"\s*<style>\s*#bgwall\{position:fixed;inset:0;z-index:90[\s\S]*?</style>\s*", "\n", html)
+    html = re.sub(r"\s*<script[^>]*src=\"[^\"]*js/nav\.js\"[^>]*></script>\s*", "\n", html)
     if html != orig:
         with open(path, "w", encoding="utf-8") as f:
             f.write(html)
-    return changed
+        return 1
+    return 0
 
 
 def all_pages():
@@ -228,8 +212,8 @@ def all_pages():
 def main():
     pages = all_pages()
     n_old = 0
-    n_wall = 0
     n_frame = 0
+    n_notes = 0
     n_strip = 0
     for path in pages:
         rel = os.path.relpath(path, ROOT)
@@ -238,12 +222,12 @@ def main():
         depth = len(parts) - 1
         prefix = "../" * depth
         changed = 0
-        c = strip_navjs(path)
+        c = strip_old_wall(path)
         if c:
             n_strip += 1
         changed += c
         if rel == "index.html":
-            pass  # корневой граф самоценен — без рамки и стены
+            pass  # корневой граф самоценен — без рамки
         else:
             if parts[0] in OLD_DIRS and name not in SKIP_OLD:
                 c = inject_old(path)
@@ -254,12 +238,12 @@ def main():
             if c:
                 n_frame += 1
             changed += c
-            c = inject_wall(path, prefix)
-            if c:
-                n_wall += 1
-            changed += c
+        c = inject_notes(path, prefix)
+        if c:
+            n_notes += 1
+        changed += c
         print(("+" if changed else "="), rel)
-    print(f"Страниц обработано: {len(pages)} | old: {n_old} | рамка: {n_frame} | стена: {n_wall} | strip nav.js: {n_strip}")
+    print(f"Страниц обработано: {len(pages)} | old: {n_old} | рамка: {n_frame} | заметки: {n_notes} | вычищено: {n_strip}")
 
 
 if __name__ == "__main__":

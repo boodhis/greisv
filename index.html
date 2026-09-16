@@ -15,20 +15,11 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 </style>
 </head>
 <body>
-<canvas id="bgwall" aria-hidden="true"></canvas>
 <canvas id="graph"></canvas>
 <main class="graph-main"><div class="graph-note">🛡️ узлы — разделы Крепости · клик по разделу — щупальца подразделов · двойной клик — открыть · колесо — зум, перетаскивание — панорама</div></main>
 
 <script src="js/graph.js"></script>
-<div id="wall-bar" class="wall-combo">
-<button class="wc on" data-c="#35e6e0" style="background:#35e6e0" title="Голубой — рисовать"></button>
-<button class="wc" data-c="#3ef06a" style="background:#3ef06a" title="Зелёный — рисовать"></button>
-<button class="wc" data-c="#ffe14d" style="background:#ffe14d" title="Жёлтый — рисовать"></button>
-<button class="wc" data-c="#ff55f0" style="background:#ff55f0" title="Розовый — рисовать"></button>
-<button class="wc" data-c="#d9f7d0" style="background:#d9f7d0" title="Белый — рисовать"></button>
-<button id="wall-undo" type="button" title="Удалить надпись">🗑</button>
-</div>
-<script src="js/wall.js"></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js");}</script>
+<script src="js/notes.js"></script>
 </body>
 </html>
