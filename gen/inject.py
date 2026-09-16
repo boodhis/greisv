@@ -3,9 +3,13 @@
 """Инжектит во все страницы сайта:
   1) old-инъекция (только для разделов с инлайн-стилем): ссылка «Манифест»,
      группы «Обучение»/«Электрика», виджет «Слова дня» + wordday.js/widget.js/sw.js;
-  2) стена-подложка (во ВСЕ страницы, кроме корневого index.html, где уже есть):
-     canvas #bgwall, кнопка «✏️ Стена», палитра, подсказка, подключение js/wall.js.
-     Для разделов с инлайн-стилем добавляется и inline-CSS стены.
+  2) рамка-бар навигации (во все страницы, кроме корневого index.html-графа):
+     снятие <aside>, тонкая рамка вокруг окна с узлами-точками разделов
+     (у текущего раздела подсветка .on); для страниц без style.css —
+     inline-CSS рамки;
+  3) стена-подложка (во все страницы, кроме корневого index.html):
+     canvas #bgwall, кнопка «✏️ Стена», палитра, подсказка, js/wall.js;
+  4) вычистка старых подключений js/nav.js (аккордеон отменён).
 
 Запуск из корня проекта:  python3 gen/inject.py
 """
@@ -33,6 +37,56 @@ WIDGET = ('<div id="wordday"><div class="wd-t">Слово дня</div><div class
           '<script src="../study/data/widget.js"></script>\n'
           '<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>\n')
 HOMELAB = '<div class="ngroup"><div class="ngt">Homelab</div>'
+
+FNAV_LINKS = [
+    ("home", "Главная", "{pf}index.html", "#35e6e0"),
+    ("manifest", "Манифест", "{pf}manifest.html", "#35e6e0"),
+    ("start", "С чего начать", "{pf}getting-started/index.html", "#3ef06a"),
+    ("study", "Обучение", "{pf}study/index.html", "#ffe14d"),
+    ("elec", "Электрика", "{pf}electric/index.html", "#ff55f0"),
+    ("lab", "Homelab", "{pf}homelab/index.html", "#35e6e0"),
+    ("srv", "Сервисы", "{pf}services/index.html", "#3ef06a"),
+    ("guide", "Гайды", "{pf}guides/index.html", "#ffe14d"),
+    ("res", "Ресурсы", "{pf}resources/index.html", "#ff55f0"),
+    ("hobby", "Досуг", "{pf}hobbies/index.html", "#d9f7d0"),
+]
+SECTION_KEYS = {
+    "getting-started": "start", "study": "study", "electric": "elec",
+    "homelab": "lab", "services": "srv", "guides": "guide",
+    "resources": "res", "hobbies": "hobby",
+}
+
+
+def fnav_markup(prefix, cur):
+    row = []
+    for key, label, href, c in FNAV_LINKS:
+        on = ' class="on"' if key == cur else ""
+        href = href.format(pf=prefix)
+        row.append('<a href="{href}"{on} style="--c:{c}"><span class="td"></span>{label}</a>'.format(
+            href=href, on=on, c=c, label=label))
+    return ('<div class="fnav">\n'
+            '<i class="cor ctl"></i><i class="cor ctr"></i><i class="cor cbl"></i><i class="cor cbr"></i>\n'
+            '<nav class="frow">' + "\n".join(row) + "</nav>\n"
+            "</div>\n")
+
+
+FRAME_CSS = """/* Рамка-бар в стиле графа: тонкая полоса вокруг окна */
+.fnav{position:fixed;inset:0;z-index:40;pointer-events:none}
+.fnav::before{content:"";position:absolute;inset:8px;border:1px solid #1c2b1f;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(5,11,6,.55),0 0 26px rgba(53,230,224,.05)}
+.fnav .frow{position:absolute;top:12px;left:16px;right:16px;display:flex;align-items:center;gap:2px;overflow-x:auto;white-space:nowrap;pointer-events:auto;padding:4px 2px;scrollbar-width:none}
+.fnav .frow::-webkit-scrollbar{display:none}
+.fnav .frow a{display:inline-flex;align-items:center;gap:7px;color:#7ba87c;text-decoration:none;font-size:13px;font-family:ui-monospace,Consolas,monospace;padding:6px 10px;border-radius:999px;flex-shrink:0;cursor:pointer}
+.fnav .frow a:hover{color:#fff;background:#1c2b1f}
+.fnav .frow a.on{color:#fff;text-shadow:0 0 10px var(--c)}
+.fnav .frow a.on .td{box-shadow:0 0 12px var(--c),0 0 3px var(--c)}
+.fnav .td{width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 6px var(--c);display:inline-block}
+.fnav .cor{position:absolute;width:16px;height:16px;opacity:.9;filter:drop-shadow(0 0 6px rgba(53,230,224,.6))}
+.fnav .ctl{top:11px;left:11px;border-top:2px solid #35e6e0;border-left:2px solid #35e6e0;border-top-left-radius:6px}
+.fnav .ctr{top:11px;right:11px;border-top:2px solid #35e6e0;border-right:2px solid #35e6e0;border-top-right-radius:6px}
+.fnav .cbl{bottom:11px;left:11px;border-bottom:2px solid #35e6e0;border-left:2px solid #35e6e0;border-bottom-left-radius:6px}
+.fnav .cbr{bottom:11px;right:11px;border-bottom:2px solid #35e6e0;border-right:2px solid #35e6e0;border-bottom-right-radius:6px}
+.layout main{padding-top:76px}
+@media(max-width:820px){.fnav .frow a{font-size:12px;padding:5px 8px}.layout main{padding-top:70px}}"""
 
 WALL_CANVAS = '<canvas id="bgwall" aria-hidden="true"></canvas>'
 WALL_CONTROLS = ('<button id="wall-btn" class="btn ghost" title="Оставить надпись на стене-подложке">✏️ Стена</button>\n'
@@ -64,16 +118,15 @@ def inject_old(path):
         html = f.read()
     orig = html
     changed = 0
-    if "Манифест" not in html:
-        anchor = '<a class="nmain" href="../index.html">Главная</a>'
-        if anchor in html:
-            html = html.replace(anchor, anchor + MANIFEST_LINK, 1)
+    if "<aside" in html:
+        if "Манифест" not in html:
+            anchor = '<a class="nmain" href="../index.html">Главная</a>'
+            if anchor in html:
+                html = html.replace(anchor, anchor + MANIFEST_LINK, 1)
+                changed += 1
+        if HOMELAB in html and "study/index.html" not in html:
+            html = html.replace(HOMELAB, NEW_GROUPS + HOMELAB, 1)
             changed += 1
-    if HOMELAB not in html:
-        print("  !! нет группы Homelab в навигации — пропускаю", path)
-    elif "study/index.html" not in html:
-        html = html.replace(HOMELAB, NEW_GROUPS + HOMELAB, 1)
-        changed += 1
     if 'id="wordday"' not in html and "</body>" in html:
         html = html.replace("</body>", WIDGET + "</body>", 1)
         changed += 1
@@ -86,15 +139,64 @@ def inject_old(path):
     return changed
 
 
-def inject_wall(path, prefix):
+def _cur_key(parts):
+    if parts[0] in SECTION_KEYS:
+        return SECTION_KEYS[parts[0]]
+    if parts[-1] == "manifest.html":
+        return "manifest"
+    return ""
+
+
+def inject_frame(path, prefix):
     with open(path, "r", encoding="utf-8") as f:
         html = f.read()
-    if 'id="bgwall"' in html:
+    if 'class="fnav"' in html:
         return 0
     orig = html
     changed = 0
+    new = re.sub(r"\s*<aside[^>]*>.*?</aside>\s*", "\n", html, flags=re.S)
+    if new != html:
+        html = new
+        changed += 1
+    m = re.search(r"(<body[^>]*>)", html)
+    if m:
+        cur = _cur_key(os.path.relpath(path, ROOT).split(os.sep))
+        html = html.replace(m.group(1), m.group(1) + "\n" + fnav_markup(prefix, cur), 1)
+        changed += 1
+    if "style.css" not in html and "</head>" in html:
+        html = html.replace("</head>", "<style>\n" + FRAME_CSS + "\n</style>\n</head>", 1)
+        changed += 1
+    if html != orig:
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(html)
+    return changed
+
+
+def html_sniff(path):
+    with open(path, "r", encoding="utf-8") as f:
+        return f.read()
+
+
+def strip_navjs(path):
+    with open(path, "r", encoding="utf-8") as f:
+        html = f.read()
+    new = re.sub(r"\s*<script[^>]*src=\"[^\"]*js/nav\.js\"[^>]*></script>\s*", "\n", html)
+    if new != html:
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(new)
+        return 1
+    return 0
+
+
+def inject_wall(path, prefix):
+    if 'id="bgwall"' in html_sniff(path):
+        return 0
+    with open(path, "r", encoding="utf-8") as f:
+        html = f.read()
+    orig = html
+    changed = 0
     if "<body" in html:
-        m = re.search(r'(<body[^>]*>)', html)
+        m = re.search(r"(<body[^>]*>)", html)
         if m:
             html = html.replace(m.group(1), m.group(1) + "\n" + WALL_CANVAS, 1)
             changed += 1
@@ -113,35 +215,13 @@ def inject_wall(path, prefix):
     return changed
 
 
-NAV_SCRIPT = '<script src="{prefix}js/nav.js"></script>\n'
-
-
-def inject_nav(path, prefix):
-    with open(path, "r", encoding="utf-8") as f:
-        html = f.read()
-    if 'js/nav.js' in html or 'class="ngroup"' not in html:
-        return 0
-    orig = html
-    html = html.replace("</body>", NAV_SCRIPT.format(prefix=prefix) + "</body>", 1)
-    if html != orig:
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(html)
-        return 1
-    return 0
-
-
 def all_pages():
     found = []
     for root, dirs, files in os.walk(ROOT):
         dirs[:] = [d for d in dirs if d not in ("gen", "tests", "node_modules")]
         for name in files:
             if name.endswith(".html"):
-                p = os.path.join(root, name)
-                rel = os.path.relpath(p, ROOT)
-                if os.sep not in rel:
-                    found.append(p)  # корневые html (index, manifest)
-                else:
-                    found.append(p)
+                found.append(os.path.join(root, name))
     return sorted(found)
 
 
@@ -149,7 +229,8 @@ def main():
     pages = all_pages()
     n_old = 0
     n_wall = 0
-    n_nav = 0
+    n_frame = 0
+    n_strip = 0
     for path in pages:
         rel = os.path.relpath(path, ROOT)
         parts = rel.split(os.sep)
@@ -157,21 +238,28 @@ def main():
         depth = len(parts) - 1
         prefix = "../" * depth
         changed = 0
-        if parts[0] in OLD_DIRS and name not in SKIP_OLD:
-            changed += inject_old(path)
-            if changed:
-                n_old += 1
-        if rel != "index.html":
+        c = strip_navjs(path)
+        if c:
+            n_strip += 1
+        changed += c
+        if rel == "index.html":
+            pass  # корневой граф самоценен — без рамки и стены
+        else:
+            if parts[0] in OLD_DIRS and name not in SKIP_OLD:
+                c = inject_old(path)
+                if c:
+                    n_old += 1
+                changed += c
+            c = inject_frame(path, prefix)
+            if c:
+                n_frame += 1
+            changed += c
             c = inject_wall(path, prefix)
             if c:
                 n_wall += 1
             changed += c
-        c = inject_nav(path, prefix)
-        if c:
-            n_nav += 1
-        changed += c
         print(("+" if changed else "="), rel)
-    print(f"Страниц обработано: {len(pages)}  | old-инъекций: {n_old}  | стен: {n_wall}  | навигация: {n_nav}")
+    print(f"Страниц обработано: {len(pages)} | old: {n_old} | рамка: {n_frame} | стена: {n_wall} | strip nav.js: {n_strip}")
 
 
 if __name__ == "__main__":
