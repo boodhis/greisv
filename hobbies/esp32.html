@@ -3,13 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ESP32 / ESPHome — Цифровая Крепость</title>
-<meta name="description" content="ESP32 и ESPHome: прошивка плат, датчики, умные панели. Наша панель Heltec V3 — источник колод для тренажёра.">
+<title>Heltec V3 / ESP32 — Цифровая Крепость</title>
+<meta name="description" content="Heltec V3 и ESP32: LoRa-радио, мост в домашнюю инфраструктуру через MQTT. Наша панель Heltec V3 — источник колод для тренажёра.">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="stylesheet" href="../style.css">
 <style>
 body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.65;background:repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 1px,transparent 1px 3px)}
 h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
+.flow{background:#050a06;border:1px solid var(--line);border-radius:10px;padding:16px;font-size:13px;line-height:1.65;color:var(--green);overflow-x:auto;white-space:pre}
+.flow b{color:var(--accent)}
 </style>
 </head>
 <body>
@@ -28,40 +30,149 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 </div>
 <div class="layout">
 <main>
-<h1>🔩 ESP32 / ESPHome</h1>
-<p class="desc">Маленькие платы за пару сотен рублей, которые делают дом умным. ESPHome — это YAML-конфиги вместо C++.</p>
+<h1>🔩 Heltec V3 / ESP32</h1>
+<p class="desc">Heltec V3 — ESP32-S3 с LoRa-радио. Как провести данные по радио в домашнюю инфраструктуру через MQTT-мост.</p>
 
-<h2>Наша панель Heltec V3</h2>
-<p>Это та самая умная панель, у которой интервальное повторение слов: экран, Wi-Fi-модуль, кнопки. Она по счёту и хранит прогресс (интервалы <code>2·5·10·25·60…11520</code> мин), а её словарь — источник колод «Слова» и «Команды» в <a href="../study/words.html">тренажёре</a>.</p>
+<h2>Зачем</h2>
+<p>У нас есть панель <strong>Heltec V3</strong>: ESP32-S3 с LoRa-радио, экран и кнопки — та самая, что хранит интервалы слов (<code>2·5·10·25·60…</code>) и кормит колоды <a href="../study/words.html">тренажёра</a>. Но данные по радио ещё нужно провести в домашнюю инфраструктуру: Home Assistant, Navidrome, SOPDS, базы. Мост между LoRa и IP — это <strong>MQTT-брокер</strong>.</p>
 
-<h2>Easiest start: ESPHome</h2>
-<ul>
-<li>Установил <code>esphome</code> (pip) или контейнер на сервере.</li>
-<li>Написал YAML: <code>esp32 → api / wifi / sensor / switch</code>.</li>
-<li>Зашил по Wi-Fi: <code>esphome run my.yaml</code>.</li>
-</ul>
-<pre><code>esphome:
-  name: kitchen-sensor
-esp32:
-  board: esp32dev
-  framework:
-    type: arduino
-wifi:
-  ssid: "Home"
-  password: "secret"
-sensor:
-  - platform: dht
-    pin: GPIO4
-    temperature:
-      name: "Kitchen temperature"
-    humidity:
-      name: "Kitchen humidity"</code></pre>
+<div class="flow"><b>Heltec V3 (LoRa)</b> → <b>Шлюз</b> (Raspberry Pi / ESP32) → <b>MQTT-брокер</b> (Mosquitto) → <b>Подписчики</b> (HA, скрипты, сайт)</div>
+
+<h2>Схема потока</h2>
+<div class="flow">┌─────────────┐  LoRa  ┌─────────────┐  UART  ┌─────────────┐
+│ Heltec V3   │ ─────→ │ Шлюз        │ ─────→ │ Raspberry Pi│
+│ (сенсор)    │        │ (Heltec V3) │        │ (bridge)    │
+└─────────────┘        └─────────────┘        └──────┬──────┘
+                                                    │ MQTT publish
+                                                    ▼
+                                             ┌─────────────┐
+                                             │ Mosquitto   │
+                                             └──────┬──────┘
+                                     ┌──────────────┼──────────────┐
+                                     ▼              ▼              ▼
+                               ┌──────────┐  ┌──────────┐  ┌──────────┐
+                               │ HA       │  │ Скрипт   │  │ Сайт(SRS)│
+                               └──────────┘  └──────────┘  └──────────┘</div>
+
+<h2>Публикация с Heltec V3 (PubSubClient)</h2>
+<pre><code>#include &lt;WiFi.h&gt;
+#include &lt;PubSubClient.h&gt;
+
+const char* ssid = "your_wifi";
+const char* password = "your_pass";
+const char* mqtt_server = "192.168.1.100";
+const int   mqtt_port = 1883;
+const char* mqtt_user = "iot-client";
+const char* mqtt_pass = "your_mqtt_pass";
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) { delay(500); Serial.print("."); }
+  client.setServer(mqtt_server, mqtt_port);
+  client.setKeepAlive(60);
+}
+
+void reconnect() {
+  while (!client.connected()) {
+    if (client.connect("HeltecV3-Node", mqtt_user, mqtt_pass)) {
+      client.subscribe("heltec/control");
+    } else {
+      delay(5000);
+    }
+  }
+}
+
+void loop() {
+  if (!client.connected()) reconnect();
+  client.loop();
+  float temp = readTemperature();
+  char payload[64];
+  snprintf(payload, sizeof(payload), "{\"temp\": %.2f, \"unit\": \"celsius\"}", temp);
+  client.publish("heltec/node1/sensor", payload);
+  delay(30000);
+}</code></pre>
+<p>Три обязательных пункта: <code>setKeepAlive(60)</code>, <code>client.loop()</code> в каждом цикле и <code>client.subscribe()</code> — без него принимаются только публикации, но не команды.</p>
+
+<h2>Форматы вывода</h2>
+<table>
+<thead><tr><th>Формат</th><th>Код</th><th>Получается</th></tr></thead>
+<tbody>
+<tr><td>Плоский текст</td><td><code>client.publish("heltec/node1/temp", String(temperature).c_str())</code></td><td><code>22.50</code></td></tr>
+<tr><td>JSON</td><td><code>snprintf(..., "{\"temp\": %.2f, \"hum\": %.1f, \"bat\": %d}", temperature, humidity, batteryLevel)</code></td><td><code>{"temp": 22.50, "hum": 45.1, "bat": 98}</code></td></tr>
+<tr><td>Компактный бинарь</td><td>упаковать в <code>uint8_t payload[4]</code></td><td>4 байта вместо ~50 (экономия LoRa до 90%)</td></tr>
+</tbody>
+</table>
+<pre><code>uint8_t payload[4];
+payload[0] = (int)temperature;                 // целая
+payload[1] = (int)(temperature * 10) % 10;     // десятые
+payload[2] = (int)humidity;
+payload[3] = batteryLevel;
+client.publish("heltec/node1/sensor", payload, 4);</code></pre>
+
+<h2>Режимы <code>mosquitto_sub</code></h2>
+<table>
+<thead><tr><th>Режим</th><th>Команда</th><th>Вывод</th></tr></thead>
+<tbody>
+<tr><td>payload-only</td><td><code>mosquitto_sub -h localhost -t "heltec/#"</code></td><td><code>{"temp": 22.50, ...}</code></td></tr>
+<tr><td>verbose</td><td><code>... -v</code></td><td><code>heltec/node1/sensor {"temp": 22.50}</code></td></tr>
+<tr><td>формат</td><td><code>... -F "%t | %p"</code></td><td><code>heltec/node1/sensor | {...}</code></td></tr>
+</tbody>
+</table>
+<p>Подстановки <code>-F</code>: <code>%t</code> топик, <code>%p</code> payload, <code>%j</code> JSON pretty, <code>%I</code> ISO-время, <code>%U</code> unix, <code>@H:%M:%S</code> — strftime.</p>
+<pre><code>mosquitto_sub -h localhost -t "heltec/#" -F "@H:%M:%S %t: %p"
+mosquitto_sub -h localhost -t "heltec/#" -F "%I %p"
+mosquitto_sub -h localhost -t "heltec/#" -F "%j"</code></pre>
+
+<h2>Приём на сервере</h2>
+<p>Bash:</p>
+<pre><code>mosquitto_sub -h localhost -t "heltec/+/sensor" -F "%t %p" | while read topic payload; do
+  echo "[$(date)] $topic → $payload"
+done</code></pre>
+<p>Python (paho-mqtt):</p>
+<pre><code>import paho.mqtt.client as mqtt, json
+
+def on_message(client, userdata, msg):
+    data = json.loads(msg.payload)
+    print(f"{msg.topic}: temp={data['temp']}, hum={data['hum']}")
+
+client = mqtt.Client()
+client.username_pw_set("iot-client", "your_pass")
+client.on_message = on_message
+client.connect("localhost", 1883)
+client.subscribe("heltec/+/sensor")
+client.loop_forever()</code></pre>
+<p>Если Heltec висит по UART на Raspberry Pi — шлюзом служит скрипт <code>serial_to_mqtt.py</code> (читает порт, публикует в Mosquitto).</p>
+
+<h2>Отладка</h2>
+<table>
+<thead><tr><th>Симптом</th><th>Причина</th><th>Решение</th></tr></thead>
+<tbody>
+<tr><td><code>rc=-3</code> (MQTT_CONNECTION_LOST)</td><td>малый keepalive / слабый Wi-Fi</td><td><code>setKeepAlive(60)</code>, проверить RSSI</td></tr>
+<tr><td>Сообщения не приходят</td><td>неверный топик / брокер выключен</td><td><code>mosquitto_sub -v -t "#"</code></td></tr>
+<tr><td>TLS не подключается</td><td>нет CA-сертификата</td><td>актуальный firmware с CA bundle</td></tr>
+<tr><td>Payload обрезается</td><td>мал буфер <code>char[]</code></td><td>увеличить буфер / использовать <code>String</code></td></tr>
+<tr><td>Дубли сообщений</td><td>QoS 1 + retain</td><td>проверить флаги публикации</td></tr>
+</tbody>
+</table>
 
 <h2>Связки</h2>
 <ul>
-<li><strong>MQTT</strong> — умный дом на шине «издатель/подписчик». Раздел <a href="../services/mqtt.html">MQTT / ESPHome</a>.</li>
-<li><strong>Электрика</strong> — только когда освоил <a href="../electric/safety.html">безопасность</a>.</li>
+<li><strong>Брокер и топики</strong> — как поднять Mosquitto и подписаться: раздел <a href="../services/mqtt.html">MQTT / Mosquitto</a>.</li>
 <li><strong>Homelab</strong> — брокер и автоматика крутятся на сервере <a href="../homelab/index.html">homelab</a>.</li>
+<li><strong>Электрика</strong> — любое железо в розетку — только после <a href="../electric/safety.html">безопасности</a>.</li>
+</ul>
+
+<h2>Ссылки</h2>
+<ul>
+<li>Mosquitto — <a href="https://mosquitto.org">mosquitto.org</a></li>
+<li>PubSubClient — <a href="https://github.com/knolleary/pubsubclient">github.com/knolleary/pubsubclient</a></li>
+<li>Heltec V3 + MQTT + HA — <a href="https://github.com/spanky59/frisquet-mqtt">github.com/spanky59/frisquet-mqtt</a></li>
+<li>meshcore-net-bridge (Heltec V3 + Raspberry Pi) — <a href="https://deepwiki.com/kabili207/meshcore-net-bridge">deepwiki.com/kabili207/meshcore-net-bridge</a></li>
+<li>man <code>mosquitto_sub</code> — <a href="https://manpages.debian.org">manpages.debian.org</a></li>
 </ul>
 
 <footer>Цифровая Крепость — образовательный сайт. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>

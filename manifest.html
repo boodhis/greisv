@@ -10,6 +10,11 @@
 <style>
 body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.65;background:repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 1px,transparent 1px 3px)}
 h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
+main{max-width:960px}
+.motto{font-size:clamp(18px,3vw,24px);color:var(--accent);font-weight:700;margin:6px 0 22px;text-shadow:0 0 16px rgba(53,230,224,.35)}
+.flow{background:#050a06;border:1px solid var(--line);border-radius:10px;padding:16px;font-size:13.5px;line-height:1.65;color:var(--green);overflow-x:auto;white-space:pre}
+.flow b{color:var(--accent)}
+.muted{color:var(--dim);font-size:13px}
 </style>
 </head>
 <body>
@@ -29,21 +34,22 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 <div class="layout">
 <main>
 <h1>🏗 Манифест Цифровой Крепости</h1>
-<p class="desc">Почему этот сайт существует и как он устроен. Короткая версия: бесплатно, открыто, офлайн, самому.</p>
+<div class="motto">Ни одной подписки. Ни одного трекера. Всё на своём.</div>
+<p class="muted">Почему этот сайт существует и как он устроен. Короткая версия: бесплатно, открыто, офлайн, самому.</p>
 
 <h2>Принципы</h2>
 <div class="grid">
-<div class="card"><b>🆓 Бесплатно</b><p>Ни одной платной подписки, никакой рекламы и трекеров.</p></div>
-<div class="card"><b>🔓 Открытый код</b><p>Весь исходник на GitHub. Можно форкнуть, проверить, переиспользовать.</p></div>
-<div class="card"><b>📴 Работает офлайн</b><p>Сайт — это статика + легковесные скрипты. Без интернета контент доступен.</p></div>
-<div class="card"><b>🧑‍🔬 Сделано самому</b><p>Каждый пример проверен на реальном сервере этого дома. Никакой «воды из методичек».</p></div>
+<div class="card"><h4>🆓 Бесплатно</h4><p>Ни одной платной подписки за софт и сервисы. «Бесплатно» здесь — про свободу и про цену: железо и электричество это не подписка.</p></div>
+<div class="card"><h4>🔓 Открытый код</h4><p>Весь исходник на GitHub. Можно форкнуть, проверить, переиспользовать.</p></div>
+<div class="card"><h4>📴 Работает офлайн</h4><p>Сайт и приложения доступны без интернета после первого визита.</p></div>
+<div class="card"><h4>🧑‍🔬 Своими руками</h4><p>Каждый пример проверен на реальном сервере этого дома. Никакой воды из методичек.</p></div>
 </div>
 
 <h2>Это возможно — и в России</h2>
-<p>Всё, из чего собран сайт и homelab, — <strong>бесплатное открытое ПО</strong>: Linux, Docker, Git, GitHub Pages. Он работает <strong>в том числе в России</strong>: без зарубежных платных сервисов, и оплатив только «железо» и электричество.</p>
+<p>Всё, из чего собран сайт и homelab, — <strong>бесплатное открытое ПО</strong>: Linux, Docker, Git, GitHub Pages. Он работает <strong>в том числе в России</strong>: без зарубежных платных подписок, оплатив только «железо» и электричество.</p>
 <ul>
-<li>Статический сайт хостится бесплатно на <strong>GitHub Pages</strong>.</li>
-<li>Сервисы крутятся в Docker на своём <strong>homelab-сервере</strong>.</li>
+<li>Статический сайт хостится бесплатно на <strong>GitHub Pages</strong> — единственное «облако» в проекте, во всём остальном всё своё.</li>
+<li>Сервисы крутятся в Docker на собственном <strong>homelab-сервере</strong>.</li>
 <li>Обновления — обычный <code>git push</code>.</li>
 <li>Проект доказывает: <strong>полноценное обучение и домашняя инфраструктура не требуют платных подписок никому</strong>.</li>
 </ul>
@@ -53,16 +59,79 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 <thead><tr><th>Часть</th><th>Что это</th></tr></thead>
 <tbody>
 <tr><td>Сайт</td><td>статический сайт на HTML/CSS/JS, PWA, офлайн</td></tr>
-<tr><td>Тренажёр карточек</td><td>интервальное повторение в браузере, прогресс в localStorage, как на панели Heltec</td></tr>
-<tr><td>Колоды</td><td>слова и команды — из <code>words.txt</code> нашей панели; генерируются скриптом <code>gen/gen_deck.py</code></td></tr>
-<tr><td>Homelab</td><td>Docker-стек на сервере: Navidrome, Immich, SOPDS, MQTT и т.д.</td></tr>
-<tr><td>Панель Heltec V3</td><td>умная панель с интервальным повторением (источник слов и механики SRS)</td></tr>
+<tr><td>Тренажёр карточек</td><td>интервальное повторение в браузере, прогресс в localStorage</td></tr>
+<tr><td>Колоды</td><td>слова и команды из <code>words.txt</code> панели; генерируются скриптом <code>gen/gen_deck.py</code></td></tr>
+<tr><td>Homelab</td><td>Docker-стек на сервере: Navidrome, Immich, SOPDS, MQTT и др.</td></tr>
+<tr><td>Панель Heltec V3</td><td>умная панель с интервальным повторением — источник слов и механики SRS</td></tr>
 </tbody>
 </table>
 
-<h2>Открытый код</h2>
+<h3>Поток данных: Heltec → Сайт</h3>
+<div class="flow"><b>Панель Heltec V3</b> (SRS на экране)
+  │ words.txt (экспорт по USB)
+  ▼
+<b>gen_deck.py</b> → deck.js (генерация колод)
+  │
+  ▼
+<b>Колоды на сайте</b> (study/words.html)
+  │
+  ▼
+<b>localStorage</b> — прогресс в браузере
+  │
+  ▼
+<b>Экспорт / импорт</b> → JSON (резервная копия прогресса)</div>
+<p>Это и есть «своими руками»: ни один компонент не куплен, всё собрано из открытого кода и проверено на своём железе.</p>
+
+<h2>🧱 Границы крепости: чего здесь нет</h2>
+<p>Важно не только то, что в крепости есть, но и то, чего мы сознательно туда НЕ пускаем.</p>
+<ul>
+<li><strong>Платных подписок</strong> — ни одной, даже «недорогой».</li>
+<li><strong>Рекламы, трекеров, аналитики, cookie-баннеров</strong>.</li>
+<li><strong>Мобильных приложений</strong> в App Store / Google Play.</li>
+<li><strong>SaaS</strong>, работающих «просто так» за счёт твоих данных.</li>
+<li><strong>Закрытых форматов и вендор-лока</strong> — Windows-only инструментов, проприетарных драйверов, «умных» устройств, требующих облако производителя для базовых функций.</li>
+</ul>
+
+<h3>Где сознательный компромисс</h3>
+<table>
+<thead><tr><th>Компромисс</th><th>Чем оправдан</th></tr></thead>
+<tbody>
+<tr><td><strong>Хостинг сайта — GitHub Pages</strong></td><td>Зарубежный, но бесплатный и с CDN. Альтернатива (Gitea/Forgejo + VPS) описана в репозитории — переезд возможен за вечер.</td></tr>
+<tr><td><strong>Домен</strong></td><td>Платный, $10/год — единственная регулярная трата на «цифру». Можно жить и на *.github.io.</td></tr>
+<tr><td><strong>Интернет-канал</strong></td><td>От провайдера, тут ничего не поделать.</td></tr>
+<tr><td><strong>Железо и электричество</strong></td><td>Не бесплатны. Это цена независимости, и она честная.</td></tr>
+</tbody>
+</table>
+
+<h3>Офлайн — с оговоркой</h3>
+<p>Сайт работает офлайн <strong>после первого визита</strong>: Service Worker кеширует то, что уже видел. Прогресс тренажёра живёт в localStorage — при очистке данных исчезнет. Поэтому в тренажёре есть <strong>экспорт/импорт прогресса в JSON</strong>: сохраняй перед чисткой браузера.</p>
+
+<h2>🚫 Почему не X</h2>
+<table>
+<thead><tr><th>Вместо</th><th>Беру</th><th>Почему</th></tr></thead>
+<tbody>
+<tr><td>Nextcloud</td><td>Immich + Syncthing</td><td>Комбайн на PHP тяжёлый. Каждый делает одно хорошо.</td></tr>
+<tr><td>Notion / Obsidian Sync</td><td>Markdown + Git</td><td>Заметки не живут в чужом облаке. Git синхронит бесплатно.</td></tr>
+<tr><td>Spotify / Яндекс.Музыка</td><td>Navidrome</td><td>Своя библиотека, ни одной рекомендации.</td></tr>
+<tr><td>ChatGPT Plus</td><td>Ollama + бесплатные API</td><td>Подписка = зависимость. Локальная модель = приватность.</td></tr>
+<tr><td>Google Photos</td><td>Immich</td><td>Свой ML-поиск и face-recognition. Лица не уезжают в чужую сеть.</td></tr>
+<tr><td>Mi Home</td><td>MQTT + Home Assistant</td><td>Устройства не звонят в Китай, чтобы включить свет.</td></tr>
+<tr><td>Trello / Jira</td><td>tasks.md + Git</td><td>Больше чем нужно — меньше чем полезно.</td></tr>
+<tr><td>Аналитика на сайте</td><td>Ничего</td><td>Мне не нужно знать, кто ты.</td></tr>
+</tbody>
+</table>
+<div class="callout callout-note"><div class="callout-t">Правило крепости</div><div class="callout-body"><p>Если для задачи нужен платный сервис — задача либо решается открытым софтом, либо не решается вовсе. Любая платная подписка в проекте — ошибка.</p></div></div>
+
+<h2>📜 Лицензии</h2>
+<ul>
+<li><strong>Код</strong> — AGPL-3.0: форки тоже обязаны открывать изменения.</li>
+<li><strong>Тексты, статьи, манифест</strong> — CC BY-SA 4.0.</li>
+<li><strong>Данные</strong> (words.txt, колоды) — CC0: бери без ограничений.</li>
+<li><strong>Атрибуция</strong> — ссылка на репозиторий, не больше.</li>
+</ul>
+
+<h2>Ссылки</h2>
 <p>Репозиторий: <a href="https://github.com/boodhis/greisv">github.com/boodhis/greisv</a>. Что можно делать: использовать, копировать, изменять, распространять — с сохранением ссылки на проект.</p>
-<div class="callout callout-note"><div class="callout-t">Правило крепости</div><div class="callout-body"><p>Любой платный сервис в проекте — ошибка. Если понадобилось «доплатить», ищем открытую замену.</p></div></div>
 
 <footer>Цифровая Крепость — образовательный сайт. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>
 </main>
