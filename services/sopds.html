@@ -101,6 +101,7 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 </div>
 <div class="layout">
 <main>
+<div id="wordday"><div class="wd-t">Слово дня</div><div class="wd-w">…</div><div class="wd-ph"></div><div class="wd-t2"></div><div class="wd-hint">нажми, чтобы раскрыть перевод</div></div>
 <h2>SOPDS: Библиотека книг</h2>
 <p><strong>SOPDS</strong> (Simple OPDS Server) — это персональный сервер электронных книг с веб-интерфейсом. Удобный способ читать и скачивать книги с любого устройства в домашней сети.</p>
 <div class="callout callout-note"><h4 class="callout-t">Новая веб-морда каталога</h4><div class="callout-body"><p>Тот же каталог в современном интерфейсе — поиск за доли секунды, читалка FB2, скачивание и озвучка, избранное: <a href="http://192.168.0.244:8091">http://192.168.0.244:8091</a>. Открытый доступ — только локальная сеть. Подробности проекта (стек, архитектура, шаги): <a href="../homelab/sopds-web.html">Проект «Библиотека»</a>.</p></div></div>
@@ -142,9 +143,7 @@ sudo chmod -R 755 /mnt/minis/flibusta</code></pre>
 <p><em>SOPDS — удобный способ сделать свою библиотеку доступной из любой точки дома.</em></p>
 <footer>Цифровая Крепость — образовательный сайт о Linux и homelab. Все примеры проверены на реальном сервере.</footer>
 </main>
-</div>
-<div id="wordday"><div class="wd-t">Слово дня</div><div class="wd-w">…</div><div class="wd-ph"></div><div class="wd-t2"></div><div class="wd-hint">нажми, чтобы раскрыть перевод</div></div>
-<script src="../study/data/wordday.js"></script>
+</div><script src="../study/data/wordday.js"></script>
 <script src="../study/data/widget.js"></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
 <script src="../js/notes.js"></script>
