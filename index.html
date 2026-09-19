@@ -6,19 +6,178 @@
 <title>Цифровая Крепость — Linux, homelab, обучение</title>
 <meta name="description" content="Образовательный сайт о Linux, homelab и самостоятельном администрировании. Тренажёр слов, электрика, шпаргалки. Работает офлайн и бесплатно.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="stylesheet" href="style.css">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#050b06">
 <style>
+:root{--bg:#050b06;--panel:#0a140d;--line:#1c2b1f;--text:#d9f7d0;--dim:#7ba87c;--accent:#35e6e0;--green:#3ef06a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:ui-monospace,'Cascadia Code','JetBrains Mono','Liberation Mono',Consolas,monospace;line-height:1.65;font-size:16px}
 body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.65;background:repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 1px,transparent 1px 3px)}
-h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
+a{color:var(--accent)}
+a:hover{text-decoration:none}
+.main{padding-top:76px;padding-left:24px;padding-right:24px;max-width:1180px;margin:0 auto}
+.hero{padding:34px 0 8px}
+.brand{font-size:15px;font-weight:700;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;text-shadow:0 0 14px rgba(62,240,106,.22)}
+h1{font-size:clamp(30px,5vw,44px);margin:10px 0 8px;color:var(--accent);text-shadow:0 0 26px rgba(53,230,224,.28)}
+.desc{color:var(--dim);font-size:17px;max-width:720px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.btn{display:inline-block;padding:10px 20px;border-radius:999px;font-weight:600;text-decoration:none;font-size:14px}
+.btn.primary{background:linear-gradient(135deg,#35e6e0,#ff55f0);color:#04141f}
+.btn.ghost{border:1px solid var(--line);color:var(--text);background:var(--panel)}
+.btn:hover{filter:brightness(1.12)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:26px 0 14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;transition:transform .15s ease,border-color .15s ease;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-2px);border-color:var(--accent)}
+.sec-link{display:flex;align-items:center;gap:9px;color:var(--text);text-decoration:none;font-size:16px;font-weight:700;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.sec-link:hover{color:var(--accent)}
+.sec-link .td{width:9px;height:9px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c);flex-shrink:0}
+.sec-link .arrow{margin-left:auto;color:var(--dim);font-size:14px}
+.subs{list-style:none;margin-top:10px;display:flex;flex-direction:column;gap:2px}
+.subs a{display:block;color:var(--dim);text-decoration:none;font-size:14px;padding:3px 0 3px 4px;border-radius:6px}
+.subs a:hover{color:#fff;background:#1c2b1f;padding-left:10px;transition:padding-left .12s ease}
+footer{margin:36px 0 30px;padding-top:18px;border-top:1px solid var(--line);color:var(--dim);font-size:13px;text-align:center}
+@media(max-width:820px){.main{padding-left:14px;padding-right:14px}.hero{padding-top:24px}}
+</style>
+<style>
+/* Рамка-бар в стиле графа: тонкая полоса вокруг окна */
+.fnav{position:fixed;inset:0;z-index:40;pointer-events:none}
+.fnav::before{content:"";position:absolute;inset:8px;border:1px solid #1c2b1f;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(5,11,6,.55),0 0 26px rgba(53,230,224,.05)}
+.fnav .frow{position:absolute;top:12px;left:16px;right:16px;display:flex;align-items:center;gap:2px;overflow-x:auto;white-space:nowrap;pointer-events:auto;padding:4px 2px;scrollbar-width:none}
+.fnav .frow::-webkit-scrollbar{display:none}
+.fnav .frow a{display:inline-flex;align-items:center;gap:7px;color:#7ba87c;text-decoration:none;font-size:13px;font-family:ui-monospace,Consolas,monospace;padding:6px 10px;border-radius:999px;flex-shrink:0;cursor:pointer}
+.fnav .frow a:hover{color:#fff;background:#1c2b1f}
+.fnav .frow a.on{color:#fff;text-shadow:0 0 10px var(--c)}
+.fnav .frow a.on .td{box-shadow:0 0 12px var(--c),0 0 3px var(--c)}
+.fnav .td{width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 6px var(--c);display:inline-block}
+.fnav .cor{position:absolute;width:16px;height:16px;opacity:.9;filter:drop-shadow(0 0 6px rgba(53,230,224,.6))}
+.fnav .ctl{top:11px;left:11px;border-top:2px solid #35e6e0;border-left:2px solid #35e6e0;border-top-left-radius:6px}
+.fnav .ctr{top:11px;right:11px;border-top:2px solid #35e6e0;border-right:2px solid #35e6e0;border-top-right-radius:6px}
+.fnav .cbl{bottom:11px;left:11px;border-bottom:2px solid #35e6e0;border-left:2px solid #35e6e0;border-bottom-left-radius:6px}
+.fnav .cbr{bottom:11px;right:11px;border-bottom:2px solid #35e6e0;border-right:2px solid #35e6e0;border-bottom-right-radius:6px}
+@media(max-width:820px){.fnav .frow a{font-size:12px;padding:5px 8px}}
+</style>
+<style>
+/* Заметки страницы: одна кнопка, одно текстовое поле */
+#nts-btn{position:fixed;right:16px;bottom:16px;z-index:120;width:46px;height:46px;border-radius:50%;border:1px solid #1c2b1f;background:#0a140d;color:#d9f7d0;cursor:pointer;font-size:18px;line-height:1;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+#nts-btn:hover{color:#35e6e0;border-color:#35e6e0}
+#nts-btn.on{background:linear-gradient(135deg,#35e6e0,#ffe14d);color:#04141f;border-color:transparent}
+#nts{position:fixed;right:16px;bottom:74px;z-index:120;width:min(360px,calc(100vw - 32px));background:#0a140d;border:1px solid #1c2b1f;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+#nts[hidden]{display:none}
+.nts-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #1c2b1f;font-size:12px;color:#35e6e0;text-transform:uppercase;letter-spacing:.08em}
+.nts-x{background:none;border:0;color:#7ba87c;cursor:pointer;font-size:14px;padding:2px 6px}
+.nts-x:hover{color:#fff}
+.nts-t{width:100%;min-height:140px;max-height:40vh;resize:vertical;background:#050a06;color:#d9f7d0;border:0;padding:12px;font-family:inherit;font-size:14px;line-height:1.6;border-radius:0 0 12px 12px;outline:none}
+.nts-t::placeholder{color:#4a6a4c}
 </style>
 </head>
 <body>
-<canvas id="graph"></canvas>
-<main class="graph-main"><div class="graph-note">🛡️ узлы — разделы Крепости · клик по разделу — щупальца подразделов · двойной клик — открыть · колесо — зум, перетаскивание — панорама</div></main>
-
-<script src="js/graph.js"></script>
+<div class="fnav">
+<i class="cor ctl"></i><i class="cor ctr"></i><i class="cor cbl"></i><i class="cor cbr"></i>
+<nav class="frow"><a href="index.html" class="on" style="--c:#35e6e0"><span class="td"></span>Главная</a>
+<a href="manifest.html" style="--c:#35e6e0"><span class="td"></span>Манифест</a>
+<a href="getting-started/index.html" style="--c:#3ef06a"><span class="td"></span>С чего начать</a>
+<a href="study/index.html" style="--c:#ffe14d"><span class="td"></span>Обучение</a>
+<a href="electric/index.html" style="--c:#ff55f0"><span class="td"></span>Электрика</a>
+<a href="homelab/index.html" style="--c:#35e6e0"><span class="td"></span>Homelab</a>
+<a href="services/index.html" style="--c:#3ef06a"><span class="td"></span>Сервисы</a>
+<a href="guides/index.html" style="--c:#ffe14d"><span class="td"></span>Гайды</a>
+<a href="resources/index.html" style="--c:#ff55f0"><span class="td"></span>Ресурсы</a>
+<a href="hobbies/index.html" style="--c:#d9f7d0"><span class="td"></span>Досуг</a></nav>
+</div>
+<div class="main">
+<section class="hero">
+<div class="brand">Цифровая Крепость</div>
+<h1>Обучение Linux и homelab</h1>
+<p class="desc">Свободные знания: тренажёр слов, шпаргалки, электрика и гайды. Работает офлайн, бесплатно и без слежки.</p>
+<div class="hero-actions">
+<a class="btn primary" href="manifest.html">Манифест</a>
+<a class="btn ghost" href="study/words.html">Тренажёр слов</a>
+<a class="btn ghost" href="getting-started/index.html">С чего начать</a>
+</div>
+</section>
+<main class="grid">
+<div class="card">
+<a class="sec-link" href="getting-started/index.html" style="--c:#3ef06a"><span class="td"></span>С чего начать<span class="arrow">→</span></a>
+<ul class="subs">
+<a href="getting-started/install-ubuntu.html">Установка Ubuntu</a>
+<a href="getting-started/first-steps.html">Первые шаги</a>
+<a href="getting-started/bootable-usb.html">Загрузочная флешка</a>
+</ul>
+</div>
+<div class="card">
+<a class="sec-link" href="study/index.html" style="--c:#ffe14d"><span class="td"></span>Обучение<span class="arrow">→</span></a>
+<ul class="subs">
+<a href="study/words.html">Тренажёр слов</a>
+<a href="study/cheatsheets.html">Шпаргалки</a>
+</ul>
+</div>
+<div class="card">
+<a class="sec-link" href="electric/index.html" style="--c:#ff55f0"><span class="td"></span>Электрика<span class="arrow">→</span></a>
+<ul class="subs">
+<a href="electric/safety.html">Безопасность</a>
+<a href="electric/panels.html">Щиты</a>
+<a href="electric/wiring.html">Кабели</a>
+<a href="electric/smart.html">Умный дом</a>
+</ul>
+</div>
+<div class="card">
+<a class="sec-link" href="homelab/index.html" style="--c:#35e6e0"><span class="td"></span>Homelab<span class="arrow">→</span></a>
+<ul class="subs">
+<a href="homelab/hardware.html">Железо</a>
+<a href="homelab/network.html">Сеть</a>
+<a href="homelab/server-reference.html">Сервер</a>
+<a href="homelab/sopds-web.html">Библиотека</a>
+</ul>
+</div>
+<div class="card">
+<a class="sec-link" href="services/index.html" style="--c:#3ef06a"><span class="td"></span>Сервисы<span class="arrow">→</span></a>
+<ul class="subs">
+<a href="services/docker.html">Docker</a>
+<a href="services/samba.html">Samba</a>
+<a href="services/minidlna.html">MiniDLNA</a>
+<a href="services/transmission.html">Transmission</a>
+<a href="services/navidrome.html">Navidrome</a>
+<a href="services/immich.html">Immich</a>
+<a href="services/sopds.html">SOPDS</a>
+<a href="services/mqtt.html">MQTT</a>
+</ul>
+</div>
+<div class="card">
+<a class="sec-link" href="guides/index.html" style="--c:#ffe14d"><span class="td"></span>Гайды<span class="arrow">→</span></a>
+<ul class="subs">
+<a href="guides/disk-health.html">Диски</a>
+<a href="guides/diagnostics.html">Диагностика</a>
+<a href="guides/backup.html">Бекапы</a>
+<a href="guides/ssh.html">SSH</a>
+<a href="guides/terminal.html">Терминал</a>
+<a href="guides/wifi-fix.html">Wi-Fi</a>
+<a href="guides/auto-setup.html">Автосборка</a>
+<a href="guides/journalctl.html">journalctl</a>
+<a href="guides/auto-shutdown.html">Авто-выкл</a>
+</ul>
+</div>
+<div class="card">
+<a class="sec-link" href="resources/index.html" style="--c:#ff55f0"><span class="td"></span>Ресурсы<span class="arrow">→</span></a>
+<ul class="subs">
+<a href="resources/links.html">Ссылки</a>
+<a href="resources/git-commands.html">Git</a>
+<a href="resources/inxi.html">INXI</a>
+<a href="resources/opencode-windows.html">OpenCode</a>
+</ul>
+</div>
+<div class="card">
+<a class="sec-link" href="hobbies/index.html" style="--c:#d9f7d0"><span class="td"></span>Досуг<span class="arrow">→</span></a>
+<ul class="subs">
+<a href="hobbies/guitar.html">Гитара</a>
+<a href="hobbies/esp32.html">ESP32</a>
+</ul>
+</div>
+</main>
+<footer>Цифровая Крепость — образовательный сайт о Linux и homelab. Работает офлайн и бесплатно.</footer>
+</div>
+<div id="wordday"><div class="wd-t">Слово дня</div><div class="wd-w">…</div><div class="wd-ph"></div><div class="wd-t2"></div><div class="wd-hint">нажми, чтобы раскрыть перевод</div></div>
+<script src="study/data/wordday.js"></script>
+<script src="study/data/widget.js"></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js");}</script>
 <script src="js/notes.js"></script>
 </body>
