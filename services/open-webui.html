@@ -44,20 +44,13 @@ em{color:var(--dim)}
 .callout-note{border-color:var(--note);background:rgba(137,87,229,.08)}
 .callout-warning{border-color:#ffe14d;background:rgba(227,179,65,.08)}
 .danger{border-color:#d73a49;background:rgba(215,58,73,.07)}
-#wordday{margin:4px 0 22px;padding:14px 16px;text-align:center;cursor:pointer;user-select:none;border:1px dashed #1c2b1f;border-radius:12px;background:var(--panel)}
-#wordday .wd-t{font-size:11px;text-transform:uppercase;letter-spacing:.22em;color:var(--dim);margin-bottom:6px}
-#wordday .wd-w{font-size:clamp(24px,4vw,32px);font-weight:700;color:var(--text);letter-spacing:.5px;line-height:1.1}
-#wordday .wd-ph{margin-left:10px;color:var(--dim);font-size:clamp(13px,2vw,16px);font-weight:400}
-#wordday .wd-t2{max-height:0;overflow:hidden;opacity:0;font-size:clamp(14px,2vw,18px);color:var(--accent);margin-top:6px;transition:max-height .25s ease,opacity .25s ease}
-#wordday.revealed .wd-t2{max-height:64px;opacity:1}
-#wordday .wd-hint{font-size:12px;color:var(--dim);opacity:.65;margin-top:6px}
 </style>
 </head>
 <body>
 <a href="../index.html" aria-label="на главную" style="display:block;margin:16px 0 0 20px;color:#35e6e0;text-decoration:none;font-size:14px;font-family:ui-monospace,Consolas,monospace">← на главную</a>
 <div class="layout">
 <main>
-<div id="wordday"><div class="wd-t">Слово дня</div><div class="wd-w">…</div><div class="wd-ph"></div><div class="wd-t2"></div><div class="wd-hint">нажми, чтобы раскрыть перевод</div></div>
+<div class="wd-w">…</div><div class="wd-ph"></div><div class="wd-t2"></div><div class="wd-hint">нажми, чтобы раскрыть перевод</div></div>
 <h1>Open WebUI: веб-морда для Ollama</h1>
 <p class="desc">Локальный веб-чат с LLM: тяжёлые модели крутит мощный ПК, открываешь с любого устройства в сети.</p>
 <h2>Идея</h2>
@@ -113,9 +106,7 @@ docker start open-webui</code></pre>
 <p><em>Бесплатно, локально, без облаков: чат-бот живёт в твоей сети — даже без интернета.</em></p>
 <footer>Цифровая Крепость — образовательный сайт о Linux и homelab. Все примеры проверены на реальном сервере.</footer>
 </main>
-</div><script src="../study/data/wordday.js"></script>
-<script src="../study/data/widget.js"></script>
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
+</div><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
 <script src="../js/notes.js"></script>
 </body>
 </html>
