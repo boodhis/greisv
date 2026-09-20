@@ -21,12 +21,12 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 
 <h2>Программа курса</h2>
 <div class="grid">
-<div class="card"><b>1 · Linux с нуля</b><p><a href="../getting-started/index.html">С чего начать</a> → терминал, файлы, права. Модули раздела «С чего начать» и <a href="../guides/terminal.html">«Терминал»</a>.</p></div>
-<div class="card"><b>2 · Сеть</b><p>IP, маршруты, Wi-Fi. <a href="../homelab/network.html">Сеть в homelab</a> и <a href="../guides/wifi-fix.html">лайфхак с Wi-Fi</a>.</p></div>
-<div class="card"><b>3 · Сервисы и Docker</b><p><a href="../services/docker.html">Docker</a>, systemd, compose — разбираем на живом стеке хомлаба.</p></div>
-<div class="card"><b>4 · Диски и бэкапы</b><p><a href="../guides/disk-health.html">SMART</a>, <a href="../guides/backup.html">бэкапы</a>, rsync. Правило трёх копий.</p></div>
-<div class="card"><b>5 · Автоматизация</b><p><a href="../guides/auto-setup.html">Автосборка сервера</a>, <a href="../guides/auto-shutdown.html">авто-выключение</a>, журналы <a href="../guides/journalctl.html">journalctl</a>.</p></div>
-<div class="card"><b>6 · Безопасность</b><p>SSH за ключами, права, минимум поверхностей. <a href="../guides/ssh.html">SSH</a> от и до.</p></div>
+<div class="card"><b>1 · Linux с нуля</b><p>Терминал, файлы, права доступа. <a href="../getting-started/index.html">С чего начать</a> + <a href="../guides/terminal.html">«Терминал»</a>.</p><p>Освоишь: навигация по fs, ls/cd/cp/mv, права chmod, ssh по ключам.</p></div>
+<div class="card"><b>2 · Сеть</b><p>IP, маршруты, Wi-Fi. <a href="../homelab/network.html">Сеть в homelab</a> и <a href="../guides/wifi-fix.html">лайфхак с Wi-Fi</a>.</p><p>Освоишь: ip a/r, ping, сетевые службы, диагностику подключения.</p></div>
+<div class="card"><b>3 · Сервисы и Docker</b><p><a href="../services/docker.html">Docker</a>, systemd, compose — разбираем на живом стеке хомлаба.</p><p>Освоишь: docker run/ps/logs, systemctl, compose-файл.</p></div>
+<div class="card"><b>4 · Диски и бэкапы</b><p><a href="../guides/disk-health.html">SMART</a>, <a href="../guides/backup.html">бэкапы</a>, rsync. Правило трёх копий.</p><p>Освоишь: lsblk, smartctl, rsync, деплой по правилу 3-2-1.</p></div>
+<div class="card"><b>5 · Автоматизация</b><p><a href="../guides/auto-setup.html">Автосборка сервера</a>, <a href="../guides/auto-shutdown.html">авто-выключение</a>, журналы <a href="../guides/journalctl.html">journalctl</a>.</p><p>Освоишь: таймеры systemd, скрипты-запускаторы, чтение логов.</p></div>
+<div class="card"><b>6 · Безопасность</b><p>SSH за ключами, права, минимум поверхностей. <a href="../guides/ssh.html">SSH</a> от и до.</p><p>Освоишь: настройка ключей, ufw, читаемое «кто и когда» в логах.</p></div>
 </div>
 
 <h2>Инструменты</h2>
@@ -35,12 +35,27 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 <tbody>
 <tr><td>Шпаргалки</td><td>Быстрые таблицы: git, systemd, docker, сеть</td><td><a href="cheatsheets.html">Шпаргалки →</a></td></tr>
 <tr><td>Электрика</td><td>Ликбез для монтажников и хозяев</td><td><a href="../electric/index.html">Электрика →</a></td></tr>
+<tr><td>Слово дня</td><td>Мини-тренажёр терминов с интервальным повторением</td><td><a href="../index.html">На главной →</a></td></tr>
 </tbody>
 </table>
 
+<h2>Обучаемся — вопрос — ответ</h2>
+<table><thead><tr><th>Вопрос</th><th>Ответ</th><th>Куда смотреть</th></tr></thead><tbody>
+<tr><td>С чего начать, если никогда не открывал терминал?</td><td>Модуль 1, «С чего начать»: установка Ubuntu и первые команды.</td><td><a href="../getting-started/index.html">С чего начать</a></td></tr>
+<tr><td>Сколько времени нужно в день?</td><td>15–20 минут достаточно: одна тема + повторение карточек слова дня.</td><td><a href="../index.html">Главная</a></td></tr>
+<tr><td>Можно ли учиться без своего сервера?</td><td>Да, первые модули — терминал и сеть — подходят и на обычном ПК. Homelab усиливает практику, но не обязателен в начале.</td><td><a href="../guides/terminal.html">Терминал</a></td></tr>
+<tr><td>Что делать, если забыл команду?</td><td>Лови себя на этом — это сигнал для карточки повторения. Плюс шпаргалки под рукой.</td><td><a href="cheatsheets.html">Шпаргалки</a></td></tr>
+</tbody></table>
+
+<h2>Метод: как учимся</h2>
+<ul>
+<li><strong>Одна тема — один день.</strong> Не распыляйся, повтори её через день-два.</li>
+<li><strong>Интервальное повторение</strong> — слова и команды возвращаются через 2·5·10·25·60 мин и до 8 дней, как на панели Heltec.</li>
+<li><strong>Практика на живом стеке</strong> — каждый модуль опирается на реальный homelab: если что-то не проверено — это предположение, а не инструкция.</li>
+</ul>
 <div class="callout callout-note">
-<div class="callout-t">Слово дня на главной</div>
-<div class="callout-body"><p>Мини-тренажёр на <a href="../index.html">главной</a>: прогресс хранится в браузере (localStorage). Слова, которые ты запомнил, возвращаются через 2·5·10·25·60 мин … 8 дней — как на нашей панели Heltec.</p></div>
+<div class="callout-t">Дальше в программе</div>
+<div class="callout-body"><p>В планах: <strong>VPN</strong> (WireGuard/Tailscale), <strong>мониторинг</strong> (Uptime Kuma), <strong>умный дом</strong> (MQTT + ESPHome). Следи за <a href="../homelab/index.html">разделом homelab</a>.</p></div>
 </div>
 
 <footer>Цифровая Крепость — образовательный сайт. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>
