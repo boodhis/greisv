@@ -25,20 +25,37 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 <div class="card"><a href="wiring.html"><b>🔌 Кабели и монтаж</b><p>Цвета жил, сечения, розетки, порядок монтажа.</p></a></div>
 <div class="card"><a href="smart.html"><b>🏡 Умный дом</b><p>Реле, датчики, ESPHome/MQTT, связка с homelab.</p></a></div>
 </div>
+<h2>Безопасность — коротко</h2>
+<ul>
+<li>Выключи <strong>вводной автомат</strong>, проверь отсутствие напряжения индикатором на обеих клеммах.</li>
+<li>Работай <strong>одной рукой</strong>, вторая — в кармане.</li>
+<li>Используй инструмент с <strong>изолированными рукоятками</strong>.</li>
+<li>Не работай в одиночку при монтаже под напряжением.</li>
+</ul>
+<p>Подробно — в разделе <a href="safety.html">🛡 Безопасность</a>: обесточивание, СИЗ, первая помощь при ударе током.</p>
 <h2>Не путай!</h2>
 <ul>
 <li><strong>Ток (А) — сила</strong>, греет провода. Сечение кабеля подбирается по току.</li>
 <li><strong>Напряжение (В) — разность потенциалов</strong>. В доме 220 В.</li>
 <li><strong>Автомат защищает проводку</strong>, а УЗО — человека.</li>
+<li><strong>Автомат vs УЗО vs дифавтомат</strong> — дифавтомат = автомат + УЗО в одном корпусе. Подробнее в <a href="panels.html">Щитах и автоматах</a>.</li>
+<li><strong>Заземление vs зануление</strong> — заземление соединяет корпус с землёй, зануление с нулём. Не путать при монтаже.</li>
+<li><strong>Мощность (Вт) vs ток (А)</strong> — P = U × I; при 220 В мощность в Вт примерно в 220 раз больше тока в А.</li>
+<li><strong>Переменный vs постоянный ток</strong> — в доме переменный 220 В 50 Гц, у аккумуляторов и блоков питания — постоянный.</li>
 </ul>
 <div class="callout callout-warning"><div class="callout-t">Важно</div><div class="callout-body"><p>Работы под напряжением — только с квалификацией и <a href="safety.html">по правилам безопасности</a>.</p></div></div>
+<h2>Вопрос — ответ</h2>
+<table><thead><tr><th>Вопрос</th><th>Ответ</th><th>Подробнее</th></tr></thead><tbody>
+<tr><td>Можно ли ставить автомат больше номинала провода?</td><td>Нет — кабель сгорит раньше, чем сработает автомат.</td><td><a href="panels.html">Щиты</a></td></tr>
+<tr><td>Нужно ли УЗО, если есть автомат?</td><td>Да — они защищают от разного: автомат от КЗ, УЗО от утечки на человека.</td><td><a href="panels.html">Щиты</a></td></tr>
+<tr><td>Какой кабель для розеток?</td><td>Медь 2,5 мм² с автоматом 16 А.</td><td><a href="wiring.html">Кабели</a></td></tr>
+<tr><td>Что делать, если выбивает автомат?</td><td>Искать причину (перегруз, утечка, неисправность), а не ставить автомат мощнее.</td><td><a href="panels.html">Щиты</a></td></tr>
+<tr><td>Какой цвет у фазы, нуля и земли?</td><td>Коричневый/чёрный — фаза, синий — ноль, жёлто-зелёный — заземление.</td><td><a href="wiring.html">Кабели</a></td></tr>
+</tbody></table>
 
-<footer>Цифровая Крепость — образовательный сайт. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>
+<footer>Цифровая Крепость — образовательный сайт по ПУЭ-7 и практическому опыту. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>
 </main>
 </div>
-<div id="wordday" style="display:none"></div>
-<script src="../study/data/wordday.js"></script>
-<script src="../study/data/widget.js"></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
 <script src="../js/notes.js"></script>
 </body>

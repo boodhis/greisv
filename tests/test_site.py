@@ -112,6 +112,17 @@ def test_trainer_tags():
     assert "11520" in srs, "в srs.js нет интервала 11520"
 
 
+def test_no_empty_wordday():
+    """Виджет требует #wordday с .wd-w; скрытый пустой блок ломает widget.js.
+       Страницы без слова дня вообще не должны его содержать."""
+    for p in all_html_files():
+        html = p.read_text(encoding="utf-8")
+        if 'id="wordday"' not in html:
+            continue
+        assert 'wd-w' in html, f"{p}: #wordday без структуры (.wd-w) сломает widget.js"
+        assert 'study/data/widget.js' in html, f"{p}: #wordday есть, но widget.js не подключён"
+
+
 def _run():
     import traceback
     failed = 0
