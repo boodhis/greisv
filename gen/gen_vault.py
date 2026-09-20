@@ -173,11 +173,11 @@ def to_html(body):
     return markdown.markdown(body, extensions=["tables", "fenced_code", "sane_lists"])
 
 
-def fnav_html(active_section):
+def fnav_html(active_section, relp="", depth=0):
     items = []
     for href, sec, label, color in FNAV:
         cls = " on" if sec == active_section else ""
-        items.append(f'<a href="{href}"{cls} style="--c:{color}"><span class="td"></span>{label}</a>')
+        items.append(f'<a href="{relp}{href}"{cls} style="--c:{color}"><span class="td"></span>{label}</a>')
     return "\n".join(items)
 
 
@@ -236,7 +236,7 @@ def main():
         html = (HEAD.replace("__TITLE__", title)
                     .replace("__DESC__", desc)
                     .replace("__REL__", relp)
-                    .replace("__FNAV__", fnav_html(section))
+                    .replace("__FNAV__", fnav_html(section, relp))
                     .replace("__MOTTO__", f'<p class="muted">{desc}</p>')
                     .replace("__BODY__", to_html(body)))
         if args.dry:
