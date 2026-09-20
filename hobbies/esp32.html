@@ -34,7 +34,7 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 <p class="desc">Heltec V3 — ESP32-S3 с LoRa-радио. Как провести данные по радио в домашнюю инфраструктуру через MQTT-мост.</p>
 
 <h2>Зачем</h2>
-<p>У нас есть панель <strong>Heltec V3</strong>: ESP32-S3 с LoRa-радио, экран и кнопки — та самая, что хранит интервалы слов (<code>2·5·10·25·60…</code>) и кормит колоды <a href="../study/words.html">тренажёра</a>. Но данные по радио ещё нужно провести в домашнюю инфраструктуру: Home Assistant, Navidrome, SOPDS, базы. Мост между LoRa и IP — это <strong>MQTT-брокер</strong>.</p>
+<p>У нас есть панель <strong>Heltec V3</strong>: ESP32-S3 с LoRa-радио, экран и кнопки — та самая, что хранит интервалы слов (<code>2·5·10·25·60…</code>) и кормит виджет «<a href="../index.html">Слово дня</a>» на главной. Но данные по радио ещё нужно провести в домашнюю инфраструктуру: Home Assistant, Navidrome, SOPDS, базы. Мост между LoRa и IP — это <strong>MQTT-брокер</strong>.</p>
 
 <div class="flow"><b>Heltec V3 (LoRa)</b> → <b>Шлюз</b> (Raspberry Pi / ESP32) → <b>MQTT-брокер</b> (Mosquitto) → <b>Подписчики</b> (HA, скрипты, сайт)</div>
 

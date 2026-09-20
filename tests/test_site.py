@@ -52,11 +52,13 @@ def test_all_links_resolve():
 
 
 def test_gen_deck_output():
-    deck = ROOT / "study/data/deck.js"
-    assert deck.exists(), "нет study/data/deck.js — запусти gen/gen_deck.py"
-    text = deck.read_text(encoding="utf-8")
-    assert "SRS_WORDS" in text and "SRS_CMDS" in text
-    assert "SRS_GUITAR" in text and "SRS_FRETS" in text
+    wd = ROOT / "study/data/wordday.js"
+    assert wd.exists(), "нет study/data/wordday.js"
+    text = wd.read_text(encoding="utf-8")
+    assert "window.SRS_DAY" in text
+    cards = text.count('",')
+    assert cards >= 20, "в wordday.js подозрительно мало карточек"
+    assert text.count('[') >= 20 and text.count(']') >= 20, "wordday.js битый (скобки)"
 
 
 def test_pwa_files():
@@ -65,7 +67,7 @@ def test_pwa_files():
 
 
 def test_key_pages():
-    for rel in ("index.html", "manifest.html", "study/index.html", "study/words.html",
+    for rel in ("index.html", "manifest.html", "study/index.html",
                 "study/cheatsheets.html", "electric/index.html", "electric/safety.html",
                 "electric/panels.html", "electric/wiring.html", "electric/smart.html",
                 "style.css", "study/data/srs.js", "study/data/wordday.js", "study/data/widget.js"):
@@ -99,10 +101,13 @@ def test_sitemap_covers_all_pages():
 
 
 def test_trainer_tags():
-    words = (ROOT / "study/words.html").read_text(encoding="utf-8")
+    idx = (ROOT / "index.html").read_text(encoding="utf-8")
+    wid = (ROOT / "study/data/widget.js").read_text(encoding="utf-8")
     srs = (ROOT / "study/data/srs.js").read_text(encoding="utf-8")
-    for needle in ("SRS.pick", "SRS.grade", 'data-cat="words"', "deck.js", "srs.js"):
-        assert needle in words, f"в study/words.html нет {needle}"
+    for needle in ('wd-reveal', 'wd-forgot', 'wd-ok', '"study/data/srs.js"'):
+        assert needle in idx, f"в index.html нет {needle}"
+    for needle in ('SRS_DAY', 'SRS.grade', 'wd-forgot', 'wd-ok'):
+        assert needle in wid, f"в study/data/widget.js нет {needle}"
     assert "srs_state_v1" in srs, "в study/data/srs.js нет ключа srs_state_v1"
     assert "11520" in srs, "в srs.js нет интервала 11520"
 

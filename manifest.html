@@ -68,8 +68,8 @@ main{max-width:960px}
 <thead><tr><th>Часть</th><th>Что это</th></tr></thead>
 <tbody>
 <tr><td>Сайт</td><td>статический сайт на HTML/CSS/JS, PWA, офлайн</td></tr>
-<tr><td>Тренажёр карточек</td><td>интервальное повторение в браузере, прогресс в localStorage</td></tr>
-<tr><td>Колоды</td><td>слова и команды из <code>words.txt</code> панели; генерируются скриптом <code>gen/gen_deck.py</code></td></tr>
+<tr><td>Слово дня</td><td>мини-тренажёр на главной: интервальное повторение слов, прогресс в localStorage</td></tr>
+<tr><td>Словарь</td><td>слова панели Heltec, расширенный вручную; колода <code>study/data/wordday.js</code></td></tr>
 <tr><td>Homelab</td><td>Docker-стек: Immich, Navidrome, SOPDS, Open WebUI; MQTT, nginx, miniDLNA</td></tr>
 <tr><td>Панель Heltec V3</td><td>умная панель с интервальным повторением — источник слов и механики SRS</td></tr>
 <tr><td>Бэкапы</td><td>systemd-таймеры, git-зеркала, внешний диск — правило 3-2-1 на практике</td></tr>
@@ -82,16 +82,13 @@ main{max-width:960px}
 <div class="flow"><b>Панель Heltec V3</b> (SRS на экране)
   │ words.txt (экспорт по USB)
   ▼
-<b>gen_deck.py</b> → deck.js (генерация колод)
+<b>wordday.js</b> — лёгкая колода слов на сайте
   │
   ▼
-<b>Колоды на сайте</b> (study/words.html)
+<b>Слово дня</b> на главной (мини-тренажёр)
   │
   ▼
-<b>localStorage</b> — прогресс в браузере
-  │
-  ▼
-<b>Экспорт / импорт</b> → JSON (резервная копия прогресса)</div>
+<b>localStorage</b> — прогресс в браузере</div>
 <p>Это и есть «своими руками»: ни один компонент не куплен, всё собрано из открытого кода и проверено на своём железе.</p>
 
 <h2>🧱 Границы крепости: чего здесь нет</h2>
@@ -152,7 +149,7 @@ main{max-width:960px}
 <ul>
 <li><strong>Код</strong> — декларирован AGPL-3.0: форки тоже обязаны открывать изменения. LICENSE-файл добавляется в репозиторий.</li>
 <li><strong>Тексты, статьи, манифест</strong> — CC BY-SA 4.0.</li>
-<li><strong>Данные</strong> (words.txt, колоды) — CC0: бери без ограничений.</li>
+<li><strong>Данные</strong> (словарь, words.txt) — CC0: бери без ограничений.</li>
 <li><strong>Атрибуция</strong> — ссылка на репозиторий, не больше.</li>
 </ul>
 

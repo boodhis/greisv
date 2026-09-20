@@ -9,8 +9,8 @@
 
 ## Что внутри
 
-- **🔁 Тренажёр карточек** (`study/words.html`) — интервальное повторение
-  (слова, команды терминала, гитара, лады), прогресс в `localStorage`.
+- **🗓 Слово дня** (виджет на главной) — мини-тренажёр английских слов с
+  интервальным повторением (прогресс в `localStorage`).
 - **🗒 Шпаргалки** (`study/cheatsheets.html`) — git, systemd, Docker, сеть.
 - **⚡ Электрика** (`electric/`) — безопасность, щиты и автоматы, кабели, умный дом.
 - **🏗 Манифест** (`manifest.html`) — принципы: бесплатно, открыто, офлайн.
@@ -27,8 +27,8 @@
 ├── style.css                  — Единая тёмная тема
 ├── js/notes.js                 — 📝 Заметки страницы (текст, localStorage)
 ├── sw.js / manifest.webmanifest / icon-192.png / icon-512.png — PWA/офлайн
-├── study/                     — «Обучение»: тренажёр, шпаргалки
-│   └── data/  deck.js · srs.js · wordday.js · widget.js
+├── study/                     — «Обучение»: слово дня, шпаргалки
+│   └── data/  srs.js · wordday.js · widget.js
 ├── electric/                  — «Электрика» (генерируется gen/gen_electric.py)
 ├── getting-started/ homelab/ services/ guides/ resources/ hobbies/
 │                              — разделы-статьи (исторически первый контент)
@@ -50,7 +50,6 @@ Push в `main` → GitHub Actions автоматически деплоит на
 ## Генераторы (`gen/`)
 
 ```bash
-python3 gen/gen_deck.py     # words.txt (с панели Heltec) → study/data/deck.js
 python3 gen/gen_electric.py # шаблон навигации + контент → electric/*.html
 python3 gen/gen_icons.py    # простые PNG-иконки для PWA (без зависимостей)
 python3 gen/inject.py       # инжектит навигацию/виджет/SW в старые страницы
