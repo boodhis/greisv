@@ -58,10 +58,10 @@ HEAD = """<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{title} — Цифровая Крепость</title>
-<meta name="description" content="{desc}">
-<link rel="icon" type="image/svg+xml" href="{rel}favicon.svg">
-<link rel="stylesheet" href="{rel}style.css">
+<title>__TITLE__ — Цифровая Крепость</title>
+<meta name="description" content="__DESC__">
+<link rel="icon" type="image/svg+xml" href="__REL__favicon.svg">
+<link rel="stylesheet" href="__REL__style.css">
 <meta name="theme-color" content="#050b06">
 <style>
 body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.65;background:repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 1px,transparent 1px 3px)}
@@ -88,23 +88,23 @@ main{max-width:880px}
 <body>
 <div class="fnav">
 <i class="cor ctl"></i><i class="cor ctr"></i><i class="cor cbl"></i><i class="cor cbr"></i>
-<nav class="frow">{fnav}</nav>
+<nav class="frow">__FNAV__</nav>
 </div>
 <div class="layout">
 <main>
-<h1>{title}</h1>
-{motto}
+<h1>__TITLE__</h1>
+__MOTTO__
 <div class="content">
-{body}
+__BODY__
 </div>
 <footer>Цифровая Крепость — образовательный сайт. · <a href="https://github.com/boodhis/greisv">Исходный код</a> · Источник статьи: заметка в Obsidian (волт)</footer>
 </main>
 </div>
 <div id="wordday" style="display:none"></div>
-<script src="{rel}study/data/wordday.js"></script>
-<script src="{rel}study/data/widget.js"></script>
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("{rel}sw.js");}</script>
-<script src="{rel}js/notes.js"></script>
+<script src="__REL__study/data/wordday.js"></script>
+<script src="__REL__study/data/widget.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("__REL__sw.js");}</script>
+<script src="__REL__js/notes.js"></script>
 </body>
 </html>
 """
@@ -233,9 +233,12 @@ def main():
         desc = fm.get("description", f"Статья «{title}» — из волта Obsidian. Цифровая Крепость.")
         depth = len(page.relative_to(GREISV).parts) - 1
         relp = ("../" * depth)
-        html = HEAD.format(title=title, desc=desc, rel=relp,
-                           motto=f'<p class="muted">{desc}</p>',
-                           body=to_html(body), fnav=fnav_html(section))
+        html = (HEAD.replace("__TITLE__", title)
+                    .replace("__DESC__", desc)
+                    .replace("__REL__", relp)
+                    .replace("__FNAV__", fnav_html(section))
+                    .replace("__MOTTO__", f'<p class="muted">{desc}</p>')
+                    .replace("__BODY__", to_html(body)))
         if args.dry:
             print(f"[gen_vault] -> {rel} → {page}")
             continue
