@@ -146,6 +146,20 @@ def parse_frontmatter(text):
 
 
 def to_html(body):
+    # спрятать код (блоки и inline) от замены вики-ссылок
+    code_blocks, code_spans = [], []
+
+    def keep_fence(m):
+        code_blocks.append(m.group(0))
+        return f"\x00CODEBLOCK{len(code_blocks) - 1}\x00"
+
+    def keep_span(m):
+        code_spans.append(m.group(0))
+        return f"\x00CODESPAN{len(code_spans) - 1}\x00"
+
+    body = re.sub(r"```.*?```", keep_fence, body, flags=re.S)
+    body = re.sub(r"`[^`\n]+`", keep_span, body)
+
     # Obsidian callouts: > [!TYPE] Заголовок
     out = []
     for line in body.splitlines():
@@ -170,6 +184,14 @@ def to_html(body):
         basename = parts[-1].split(".")[0]
         return f'<a href="{basename}.html">{name}</a>'
     body = re.sub(r"\[\[([^\]|]+)(?:\|([^\]]+))?\]\]", wl, body)
+
+    def restore(m):
+        i = int(m.group(1))
+        if m.group(0).startswith("\x00CODEBLOCK"):
+            return code_blocks[i]
+        return code_spans[i]
+
+    body = re.sub(r"\x00CODE(BLOCK|SPAN)(\d+)\x00", restore, body)
     return markdown.markdown(body, extensions=["tables", "fenced_code", "sane_lists"])
 
 
