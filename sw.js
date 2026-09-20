@@ -3,7 +3,7 @@
    ВАЖНО: ASSETS должен покрывать все страницы сайта — проверка в tests/test_site.py
    (test_sw_precache_covers_all_pages). После добавления страницы пересобери список
    (git ls-files '*.html') и подними версию CACHE, чтобы старый кэш обновился. */
-var CACHE = "fortress-v15";
+var CACHE = "fortress-v16";
 var ASSETS = [
   "./",
   "index.html",
@@ -56,14 +56,17 @@ var ASSETS = [
   "services/docker.html",
   "services/immich.html",
   "services/index.html",
+  "services/jellyfin.html",
   "services/minidlna.html",
   "services/mqtt.html",
   "services/navidrome.html",
+  "services/open-webui.html",
   "services/samba.html",
   "services/sopds.html",
   "services/transmission.html",
   "guides/publish.html",
   "guides/about.html",
+  "guides/obsidian-github.html",
 ];
 
 self.addEventListener("install", function (e) {

@@ -17,6 +17,7 @@
   <url><loc>https://boodhis.github.io/greisv/guides/disk-health.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/guides/index.html</loc><priority>0.8</priority></url>
   <url><loc>https://boodhis.github.io/greisv/guides/journalctl.html</loc><priority>0.6</priority></url>
+  <url><loc>https://boodhis.github.io/greisv/guides/obsidian-github.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/guides/publish.html</loc><priority>0.5</priority></url>
   <url><loc>https://boodhis.github.io/greisv/guides/ssh.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/guides/terminal.html</loc><priority>0.6</priority></url>
@@ -39,9 +40,11 @@
   <url><loc>https://boodhis.github.io/greisv/services/docker.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/services/immich.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/services/index.html</loc><priority>0.8</priority></url>
+  <url><loc>https://boodhis.github.io/greisv/services/jellyfin.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/services/minidlna.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/services/mqtt.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/services/navidrome.html</loc><priority>0.6</priority></url>
+  <url><loc>https://boodhis.github.io/greisv/services/open-webui.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/services/samba.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/services/sopds.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/services/transmission.html</loc><priority>0.6</priority></url>
