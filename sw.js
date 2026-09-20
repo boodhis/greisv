@@ -3,7 +3,7 @@
    ВАЖНО: ASSETS должен покрывать все страницы сайта — проверка в tests/test_site.py
    (test_sw_precache_covers_all_pages). После добавления страницы пересобери список
    (git ls-files '*.html') и подними версию CACHE, чтобы старый кэш обновился. */
-var CACHE = "fortress-v17";
+var CACHE = "fortress-v18";
 var ASSETS = [
   "./",
   "index.html",
@@ -22,6 +22,7 @@ var ASSETS = [
   "study/index.html",
   "study/cheatsheets.html",
   "electric/index.html",
+  "electric/components.html",
   "electric/panels.html",
   "electric/safety.html",
   "electric/smart.html",
