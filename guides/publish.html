@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Как сайт обновляется из Obsidian — Цифровая Крепость</title>
+<meta name="description" content="Папка «Сайт» в волте — прямые команды автогенерации для сайта Цифровая Крепость. Пишешь заметку — сайт обновляется сам.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+<meta name="theme-color" content="#050b06">
+<style>
+body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.65;background:repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 1px,transparent 1px 3px)}
+h1,h2,.brand{text-shadow:0 0 14px rgba(62,240,106,.22)}
+main{max-width:880px}
+.content h2{border-bottom:1px solid #1c2b1f;padding-bottom:6px;margin-top:34px}
+.content h3{margin-top:22px}
+.content table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px}
+.content th,.content td{border:1px solid #1c2b1f;padding:7px 10px;text-align:left;vertical-align:top}
+.content th{color:#35e6e0;font-weight:600}
+.content code{background:#0a140d;border:1px solid #1c2b1f;border-radius:5px;padding:1px 5px;color:#c9ff87;font-family:ui-monospace,Consolas,monospace;font-size:13px}
+.content pre{background:#0a140d;border:1px solid #1c2b1f;border-radius:10px;padding:14px;overflow-x:auto;line-height:1.55}
+.content pre code{border:0;background:none;padding:0;color:#d9f7d0}
+.content blockquote{border-left:3px solid #3ef06a;margin:14px 0;padding:2px 0 2px 14px;color:#7ba87c}
+.content a{color:#35e6e0}
+.content ul,.content ol{padding-left:22px;margin:10px 0}
+.content img{max-width:100%;border-radius:8px}
+.callout{background:#0a140d;border:1px solid #1c2b1f;border-left:4px solid #3ef06a;border-radius:10px;padding:12px 16px;margin:18px 0}
+.callout .callout-t{color:#35e6e0;font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;font-size:13px}
+.callout.callout-warn,.callout.callout-danger{border-left-color:#ffe14d}
+.callout.callout-danger{border-left-color:#ff6b6b}
+</style>
+</head>
+<body>
+<div class="fnav">
+<i class="cor ctl"></i><i class="cor ctr"></i><i class="cor cbl"></i><i class="cor cbr"></i>
+<nav class="frow"><a href="index.html" style="--c:#35e6e0"><span class="td"></span>Главная</a>
+<a href="manifest.html" style="--c:#35e6e0"><span class="td"></span>Манифест</a>
+<a href="getting-started/index.html" style="--c:#3ef06a"><span class="td"></span>С чего начать</a>
+<a href="study/index.html" style="--c:#ffe14d"><span class="td"></span>Обучение</a>
+<a href="electric/index.html" style="--c:#ff55f0"><span class="td"></span>Электрика</a>
+<a href="homelab/index.html" style="--c:#35e6e0"><span class="td"></span>Homelab</a>
+<a href="services/index.html" style="--c:#3ef06a"><span class="td"></span>Сервисы</a>
+<a href="guides/index.html" on style="--c:#ffe14d"><span class="td"></span>Гайды</a>
+<a href="resources/index.html" style="--c:#ff55f0"><span class="td"></span>Ресурсы</a>
+<a href="hobbies/index.html" style="--c:#d9f7d0"><span class="td"></span>Досуг</a></nav>
+</div>
+<div class="layout">
+<main>
+<h1>Как сайт обновляется из Obsidian</h1>
+<p class="muted">Папка «Сайт» в волте — прямые команды автогенерации для сайта Цифровая Крепость. Пишешь заметку — сайт обновляется сам.</p>
+<div class="content">
+<h1>Как сайт обновляется из Obsidian</h1>
+<div class="callout callout-tip">
+<div class="callout-t">Идея</div>
+<div class="callout-body">
+> Пишешь обычную заметку в Obsidian — через пару минут она уже на сайте. Никаких
+> правок HTML вручную.
+
+## Как это устроено
+
+Волт Obsidian — единственный источник текста. В нём есть зеркальная папка
+**«Сайт»**: каждая подпапка = раздел сайта, каждый `.md`-файл = страница.
+
+Скрипт `gen/gen_vault.py` на хомлабе:
+
+1. после синка волта проверяет, менялась ли папка «Сайт»;
+2. конвертирует Markdown → HTML (таблицы, код, callout-блоки, вики-ссылки);
+3. кладёт страницу в нужный раздел `~/greisv` и согласует `sitemap.xml` и офлайн-кеш `sw.js`;
+4. прогоняет тесты и пушит в репозиторий.
+
+Дальше GitHub Actions деплоит сайт на Pages. Весь конвейер — открытый код и без платных сервисов.
+
+## Правила публикации
+
+- Подпапки-разделы: `getting-started / services / guides / homelab / resources / hobbies`.
+- `README.md` и файлы `_*` не публикуются.
+- Шапка заметки (`frontmatter`): `title`, `description`, `priority`.
+- Обычный Markdown + Obsidian-фишки:
+
+| Синтаксис | Что получится |
+|---|---|
+| `<a href="другая страница.html">другая страница</a>` | ссылка на страницу сайта |
+| `> [!note] Заголовок` | callout-блок |
+| `| таблицы | md |` | HTML-таблица |
+
+## Что осталось вручную
+
+Интерактивные части (тренажёр карточек, PWA, генераторы «Электрики»,
+манифест) — как раньше: правятся в репозитории `greisv`. Через волт идёт
+контент статей.
+</div>
+<footer>Цифровая Крепость — образовательный сайт. · <a href="https://github.com/boodhis/greisv">Исходный код</a> · Источник статьи: заметка в Obsidian (волт)</footer>
+</main>
+</div>
+<div id="wordday" style="display:none"></div>
+<script src="../study/data/wordday.js"></script>
+<script src="../study/data/widget.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
+<script src="../js/notes.js"></script>
+</body>
+</html>
