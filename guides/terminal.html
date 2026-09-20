@@ -166,6 +166,42 @@ cd !$
 # История команд
 history
 !123  # выполнить команду 123 из истории</code></pre>
+<h3>Скорость ядер процессора</h3>
+<p>Посмотреть реальную частоту по всем ядрам в реальном времени:</p>
+<pre><code>watch -n 1 "grep 'cpu MHz' /proc/cpuinfo"</code></pre>
+<p>Перевести процессор в режим <strong>performance</strong> (максимальная частота вместо экономии):</p>
+<pre><code>sudo apt install cpupower-gui    # графический интерфейс
+sudo cpupower frequency-set -g performance   # или просто команда
+
+# на постоянной основе:
+sudo apt install cpufrequtils
+echo 'GOVERNOR="performance"' | sudo tee /etc/default/cpufrequtils
+sudo systemctl restart cpufrequtils</code></pre>
+<hr/>
+<h3>Тренажёры слепой печати (чтобы быстрее админить)</h3>
+<p>Админишь в терминале — моторные навыки клавиатуры окупаются сразу. Три уровня:</p>
+<ul>
+<li><strong>GNU Typist</strong> (<code>sudo apt install gtypist</code>) — системный учебник: серия уроков латиницы QWERTY, не пустит дальше без минимального процента ошибок. Запуск: просто <code>gtypist</code>, урок Q1.</li>
+<li><strong>ttyper</strong> — набить скорость на словах: поток случайных английских слов, ошибки подсвечиваются, в конце WPM. Без установки: <code>docker run -it --rm maxwellstein/ttyper</code>.</li>
+<li><strong>vimtutor</strong> — если пользуешься Vim: интерактивный учебник, одновременно учишься и печатать, и управлять текстом (команды <code>h</code> <code>j</code> <code>k</code> <code>l</code>…).</li>
+</ul>
+<h3>Терминал в стиле «кинохакера»</h3>
+<p>Всё работает внутри <strong>tmux</strong>:</p>
+<ul>
+<li><strong>btop</strong> (<code>sudo apt install btop</code> → <code>btop</code>) — красивый монитор ресурсов: графики, температура, стильный интерфейс. Альтернатива — <strong>gtop</strong> (nodejs, выглядит футуристично).</li>
+<li><strong>hollywood</strong> (<code>sudo apt install hollywood</code> → <code>hollywood</code>) — консоль «кинохакера»: сам разбивает экран на окна, карты, коды, логи.</li>
+<li><strong>genact</strong> (<code>sudo apt install genact</code> → <code>genact</code>) — симулятор бессмысленной активности (компиляция ядра, скан сети). Выглядит серьёзно, на деле — заставка.</li>
+<li><strong>mc</strong> — Midnight Commander, двухпанельный файловый менеджер (не печатать длинные пути).</li>
+<li><strong>fastfetch</strong> / <strong>neofetch</strong> — логотип дистрибутива и краткая инфа о железе.</li>
+<li><strong>yt-dlp + mpv</strong> — YouTube прямо в терминале в ASCII-графике: <code>mpv --vo=tct https://www.youtube.com</code>.</li>
+<li><strong>mapscii</strong> — карта мира в терминале: <code>telnet mapscii.me</code>.</li>
+<li><strong>Погода</strong> и <strong>фазы Луны</strong>: <code>curl wttr.in/Moscow</code> и <code>curl wttr.in/Moon</code>.</li>
+</ul>
+<p>Заставка «Матрица», когда терминал простаивает — настройка tmux (<strong>300</strong> = секунд, потом cmatrix):</p>
+<pre><code>tmux set-option lock-after-time 300 && tmux set-option lock-command "cmatrix -s -B"</code></pre>
+<p>Чтобы работало всегда (после перезагрузки) — добавь в <code>~/.tmux.conf</code>:</p>
+<pre><code>set -g lock-after-time 300
+set -g lock-command "cmatrix -s -B"</code></pre>
 <hr/>
 <p><em>Терминал — это мощный инструмент. Чем больше практикуешься, тем быстрее работаешь.</em></p>
 <footer>Цифровая Крепость — образовательный сайт о Linux и homelab. Все примеры проверены на реальном сервере.</footer>

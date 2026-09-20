@@ -147,6 +147,68 @@ client.loop_forever()</code></pre>
 </tbody>
 </table>
 
+<h2>Плата Heltec V3 — старт</h2>
+<p><strong>Heltec WiFi LoRa 32 V3</strong> на чипе <strong>ESP32-S3</strong>: много GPIO, WiFi, LoRa, BLE, OLED-экран и кнопка. Наш сервер собирает для неё прошивку через <strong>ESPHome</strong> (конфиг → C++ → бинарь).</p>
+<h3>Пины (то, что задействовано у нас)</h3>
+<table><thead><tr><th>Пин</th><th>Что</th></tr></thead><tbody>
+<tr><td><code>GPIO0</code></td><td>кнопка PRG (вход в прошивку / пользовательская кнопка)</td></tr>
+<tr><td><code>GPIO35</code></td><td>встроенный LED (status_led)</td></tr>
+<tr><td><code>GPIO36</code></td><td>питание OLED (inverted)</td></tr>
+<tr><td><code>GPIO17/18</code></td><td>I2C SDA/SCL (OLED)</td></tr>
+<tr><td><code>GPIO21</code></td><td>OLED reset</td></tr>
+<tr><td><code>GPIO8/9/14</code></td><td>SPI для LoRa (SX1262)</td></tr>
+</tbody></table>
+<p>Полная карта пинов — в официальной доке (скачана локально на сервер: <code>/var/www/html/panel/wiki/</code>).</p>
+<h3>Прошивка по USB</h3>
+<ol>
+<li>Кабель <strong>type-C с данными</strong> (не зарядный!) → плата = <code>/dev/ttyUSB0</code> (чип <strong>Silicon Labs CP210x</strong>).</li>
+<li>Веб-инструмент панели <code>/panel/</code>: правишь <code>server-panel.yaml</code> → <strong>Скомпилировать</strong> → <strong>Прошить</strong>.</li>
+<li>Если плата «зависла» — удерживай <strong>PRG (GPIO0)</strong> и нажми сброс.</li>
+</ol>
+<pre><code>/home/iva/esphome/bin/esphome run /home/iva/server-panel/server-panel.yaml</code></pre>
+<div class="callout callout-warning"><h4 class="callout-t">Важно</h4><div class="callout-body"><p>Не выдёргивай кабель во время прошивки — можно убить загрузчик.</p></div></div>
+<p>Наш конфиг <code>server-panel.yaml</code>: плата <code>heltec_wifi_lora32_v3</code> (esp32s3, esp-idf); WiFi TP-Link_B31D_2_4; MQTT-брокер <code>192.168.0.244</code>; <code>text_sensor</code> читает <code>server/status</code>; <code>display</code> — SSD1306 128×64, шрифт Press Start 2P; <code>esp32_ble_server</code> отдаёт статус по Bluetooth (характеристика + notify); <code>binary_sensor</code> GPIO0 → запрос статуса; <code>switch</code> — питание OLED (GPIO36).</p>
+
+<h2>Основы ESPHome</h2>
+<p>ESHome — когда пишут про ESPHome, имеют в виду подход: описываешь железо на <strong>YAML</strong>, а ESPHome собирает полноценную прошивку на <strong>C++</strong>. Меняешь поведение — правишь несколько строк yaml, а не сотни строк кода.</p>
+<div class="flow"><b>yaml-конфиг</b> → <b>компилятор</b> → <b>firmware.bin</b> → залить на плату</div>
+<h3>Основные секции конфига</h3>
+<table><thead><tr><th>Секция</th><th>Роль</th></tr></thead><tbody>
+<tr><td><code>esphome:</code></td><td>имя, friendly_name</td></tr>
+<tr><td><code>esp32:</code></td><td>плата (board, variant, framework)</td></tr>
+<tr><td><code>wifi:</code></td><td>подключение к сети</td></tr>
+<tr><td><code>mqtt:</code></td><td>обмен данными с сервером (брокер)</td></tr>
+<tr><td><code>text_sensor:</code> / <code>sensor:</code></td><td>чтение данных</td></tr>
+<tr><td><code>display:</code></td><td>экран, рисуем через <strong>lambda</strong></td></tr>
+<tr><td><code>switch:</code> / <code>binary_sensor:</code></td><td>выходы / кнопки</td></tr>
+<tr><td><code>esp32_ble_server:</code></td><td>Bluetooth</td></tr>
+</tbody></table>
+<h3>Lambda — секретная сила</h3>
+<p>Там, где yaml не хватает, вставляют <strong>lambda</strong> — кусок C++ прямо в конфиг. Пример — наш <code>display.lambda</code>: строки статуса на OLED, шрифт Press Start 2P.</p>
+<div class="callout callout-tip"><h4 class="callout-t">Совет</h4><div class="callout-body"><p>Когда учишься — сравнивай <code>server-panel.yaml</code> с докой по компоненту: как поля совпадают, так и собирается пазл.</p></div></div>
+<p>Дока скачана локально на сервер: <code>/var/www/html/panel/wiki/</code> — GPIO, WiFi, MQTT, Switch, Binary Sensor, SSD1306 (OLED), CLI.</p>
+
+<h2>Прототипирование: метод и идеи</h2>
+<p><strong>Метод</strong> (как учиться быстрее всего):</p>
+<ol>
+<li>Читай один раздел за раз (пины → прошивка → ESPHome → компоненты).</li>
+<li>Меняй конфиг: <strong>одна маленькая вещь за раз</strong> → компилируй → прошивай.</li>
+<li>Смотри на плату: что изменилось (LED, OLED, MQTT).</li>
+<li>Ломай осознанно и чини по логу компиляции.</li>
+</ol>
+<div class="callout callout-tip"><h4 class="callout-t">Главный принцип</h4><div class="callout-body"><p><strong>Маленький шаг → компиляция → проверка.</strong> Не меняй много за раз.</p></div></div>
+<p><strong>Уже умеем на этой плате:</strong> статус сервера по MQTT → на OLED; уведомление по BLE (телефон видит плату); кнопка на плате → запрос статуса.</p>
+<p><strong>Идеи, что добавить</strong> (по возрастанию сложности):</p>
+<ul>
+<li>Кнопка-действие (перезапуск службы, тумблер)</li>
+<li>Датчик температуры/влажности (DHT22) → в MQTT</li>
+<li>Светодиодная индикация по статусу сервера</li>
+<li>Вторая экранная страница на OLED (кнопка перелистывает)</li>
+<li>LoRa-сообщение на вторую плату (радио без WiFi)</li>
+<li>Счётчик аптайма сервера (в свою BLE-характеристику)</li>
+</ul>
+<blockquote>Прототипирование = собрать → подключить → прошить → протестировать. Всё это уже покрыто инструментом <code>/panel/</code>.</blockquote>
+
 <h2>Meshtastic на Heltec V3</h2>
 <p>Meshtastic — прошивка, превращающая Heltec V3 в узел автономной LoRa-меш-сети (сообщения и координаты без интернета, ноды связываются между собой по радио). Три способа прошить:</p>
 <table><thead><tr><th>Способ</th><th>Кому подходит</th><th>Команда</th></tr></thead><tbody>

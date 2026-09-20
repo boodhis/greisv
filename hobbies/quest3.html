@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meta Quest 3: DNS в РФ, перенос файлов, VR-плееры — Цифровая Крепость</title>
+<meta name="description" content="Meta Quest 3 в России: обход проблем с обновлениями через DNS, перенос файлов с ПК и Mac, лучшие VR-плееры и просмотр по сети DLNA.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+<style>
+body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.65;background:repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 1px,transparent 1px 3px)}
+h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
+</style>
+</head>
+<body>
+<a href="../index.html" aria-label="на главную" style="display:block;margin:16px 0 0 20px;color:#35e6e0;text-decoration:none;font-size:14px;font-family:ui-monospace,Consolas,monospace">← на главную</a>
+<div class="layout">
+<main>
+<h1>🥽 Meta Quest 3</h1>
+<p class="desc">Настройка VR-гарнитуры под РФ: чиним обновления через DNS, переносим фильмы с ПК/Mac и выбираем VR-плеер.</p>
+
+<h2>DNS для обновлений в РФ</h2>
+<p>Продуктовые серверы Meta из России не всегда доступны. Решение — статический IP с DNS, который раздаёт «правильные» адреса обновлений.</p>
+<ol>
+<li>Надень шлем и открой <strong>Быстрые настройки</strong> (часы в левом нижнем углу).</li>
+<li>Перейди: <strong>Настройки</strong> (шестерёнка) → <strong>Wi-Fi</strong>.</li>
+<li>Нажми на свою сеть Wi-Fi, затем иконку карандаша / кнопку <strong>Изменить</strong> (Edit).</li>
+<li>Разверни <strong>Дополнительно</strong> (Advanced options).</li>
+<li>В пункте <strong>Настройки IP</strong> (IP Settings) смени <code>DHCP</code> → <strong>Статический</strong> (Static).</li>
+<li>Заполни DNS:
+<ul>
+<li><strong>DNS 1:</strong> <code>76.76.2.22</code> — Comss.one, чаще всего помогает с обновлениями в РФ.</li>
+<li><strong>DNS 2:</strong> <code>8.8.8.8</code> — публичный DNS Google.</li>
+</ul>
+</li>
+<li>Остальные поля (IP, шлюз) оставь как есть — шлем обычно подтягивает их из текущего подключения. Сохранить.</li>
+</ol>
+
+<h2>Перенос файлов с компьютера</h2>
+<p><strong>Windows:</strong> подключи шлем через USB-C → надень, разреши «Доступ к данным» → в «Этот компьютер» появится накопитель → открой/создай папку <code>Movies</code> и копируй видео.</p>
+<p><strong>macOS:</strong> Mac не видит Android-устройства как флешку напрямую — нужна бесплатная утилита <strong>Android File Transfer</strong> или <strong>OpenMTP</strong>.</p>
+
+<h2>Как смотреть кино в шлеме</h2>
+<table><thead><tr><th>Приложение</th><th>Сила</th></tr></thead><tbody>
+<tr><td>Встроенный плеер (Files)</td><td>без установок: открой «Файлы» → найди папку → клик. Базовые возможности.</td></tr>
+<tr><td><strong>SkyBox VR Player</strong> (рекомендуем)</td><td>всеяден: любые 3D-форматы, VR180/360, виртуальные кинотеатры (на Луне, в зале). Платный.</td></tr>
+<tr><td>Bigscreen Beta</td><td>бесплатно: реалистичные кинозалы, можно смотреть вместе с друзьями.</td></tr>
+<tr><td>4XVR Video Player</td><td>тяжёлые Blu-ray-образы и ISO.</td></tr>
+</tbody></table>
+<div class="callout callout-tip"><h4 class="callout-t">Лайфхак: просмотр по сети (DLNA)</h4><div class="callout-body"><p>Чтобы не забивать память шлема, не копируй файлы — смотри по Wi-Fi прямо с компьютера. В SkyBox или Bigscreen выбери вкладку <strong>Network</strong>: шлем увидит ПК, если на нём настроен общий доступ к папкам.</p></div></div>
+
+<h2>Связки</h2>
+<ul>
+<li><strong>Homelab</strong> — общий доступ к фильмам и видео через <a href="../services/minidlna.html">MiniDLNA</a> и <a href="../services/samba.html">Samba</a> на нашем сервере.</li>
+<li><strong>VPN</strong> — если DNS не помог, прямой маршрут к серверам Meta может дать только VPN.</li>
+<li><strong>Хобби</strong> — остальное убежище: <a href="../hobbies/index.html">гитара и досуг</a>.</li>
+</ul>
+
+<footer>Цифровая Крепость — образовательный сайт. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>
+</main>
+</div>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
+<script src="../js/notes.js"></script>
+</body>
+</html>
