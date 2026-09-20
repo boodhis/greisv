@@ -65,6 +65,19 @@ window.SRS = (function () {
 
   function reset() { try { localStorage.removeItem(KEY); } catch (e) {} }
 
+  function exportJson() {
+    var st = load();
+    return JSON.stringify({ v: 1, saved: new Date().toISOString(), state: st }, null, 2);
+  }
+
+  function importJson(text) {
+    var data = JSON.parse(text);
+    var st = (data && data.state && typeof data.state === 'object') ? data.state : data;
+    if (typeof st !== 'object' || st === null) throw new Error('invalid json');
+    save(st);
+    return stats;
+  }
+
   return {
     KEY: KEY,
     INTERVALS: INTERVALS,
@@ -73,6 +86,8 @@ window.SRS = (function () {
     grade: grade,
     stats: stats,
     load: load,
-    reset: reset
+    reset: reset,
+    exportJson: exportJson,
+    importJson: importJson
   };
 })();

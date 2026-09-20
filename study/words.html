@@ -52,7 +52,12 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 </div>
 </div>
 
-<button id="btn-reset" class="btn ghost">Сбросить прогресс</button>
+<div class="card" style="margin:20px 0 8px"><div class="backup-lbl" style="margin-bottom:8px;font-size:13px;color:var(--dim)">💾 Резервная копия прогресса (localStorage):</div>
+<div class="t-actions" style="display:flex;gap:8px">
+<button id="btn-export" class="btn ghost">Экспорт JSON</button>
+<button id="btn-import" class="btn ghost">Импорт JSON</button>
+<input type="file" id="file-import" accept="application/json,.json" style="display:none">
+</div></div>
 
 <footer>Цифровая Крепость — образовательный сайт. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>
 </main>
@@ -124,6 +129,31 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
   bForgot.addEventListener('click', function () { SRS.grade(curCard, false); next(); });
   bOk.addEventListener('click', function () { SRS.grade(curCard, true); next(); });
   document.getElementById('btn-reset').addEventListener('click', function () { SRS.reset(); next(); });
+
+  document.getElementById('btn-export').addEventListener('click', function () {
+    var blob = new Blob([SRS.exportJson()], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'srs-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 100);
+  });
+  document.getElementById('btn-import').addEventListener('click', function () {
+    document.getElementById('file-import').click();
+  });
+  document.getElementById('file-import').addEventListener('change', function (e) {
+    var f = e.target.files && e.target.files[0];
+    if (!f) return;
+    var rd = new FileReader();
+    rd.onload = function () {
+      try { SRS.importJson(String(rd.result)); alert('Прогресс восстановлен.'); }
+      catch (err) { alert('Не удалось прочитать файл: ' + err.message); }
+      next();
+    };
+    rd.readAsText(f);
+    this.value = '';
+  });
 
   next();
 })();
