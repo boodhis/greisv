@@ -186,10 +186,8 @@ def to_html(body):
     body = re.sub(r"\[\[([^\]|]+)(?:\|([^\]]+))?\]\]", wl, body)
 
     def restore(m):
-        i = int(m.group(1))
-        if m.group(0).startswith("\x00CODEBLOCK"):
-            return code_blocks[i]
-        return code_spans[i]
+        i = int(m.group(2))
+        return code_blocks[i] if m.group(1) == "BLOCK" else code_spans[i]
 
     body = re.sub(r"\x00CODE(BLOCK|SPAN)(\d+)\x00", restore, body)
     return markdown.markdown(body, extensions=["tables", "fenced_code", "sane_lists"])
