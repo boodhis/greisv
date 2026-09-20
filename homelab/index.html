@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Концепция &quot;Цифровой Крепости — Цифровая Крепость</title>
-<meta name="description" content="Что такое homelab и зачем он нужен">
+<title>Homelab: что это, зачем нужен и как собрать — Цифровая Крепость</title>
+<meta name="description" content="Что такое homelab, зачем он нужен и как собрать домашнюю лабораторию из старого ноутбука: сервер, Docker, хранилище, безопасность и бэкапы.">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <style>
 :root{--bg:#050b06;--panel:#0a140d;--line:#1c2b1f;--text:#d9f7d0;--dim:#7ba87c;--accent:#35e6e0;--code:#3ef06a;--green:#3ef06a;--tip:#3ef06a;--note:#3ef06a}
@@ -72,11 +72,12 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 <div class="layout">
 <main>
 <div id="wordday"><div class="wd-t">Слово дня</div><div class="wd-w">…</div><div class="wd-ph"></div><div class="wd-t2"></div><div class="wd-hint">нажми, чтобы раскрыть перевод</div></div>
-<h2>Что такое Homelab?</h2>
-<p><strong>Homelab</strong> — это домашняя лаборатория для изучения технологий. Это как научная лаборатория, но для компьютерных наук.</p>
-<h3>Зачем нужен homelab?</h3>
-<table><thead><tr><th>Цель</th><th>Пример</th></tr></thead><tbody><tr><td><strong>Обучение</strong></td><td>Изучение Linux, Docker, сетей</td></tr><tr><td><strong>Эксперименты</strong></td><td>Тестирование нового ПО без риска</td></tr><tr><td><strong>Автоматизация</strong></td><td>Умный дом, бекапы, мониторинг</td></tr><tr><td><strong>Безопасность</strong></td><td>Хранение данных под своим контролем</td></tr><tr><td><strong>Экономия</strong></td><td>Бесплатные альтернативы облачным сервисам</td></tr></tbody></table>
-<h3>Концепция "Цифровой Крепости"</h3>
+<h1 id="top">Что такое Homelab?</h1>
+<p><strong>Homelab</strong> — это домашняя лаборатория для изучения технологий. Это как научная лаборатория, но для компьютерных наук: сервер из старого ноутбука, Docker-сервисы, своё хранилище и бэкапы. Всё — бесплатно и под своим контролем.</p>
+<p class="desc" style="margin-bottom:20px">На этой странице: <a href="#why">Зачем</a> · <a href="#stack">Стек</a> · <a href="#security">Безопасность</a> · <a href="#start">Как начать</a></p>
+<h2 id="why">Зачем нужен homelab?</h2>
+<table><thead><tr><th>Цель</th><th>Пример</th><th>Что получишь на практике</th></tr></thead><tbody><tr><td><strong>Обучение</strong></td><td>Linux, Docker, сети</td><td>Умение настраивать серверы, а не только читать про них</td></tr><tr><td><strong>Эксперименты</strong></td><td>Новое ПО в контейнерах</td><td>Проверка софта без риска сломать основную систему</td></tr><tr><td><strong>Автоматизация</strong></td><td>Умный дом, бэкапы, мониторинг</td><td>Сервисы работают сами, пока ты занимаешься своим делом</td></tr><tr><td><strong>Безопасность</strong></td><td>Данные под своим контролем</td><td>Фото и файлы не лежат в чужих облаках</td></tr><tr><td><strong>Экономия</strong></td><td>Бесплатные аналоги облачных сервисов</td><td>Spotify, Google Photos, iCloud — без подписок</td></tr></tbody></table>
+<h2 id="architecture">Концепция &quot;Цифровой Крепости&quot;</h2>
 <p>Наш homelab — это не просто набор компьютеров. Это <strong>система</strong>:</p>
 <pre><code>┌─────────────────────────────────────────────────┐
 │                 Цифровая Крепость               │
@@ -88,19 +89,25 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 │                     │  └─ Флешка (30G)           │
 ├─────────────────────────────────────────────────┤
 │  🌐 Сеть            │  🔒 Безопасность          │
-│  ├─ WiFi            │  ├─ Firewall              │
-│  ├─ SSH             │  ├─ Бекапы                │
-│  └─ VPN (будущее)   │  └─ Мониторинг            │
+│  ├─ WiFi            │  ├─ Firewall (UFW)        │
+│  ├─ SSH по ключам   │  ├─ Бэкапы (3-2-1)        │
+│  └─ VPN: план       │  └─ Мониторинг (smartd)   │
 └─────────────────────────────────────────────────┘</code></pre>
-<h3>Принципы</h3>
-<ol><li><strong>Простота</strong> — используем только проверенные решения</li><li><strong>Надёжность</strong> — всё должно работать после перезагрузки</li><li><strong>Документация</strong> — каждое действие описано</li><li><strong>Открытый код</strong> — всё можно скопировать</li></ol>
-<h3>Что мы строим?</h3>
-<p>Наш homelab включает:</p>
-<ul><li><strong>Сервер</strong>: Ubuntu Server 24.04 на старом ноутбуке Acer</li><li><strong>Сервисы</strong>: Docker контейнеры для различных задач</li><li><strong>Хранилище</strong>: 5 дисков общим объёмом 4 ТБ</li><li><strong>Мониторинг</strong>: отслеживание состояния системы</li><li><strong>Бекапы</strong>: регулярное копирование важных данных</li></ul>
-<h3>Как начать?</h3>
-<ol><li><strong>Выбери железо</strong> — подойдёт даже старый компьютер</li><li><strong>Установи Ubuntu</strong> — следуй инструкциям в разделе "Старт"</li><li><strong>Настрой сервисы</strong> — начни с простых (Samba, Docker)</li><li><strong>Документируй</strong> — записывай что делаешь</li></ol>
+<p>Уточнение по дискам: помимо встроенного системного накопителя (240G), рабочие данные разложены по <strong>внешним накопителям</strong>, подключённым к ноутбуку по USB — для старого ноутбука это нормальная схема. Суммарно это четыре накопителя (~3,3 ТБ), а упомянутая в старых текстах «общая ёмкость 4 ТБ» — это расчёт по номиналу дисков округлённо.</p>
+<h2 id="principles">Принципы</h2>
+<ol><li><strong>Простота</strong> — используем только проверенные решения</li><li><strong>Надёжность</strong> — всё должно работать после перезагрузки</li><li><strong>Документация</strong> — каждое действие описано</li><li><strong>Открытый код</strong> — конфиги и инструкции опубликованы, можно копировать и адаптировать под себя</li></ol>
+<h2 id="stack">Текущий стек</h2>
+<table><thead><tr><th>Компонент</th><th>Статус</th><th>Детали</th></tr></thead><tbody><tr><td><strong>Сервер</strong></td><td>✅ Готово</td><td>Ubuntu Server 24.04 на ноутбуке</td></tr><tr><td><strong>Docker</strong></td><td>✅ Готово</td><td>контейнеры, <code>docker compose</code></td></tr><tr><td><strong>Сервисы</strong></td><td>✅ Готово</td><td>Navidrome, Immich, Samba, MiniDLNA, SOPDS, Transmission, MQTT</td></tr><tr><td><strong>Хранилище</strong></td><td>⚠️ В процессе</td><td>240G + 1T + 2T + 30G внешних USB</td></tr><tr><td><strong>Мониторинг</strong></td><td>✅ Готово</td><td>smartd (диски), журналы systemd</td></tr><tr><td><strong>VPN</strong></td><td>⏳ План</td><td>WireGuard или Tailscale для доступа извне</td></tr></tbody></table>
+<h2 id="security">Безопасность и бэкапы</h2>
+<p>Homelab — это не только «как классно». Это ещё и <strong>ответственность за данные</strong>. Минимальный набор:</p>
+<ul><li><strong>SSH только по ключам</strong> — пароль для входа отключить</li><li><strong>Firewall</strong> — <code>ufw</code>, открыты только нужные порты в локальной сети</li><li><strong>Без проброса портов наружу</strong> — внешний доступ через VPN (WireGuard/Tailscale), а не открытые в интернет порты</li><li><strong>Обновления</strong> — регулярно, или автоматически через <code>unattended-upgrades</code></li><li><strong>Бэкапы 3-2-1</strong> — три копии, два носителя, одна — вне дома</li><li><strong>Fail2ban</strong> — если открыт доступ извне, блокирует перебор паролей</li></ul>
+<div class="callout callout-warning"><h4 class="callout-t">Предупреждение</h4><div class="callout-body"><p>Старый ноутбук работает 24/7 — следи за <strong>температурой</strong>, <strong>пылью</strong> и состоянием <strong>батареи</strong>. Если батарея вздулась — убери её и работай от сети.</p></div></div>
+<h2 id="start">Как начать?</h2>
+<ol><li><strong>Выбери железо</strong> — подойдёт даже старый ноутбук или мини-ПК</li><li><strong>Установи Ubuntu Server</strong> — инструкция в <a href="../getting-started/install-ubuntu.html">разделе «С чего начать»</a></li><li><strong>Настрой SSH и UFW</strong> — <a href="../guides/ssh.html">гайд по SSH</a></li><li><strong>Поставь Docker</strong> — <a href="../services/docker.html">как запустить свой первый сервис</a></li><li><strong>Настрой бэкапы</strong> — <a href="../guides/backup.html">гайд по резервному копированию</a></li><li><strong>Документируй</strong> — записывай, что делаешь, чтобы повторить на новом железе</li></ol>
+<h2>Дальше по плану</h2>
+<ul><li><strong>VPN</strong> — WireGuard или Tailscale для доступа снаружи дома</li><li><strong>Мониторинг</strong> — Uptime Kuma / Netdata для наглядности</li><li><strong>Умный дом</strong> — связка MQTT + ESPHome уже работает, расширяем</li></ul>
 <hr/>
-<p><em>Homelab — это путешествие, а не пункт назначения. Начни с малого и расти.</em></p>
+<p><em>Обновлено 20.09.2026: диски описаны честно, добавлен раздел «Безопасность и бэкапы», стек разложен по статусам.</em></p>
 <footer>Цифровая Крепость — образовательный сайт о Linux и homelab. Все примеры проверены на реальном сервере.</footer>
 </main>
 </div><script src="../study/data/wordday.js"></script>
