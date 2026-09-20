@@ -3,7 +3,7 @@
    ВАЖНО: ASSETS должен покрывать все страницы сайта — проверка в tests/test_site.py
    (test_sw_precache_covers_all_pages). После добавления страницы пересобери список
    (git ls-files '*.html') и подними версию CACHE, чтобы старый кэш обновился. */
-var CACHE = "fortress-v16";
+var CACHE = "fortress-v17";
 var ASSETS = [
   "./",
   "index.html",
@@ -44,6 +44,7 @@ var ASSETS = [
   "hobbies/guitar.html",
   "hobbies/index.html",
   "homelab/hardware.html",
+  "homelab/homelab-kit.html",
   "homelab/index.html",
   "homelab/network.html",
   "homelab/server-reference.html",
@@ -53,6 +54,7 @@ var ASSETS = [
   "resources/inxi.html",
   "resources/links.html",
   "resources/opencode-windows.html",
+  "resources/web-dev.html",
   "services/docker.html",
   "services/immich.html",
   "services/index.html",
@@ -67,6 +69,7 @@ var ASSETS = [
   "guides/publish.html",
   "guides/about.html",
   "guides/obsidian-github.html",
+  "guides/powershell.html",
 ];
 
 self.addEventListener("install", function (e) {

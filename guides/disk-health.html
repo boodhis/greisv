@@ -115,6 +115,25 @@ sudo iotop -o</code></pre>
 <pre><code>/dev/sda -a -o on -S on -s (S/../.././02|L/../../6/03) -m root</code></pre>
 <p>Перезапусти:</p>
 <pre><code>sudo systemctl restart smartd</code></pre>
+<h3>Усыпление и размонтирование дисков</h3>
+<p>Для USB-дисков, которые нужны не постоянно: усыпление (hdparm -y) экономит ресурс и шум. Команды проверены на стеке внешних дисков:</p>
+<pre><code># проверить, спит ли диск (вместо sdb — имя устройства)
+sudo hdparm -C /dev/sdb        # active/idle или standby
+
+# усыпить (размонтировать + перевести в standby)
+sudo umount /dev/sdb1 2&gt;/dev/null; sudo hdparm -y /dev/sdb
+
+# полное отключение питания USB-диска
+sudo udisksctl power-off -b /dev/sdb
+
+# размонтировать (не усыпляя)
+sudo umount /mnt/storage
+sudo umount -l /mnt/storage    # ленивое, если диск занят
+sudo fuser -km /mnt/storage    # убить процессы, держащие точку монтирования
+
+# смонтировать обратно
+sudo mount /dev/sdb1 /mnt/storage</code></pre>
+<div class="callout callout-tip"><h4 class="callout-t">Разбор</h4><div class="callout-body"><ul><li><code>hdparm -C</code> — статус: active, idle или standby</li><li><code>hdparm -y</code> — перевести головки в standby (проснётся сам при обращении)</li><li><code>umount -l</code> — отложенное размонтирование, если «target is busy»</li><li><code>udisksctl power-off</code> — полностью выключить питание USB-диска</li></ul></div></div>
 <h3>Готово!</h3>
 <p>Теперь ты можешь: - ✅ Проверять состояние дисков - ✅ Предсказывать выход из строя - ✅ Мониторить нагрузку - ✅ Настроить автоматические проверки</p>
 <hr/>

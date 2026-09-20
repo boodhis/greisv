@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Веб-разработка: шпаргалка — Цифровая Крепость</title>
+<meta name="description" content="Шпаргалка по веб-разработке: Node.js (nvm), запуск серверов, панель VS Code, базовая страница HTML">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a href="../index.html" aria-label="на главную" style="display:block;margin:16px 0 0 20px;color:#35e6e0;text-decoration:none;font-size:14px;font-family:ui-monospace,Consolas,monospace">← на главную</a>
+<div class="layout">
+<main>
+<h1>Веб-разработка — шпаргалка</h1>
+<p class="desc">Стартовый набор для своей первой веб-страницы на Ubuntu: версии Node, «живой» сервер, каркас HTML.</p>
+
+<h2>Node.js (nvm)</h2>
+<pre><code>nvm ls               # какие версии установлены
+nvm install --lts    # поставить самую свежую стабильную
+node -v              # проверить версию Node.js
+npm -v               # проверить менеджер пакетов</code></pre>
+
+<h2>Управление проектом</h2>
+<pre><code>mkdir -p ~/projects/my-site   # новая папка для сайта
+cd ~/projects/my-site         # войти
+code .                        # открыть в VS Code</code></pre>
+
+<h2>Запуск серверов (в терминале VS Code)</h2>
+<pre><code>npx serve        # простой статический сервер
+# «живой» сервер — автообновление при сохранении файла:
+npx browser-sync start --server --files "*.html, *.css"
+ctrl+c           # остановить сервер</code></pre>
+
+<h2>Базовая страница</h2>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Test Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Сервер на Acer работает!&lt;/h1&gt;
+    &lt;script&gt;console.log("JS в деле");&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+<h2>Полезное на Ubuntu</h2>
+<ul>
+<li><strong>inxi -Fx</strong> — полная инфа о железе (то, с чего начинали в <a href="../resources/inxi.html">inxi</a>).</li>
+<li><strong>sudo snap install &lt;название&gt;</strong> — установка софта (так ставили Obsidian).</li>
+<li><strong>python3 -m venv venv</strong> — виртуальное окружение Python (чтобы не мусорить в системе).</li>
+</ul>
+
+<div class="callout callout-note"><div class="callout-t">Приём в терминале</div><div class="callout-body"><p><code>Ctrl + Shift + V</code> в Obsidian — вставить без переформатирования; код в тройных квотах <code>```</code> — автоматически подсветится.</p></div></div>
+
+<footer>Цифровая Крепость — образовательный сайт о Linux и homelab. Все примеры проверены на реальном сервере.</footer>
+</main>
+</div><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
+<script src="../js/notes.js"></script>
+</body>
+</html>

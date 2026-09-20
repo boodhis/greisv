@@ -147,6 +147,16 @@ client.loop_forever()</code></pre>
 </tbody>
 </table>
 
+<h2>Meshtastic на Heltec V3</h2>
+<p>Meshtastic — прошивка, превращающая Heltec V3 в узел автономной LoRa-меш-сети (сообщения и координаты без интернета, ноды связываются между собой по радио). Три способа прошить:</p>
+<table><thead><tr><th>Способ</th><th>Кому подходит</th><th>Команда</th></tr></thead><tbody>
+<tr><td><strong>Meshtastic Flasher</strong></td><td>новичкам (GUI, есть кнопка Full Erase, сама качает прошивку)</td><td>с официального сайта Meshtastic</td></tr>
+<tr><td><strong>esptool</strong></td><td>из терминала, разовый перенос `firmware.bin`</td><td><code>pip install esptool</code> → <code>esptool.py --chip esp32s3 --baud 921600 write_flash 0x0 firmware-heltec-v3-2.5.x.bin</code></td></tr>
+<tr><td><strong>Meshtastic CLI</strong></td><td>настройка и обновления по сети</td><td><code>pip install meshtastic</code> → <code>meshtastic --flash</code></td></tr>
+<tr><td><strong>VS Code + PlatformIO</strong></td><td>копаться в исходниках прошивки под себя</td><td>открыть проект, выбрать профиль <code>heltec_v3</code>, Build → Upload</td></tr>
+</tbody></table>
+<div class="callout callout-tip"><h4 class="callout-t">Совет</h4><div class="callout-body"><p>PlatformIO умеет и «чистить» плату (Erase Flash) перед заливкой — это как Full Erase у Flasher. Для версии из исходников собери под себе подходящий S3-чип: выбор профиля в нижней синей панели.</p></div></div>
+
 <h2>Связки</h2>
 <ul>
 <li><strong>Брокер и топики</strong> — как поднять Mosquitto и подписаться: раздел <a href="../services/mqtt.html">MQTT / Mosquitto</a>.</li>

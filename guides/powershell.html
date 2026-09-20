@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Windows для Linux-админа: PowerShell — Цифровая Крепость</title>
+<meta name="description" content="Как работать с Windows из консоли, если ты привык к Linux: PowerShell-команды, сеть, мониторинг RDP и 1С">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a href="../index.html" aria-label="на главную" style="display:block;margin:16px 0 0 20px;color:#35e6e0;text-decoration:none;font-size:14px;font-family:ui-monospace,Consolas,monospace">← на главную</a>
+<div class="layout">
+<main>
+<h1>Windows для Linux-админа: PowerShell</h1>
+<p class="desc">Ты привык к Bash, а тут 1С, RDP и диск 600 МБ, который не удаляется. Главное отличие: в Linux всё — <strong>текст</strong> (grep/awk), в PowerShell всё — <strong>объект</strong>.</p>
+
+<h2>Маст-хэв (повседневное)</h2>
+<table><thead><tr><th>Задача</th><th>Команда (аналог Linux)</th></tr></thead><tbody>
+<tr><td>IP, MAC, шлюз</td><td><code>ipconfig /all</code> · <code>Get-NetIPAddress -AddressFamily IPv4</code></td></tr>
+<tr><td>Проверить порт/сайт</td><td><code>tnc google.com</code> · <code>tnc &lt;host&gt; -Port 22</code> (замена ping/telnet)</td></tr>
+<tr><td>Топ-10 процессов по CPU</td><td><code>Get-Process | Sort-Object CPU -Descending | Select-Object -First 10</code> (top)</td></tr>
+<tr><td>Починить систему</td><td><code>sfc /scannow</code></td></tr>
+<tr><td>Поставить софт</td><td><code>winget install telegram</code> (apt)</td></tr>
+<tr><td>Логи в реальном времени</td><td><code>Get-Content log.txt -Wait -Tail 20</code> (tail -f)</td></tr>
+<tr><td>Фильтр объектов</td><td><code>Get-Service | Where-Object {$_.Status -eq "Stopped"}</code> (grep)</td></tr>
+<tr><td>Поиск файлов</td><td><code>Get-ChildItem -Recurse -Filter "*.log"</code> (find)</td></tr>
+<tr><td>JSON-вывод для скриптов</td><td><code>Get-Service | ConvertTo-Json</code></td></tr>
+<tr><td>Открытое свойство без мусора</td><td><code>(Get-Service -Name "bits").Status</code></td></tr>
+</tbody></table>
+
+<div class="callout"><div class="callout-t">Модель объектов</div><div class="callout-body"><p>Когда ты пишешь <code>Get-Service</code>, получаешь не строку, а <em>объект</em>: ставь точку и обращайся к любому свойству. <code>Where-Object</code> + <code>Select-Object</code> ≈ твои <code>grep</code> + <code>awk</code>.</p></div></div>
+
+<h2>Мониторинг сети</h2>
+<table><thead><tr><th>Задача</th><th>Команда (аналог)</th></tr></thead><tbody>
+<tr><td>Активные соединения</td><td><code>Get-NetTCPConnection -State Established</code> (netstat)</td></tr>
+<tr><td>UDP-порты</td><td><code>Get-NetUDPEndpoint</code></td></tr>
+<tr><td>Сниффер пакетов</td><td><code>pktmon start --etw</code> → <code>pktmon stop</code> (tcpdump)</td></tr>
+<tr><td>Маршрут + статистика</td><td><code>pathping google.com</code></td></tr>
+<tr><td>Ошибки на интерфейсе</td><td><code>Get-NetAdapterStatistics</code></td></tr>
+<tr><td>DNS-записи</td><td><code>Resolve-DnsName google.com</code> (dig)</td></tr>
+<tr><td>Визуальный ping</td><td><code>winget install orf.gping</code> → <code>gping</code></td></tr>
+<tr><td>Кто жрёт канал</td><td><code>winget install bandwhich</code> → <code>bandwhich</code> (iftop)</td></tr>
+</tbody></table>
+
+<h3>pktmon правильно (не всё подряд)</h3>
+<pre><code>pktmon filter add -p 443                          # ловить только HTTPS
+pktmon start --etw -m real-time                   # в реальном времени
+Ctrl+C                                            # остановить
+pktmon filter remove                              # очистить фильтры</code></pre>
+<p><em>Почему <code>list</code> не сработало?</em> PowerShell использует связку «Глагол-Существительное» (<code>Get-Service</code>), а pktmon — внешняя exe, свои подкоманды принимает одной строкой: <code>pktmon list</code>.</p>
+
+<h2>Сценарий 1С + RDP (простая контора)</h2>
+<table><thead><tr><th>Задача</th><th>Команда</th></tr></thead><tbody>
+<tr><td>Кто на RDP-сервере</td><td><code>qwinsta</code></td></tr>
+<tr><td>Выкинуть зависшую сессию</td><td><code>rwinsta &lt;ID&gt;</code></td></tr>
+<tr><td>SQL 1С доступен?</td><td><code>tnc &lt;ip&gt; -Port 1433</code></td></tr>
+<tr><td>Агент 1С доступен?</td><td><code>tnc &lt;ip&gt; -Port 1540</code></td></tr>
+<tr><td>Кто съел 1 ГБ ОЗУ</td><td><code>Get-Process | Where-Object {$_.WorkingSet -gt 1GB}</code></td></tr>
+<tr><td>Очистить кэш 1С</td><td><code>Remove-Item "$env:LOCALAPPDATA\1C\1cv8\*" -Recurse -Force</code></td></tr>
+<tr><td>Последние ошибки системы</td><td><code>Get-EventLog -LogName System -EntryType Error -Newest 10</code></td></tr>
+</tbody></table>
+
+<h2>Управление адаптерами и дисками</h2>
+<ul>
+<li><strong>Перезапуск адаптера</strong> (аналог «выдернуть кабель»): <code>Disable-NetAdapter -Index 66</code> → <code>Enable-NetAdapter -Index 66</code>.</li>
+<li><strong>Скорость соединения:</strong> <code>Get-NetAdapter | Select-Object Name, LinkSpeed</code>.</li>
+<li><strong>Сброс всей сети</strong> (перезагрузка!): <code>netcfg -d</code> — удалит все виртуальные свитчи и настройки адаптеров.</li>
+<li><strong>IP конкретных адаптеров:</strong> <code>Get-NetIPAddress -InterfaceIndex 11, 66</code>.</li>
+<li><strong>Температура дисков:</strong>
+<pre><code>Get-PhysicalDisk | ForEach-Object {
+    $stats = $_ | Get-StorageReliabilityCounter
+    [PSCustomObject]@{ Model = $_.FriendlyName; Temp = "$($stats.Temperature)°C" }
+} | Format-Table -AutoSize</code></pre></li>
+<li><strong>Состав дисков:</strong> <code>Get-PhysicalDisk | Select-Object FriendlyName, BusType, MediaType</code>.</li>
+<li><strong>Удалить защищённый системный раздел (600 МБ):</strong> <code>diskpart</code> → <code>list disk</code> → <code>select disk 1</code> → <code>list partition</code> → <code>select partition 1</code> → <code>delete partition override</code> (параметр override — для защищённых системных разделов).</li>
+</ul>
+
+<div class="callout callout-note"><div class="callout-t">Виртуальный адаптер vEthernet</div><div class="callout-body"><p>Наличие <code>vEthernet (Default Switch)</code> — признак включённого Hyper-V или WSL2. Для Linux-админа отличный ход — поставить <strong>WSL2</strong>: твой привычный терминал прямо внутри Windows.</p></div></div>
+
+<footer>Цифровая Крепость — образовательный сайт о Linux и homelab. Все примеры проверены на реальном сервере.</footer>
+</main>
+</div><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
+<script src="../js/notes.js"></script>
+</body>
+</html>

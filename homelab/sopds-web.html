@@ -110,6 +110,17 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 <tr><td><code>/favs</code>, <code>/books_json</code></td><td>Избранное и история (localStorage) + данные для карточек</td></tr>
 </tbody></table>
 
+<h3>Инженерные решения (портфолио)</h3>
+<table><thead><tr><th>Задача</th><th>Решение</th></tr></thead><tbody>
+<tr><td>Поиск по 400k книг &lt; 0.1 с</td><td>PostgreSQL 14 + pg_trgm GIN; хит-путь: UNION под-запросов по id (название+автор+серия) → DISTINCT id → один JOIN на страницу. Без этого LEFT JOIN + GROUP BY = 2.5 с</td></tr>
+<tr><td>Фильтр «только русские»</td><td>Накладывается на стыках, а не в БД — данные продакшена чисты</td></tr>
+<tr><td>Читалка FB2</td><td>Конвертер fb2 → HTML через ElementTree, без хранения XSLT/кэшей</td></tr>
+<tr><td>Скачивание .zip</td><td><code>FileResponse</code> (стриминг + Range) — не грузит 1.7-ГБ архив в ОЗУ</td></tr>
+<tr><td>Библиотека книг</td><td>SSHFS (176 zip ≈ 304 ГБ на homelab) — не нужны локальные 300 ГБ; извлекается один FB2 по запросу</td></tr>
+<tr><td>Озвучка</td><td>307-редирект на фабрику аудио (<code>edge-tts</code>/<code>piper</code>) с параметрами книги</td></tr>
+<tr><td>Автостарт</td><td>user systemd unit, <code>restart=on-failure</code></td></tr>
+</tbody></table>
+<div class="callout callout-tip"><div class="callout-t">Почему стек FastAPI</div><div class="callout-body"><p>FastAPI + HTMX + Jinja2 — один язык на весь стек (без Node); HTMX даёт инфініти-скролл и живой поиск без SPA-фреймворка. PostgreSQL каталога — read-only, данные не трогаются.</p></div></div>
 <h2>Шаги (как собирали)</h2>
 <ol>
 <li><strong>Разведка</strong> — вытащили с сервера шаблоны, views, логику фильтра «русские» и кнопку озвучки; локальная копия <code>~/sopds-dev</code>.</li>

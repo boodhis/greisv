@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>homelab-kit: развернуть homelab без интернета — Цифровая Крепость</title>
+<meta name="description" content="Переносной оффлайн-развёртыватель homelab: вся архитектура, пошаговая инструкция, загрузочный диск и ручной деплой на любую Ubuntu">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a href="../index.html" aria-label="на главную" style="display:block;margin:16px 0 0 20px;color:#35e6e0;text-decoration:none;font-size:14px;font-family:ui-monospace,Consolas,monospace">← на главную</a>
+<div class="layout">
+<main>
+<h1>📦 homelab-kit</h1>
+<p class="desc">Команда: «развернуть homelab без интернета». Один диск или скрипт — и на любой Ubuntu поднимается телега сервисов: Immich, Navidrome, SOPDS, Open WebUI, Ollama.</p>
+<div class="callout"><div class="callout-t">Что умеет кит</div><div class="callout-body">
+<ul>
+<li>Ставить весь стек <strong>без интернета</strong>: Docker, Ollama, opencode — из статических бинарников.</li>
+<li>Работать на любом systemd-дистрибутиве x86_64.</li>
+<li>Загрузочный вариант: Ubuntu (сервер + GNOME) с авторазвёртыванием при первом старте.</li>
+<li>Сам подбирает модель Ollama под железо клиента (CPU/RAM/GPU/VRAM).</li>
+</ul>
+</div></div>
+
+<h2>Два способа развернуть</h2>
+
+<h3>Вариант 1 — загрузочный диск (рекомендуется)</h3>
+<p>Готовый образ Ubuntu с автологином <code>kit</code> и сервисом первого старта, который сам ставит весь стек.</p>
+<h4>Подготовка (на своей станции)</h4>
+<pre><code># найти диск клиента (данные на нём сотрутся!)
+lsblk -o NAME,SIZE,MODEL
+
+# записать образ (device указывай точно!)
+sudo dd if=ubuntu-kit.img of=/dev/sdX bs=4M status=progress
+
+# расширить раздел на весь диск
+sudo growpart /dev/sdX 3 &amp;&amp; sudo resize2fs /dev/sdX3
+</code></pre>
+<h4>Первый запуск у клиента</h4>
+<ol>
+<li>Вставь SSD в компьютер клиента, загрузися с него (F12 / F2 / Del в BIOS).</li>
+<li>Ubuntu стартует с автологином пользователя <code>kit</code>.</li>
+<li>Автоматически отработает <code>homelab-kit-firstboot.service</code>: определит железо → поставит Docker/Ollama/opencode → смонтирует диски данных по UUID → загрузит образы → подберёт модель → запустит весь стек.</li>
+<li>Сервисы доступны: Immich <code>:2283</code>, Navidrome <code>:4533</code>, SOPDS <code>:8081</code>, Open WebUI <code>:3000</code>, Ollama <code>:11434</code>.</li>
+</ol>
+
+<h3>Вариант 2 — ручной деплой на существующей Ubuntu</h3>
+<h4>Шаг 1. Скопировать кит</h4>
+<pre><code>sudo cp -r /opt/homelab-kit /opt/homelab-kit   # откуда-нибудь на диск
+# или: sudo cp -r ~/kit /opt/homelab-kit
+</code></pre>
+<h4>Шаг 2. Настроить config.env</h4>
+<pre><code>cd /opt/homelab-kit
+sudo cp config.env.example config.env
+sudo nano config.env
+</code></pre>
+<pre><code># UUID дисков данных (узнать через blkid)
+DATA_DISK_UUID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+LIB_DISK_UUID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
+# какие стеки ставить (через пробел)
+STACKS="immich navidrome sopds open-webui"
+</code></pre>
+<h4>Шаг 3. Запустить deploy</h4>
+<pre><code>sudo bash /opt/homelab-kit/scripts/deploy.sh
+</code></pre>
+<h4>Шаг 4. Проверить</h4>
+<pre><code>docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
+# http://localhost:2283 — Immich, :4533 — Navidrome, :8081 — SOPDS, :3000 — Open WebUI
+</code></pre>
+
+<h2>Архитектура кита</h2>
+<pre><code>kit/
+├── images/               # docker save всех образов → docker load оффлайн
+├── pkgs/                 # статические бинарники: docker.tgz, compose, ollama, opencode
+├── ollama-models/        # модели (qwen3.5:9b, qwen3:14b, gemma4:12b, nemotron:24b, embedding)
+├── stack/                # docker-compose (immich, navidrome, sopds, open-webui) + оверлеи
+├── scripts/              # install-docker/ollama/opencode + главный deploy.sh
+└── config.env.example    # параметры клиента (диски по UUID, стеки, порты)
+</code></pre>
+
+<h2>Ключевые решения (почему так)</h2>
+<ul>
+<li><strong>Оффлайн = самодостаточность.</strong> Образы — <code>docker save | gzip</code>; Docker — статические бинарники (без apt и зависимостей); Ollama — тарболл с CUDA-библиотеками; модели — в <code>OLLAMA_MODELS</code>. apt-get update вообще не вызывается.</li>
+<li><strong>Железо клиента неизвестно.</strong> <code>deploy.sh</code> сам определяет CPU/RAM/GPU/VRAM: Immich ML <code>auto|cpu|cuda</code>, модель Ollama подбирается по VRAM (nemotron → qwen3:14b → qwen3.5:9b → CPU-fallback), Open WebUI ходит на нативный Ollama <code>127.0.0.1:11434</code> (не docker-в-docker).</li>
+<li><strong>Диски — по UUID.</strong> Фото/музыка/библиотеки живут на дисках клиента: монтирование <code>mount UUID → DATA_ROOT/LIB_ROOT</code>.</li>
+<li><strong>Один скрипт на всё.</strong> probe железа → install runtime → mount → load образов → генерация .env → <code>docker compose up -d</code> → restore sopds → настройка opencode (offline AI).</li>
+<li><strong>Загрузочная версия.</strong> GPT: bios_grub + ESP + ext4(root), debootstrap noble + <code>ubuntu-desktop-minimal</code> (GNOME, автологин kit), systemd unit <code>homelab-kit-firstboot.service</code>. GRUB дважды: i386-pc (BIOS) + x86_64-efi <code>--removable</code> (UEFI без NVRAM).</li>
+</ul>
+
+<h2>Возможные проблемы</h2>
+<table><thead><tr><th>Проблема</th><th>Решение</th></tr></thead><tbody>
+<tr><td><code>disk with UUID ... not found</code></td><td><code>sudo blkid</code> — сверить UUID, обновить config.env</td></tr>
+<tr><td>Docker не стартует</td><td><code>sudo systemctl start docker &amp;&amp; docker info</code></td></tr>
+<tr><td>Ollama не грузит модель</td><td><code>ollama list</code>; если есть сеть — <code>ollama pull &lt;model&gt;</code></td></tr>
+<tr><td>Immich не видит фото</td><td>Проверить <code>UPLOAD_LOCATION</code> в .env — путь должен быть корректным</td></tr>
+<tr><td>Нет доступа с другого устройства</td><td>Проверить порты в docker-compose.yml, bind должен быть <code>0.0.0.0</code></td></tr>
+<tr><td>GRUB не видит диск</td><td>В BIOS выключить Secure Boot, включить CSM/Legacy (для BIOS-режима)</td></tr>
+<tr><td>UEFI не загружается</td><td>Secure Boot выключен; EFI-раздел на месте (<code>/boot/efi</code> в образе)</td></tr>
+</tbody></table>
+
+<h2>Уроки/грабли (проверено вживую)</h2>
+<ul>
+<li>grub-pc и grub-efi-amd64 конфликтуют — ставить <strong>только</strong> <code>-bin</code> пакеты.</li>
+<li>Том open-webui (~1G) снимается только через <code>docker run --rm -v ... tar</code> — каталог volume в /var/lib/docker не читается обычным юзером.</li>
+<li>docker save хорошо жмёт: 7.1G open-webui → 1.7G tar.gz; сумма всех образов 6.8G.</li>
+<li>Долгие pull больших образов — <code>nohup docker pull</code>, доверить демону.</li>
+<li>loop-образ: после повторного <code>losetup --partscan</code> узлы разделов могут не создаться — выручает <code>partprobe</code>.</li>
+<li>debootstrap: сначала <code>minbase</code>, потом apt-пакеты в chroot (mount proc/sys/dev). Образ нельзя переразмечать на лету в debootstrap.</li>
+</ul>
+
+<h2>Зачем это</h2>
+<p>Кит — «тёплый» резерв собственного homelab (весь стек+конфиги+БД перезапускаются одной командой) и материал для монетизации: развёртывание похожих систем за деньги в оффлайне. Учебные страницы по стеку — в разделах <a href="../services/index.html">Сервисы</a> и <a href="../homelab/index.html">homelab</a>.</p>
+<footer>Цифровая Крепость — образовательный сайт о Linux и homelab. Все примеры проверены на реальном сервере.</footer>
+</main>
+</div><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
+<script src="../js/notes.js"></script>
+</body>
+</html>

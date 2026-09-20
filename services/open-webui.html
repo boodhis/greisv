@@ -97,6 +97,30 @@ sudo systemctl restart ollama</code></pre>
 <li>Зарегистрируй первого пользователя — это локальный админ, данные останутся на твоём сервере.</li>
 <li>В левом верхнем углу — выбор модели: там уже видны все модели, скачанные на стационаре.</li>
 </ol>
+<h2>Какие модели брать</h2>
+<p>Ориентир — видеопамять (VRAM) GPU. Для 12 ГБ (RTX 3060) рабочая тройка:</p>
+<table><thead><tr><th>Модель</th><th>Зачем</th></tr></thead><tbody>
+<tr><td><code>qwen2.5:7b</code> / <code>qwen3:14b</code></td><td>код и русский язык</td></tr>
+<tr><td><code>llama3.1:8b</code></td><td>эталон логики и общения</td></tr>
+<tr><td><code>mistral-nemo (12B)</code></td><td>потолок точности для 12 ГБ</td></tr>
+<tr><td><code>nomic-embed-text</code></td><td>эмбеддинги для RAG</td></tr>
+</tbody></table>
+<p>Проверить, какие модели уже скачаны, и ставить их Ollama:</p>
+<pre><code>ollama list      # список моделей
+curl http://localhost:11434/api/tags</code></pre>
+<p>Подсказка: у крупных моделей держи <code>num_ctx</code> 8–16k, иначе KV-кэш уедет в CPU и скорость упадёт в разы.</p>
+<h2>Python-скрипт к модели</h2>
+<p>Python служит «клеем» между нейронкой и твоими задачами. Базовый запрос к Ollama по API:</p>
+<pre><code>import requests
+
+def ask_ai(prompt):
+    url = "http://localhost:11434/api/generate"
+    data = {"model": "qwen2.5:7b", "prompt": prompt, "stream": False}
+    response = requests.post(url, json=data)
+    return response.json()['response']
+
+print(ask_ai("Зачем нужен Python?"))</code></pre>
+<p>Полезные библиотеки: <code>requests</code> — запросы к API, <code>os</code>/<code>shutil</code> — файлы и папки, <code>pandas</code> — таблицы и большие данные. Алиасы в <code>~/.bashrc</code>: <code>alias ai='ollama run qwen2.5:7b'</code>, <code>alias gpu='watch -n 1 nvidia-smi'</code>.</p>
 <h2>Управление контейнером</h2>
 <pre><code>docker stop open-webui
 docker start open-webui</code></pre>

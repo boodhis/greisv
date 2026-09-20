@@ -19,6 +19,7 @@
   <url><loc>https://boodhis.github.io/greisv/guides/journalctl.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/guides/obsidian-github.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/guides/publish.html</loc><priority>0.5</priority></url>
+  <url><loc>https://boodhis.github.io/greisv/guides/powershell.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/guides/ssh.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/guides/terminal.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/guides/wifi-fix.html</loc><priority>0.6</priority></url>
@@ -26,6 +27,7 @@
   <url><loc>https://boodhis.github.io/greisv/hobbies/guitar.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/hobbies/index.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/homelab/hardware.html</loc><priority>0.6</priority></url>
+  <url><loc>https://boodhis.github.io/greisv/homelab/homelab-kit.html</loc><priority>0.7</priority></url>
   <url><loc>https://boodhis.github.io/greisv/homelab/index.html</loc><priority>0.8</priority></url>
   <url><loc>https://boodhis.github.io/greisv/homelab/network.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/homelab/server-reference.html</loc><priority>0.6</priority></url>
@@ -37,6 +39,7 @@
   <url><loc>https://boodhis.github.io/greisv/resources/inxi.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/resources/links.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/resources/opencode-windows.html</loc><priority>0.6</priority></url>
+  <url><loc>https://boodhis.github.io/greisv/resources/web-dev.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/services/docker.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/services/immich.html</loc><priority>0.6</priority></url>
   <url><loc>https://boodhis.github.io/greisv/services/index.html</loc><priority>0.8</priority></url>
