@@ -97,6 +97,14 @@ sudo nano /etc/ssh/sshd_config</code></pre>
 PubkeyAuthentication yes</code></pre>
 <p>Перезапусти SSH:</p>
 <pre><code>sudo systemctl restart ssh</code></pre>
+<div class="callout callout-warning"><h4 class="callout-t">Почему это важно</h4><div class="callout-body"><p>Сервер в интернете постоянно «простукивают» боты: перебирают логине и пароли тысячами попыток в минуту. Ключи (ed25519) подобрать перебором практически невозможно, а пароль с 8 символами — реально. Поэтому: <strong>только после того, как ключ успешно работает</strong> (<code>ssh-copy-id</code> + проверка входа), выключай пароли. Иначе можешь остаться без доступа.</p></div></div>
+<h3>Частые ошибки</h3>
+<table><thead><tr><th>Ошибка</th><th>Причина</th><th>Решение</th></tr></thead><tbody>
+<tr><td><code>Permission denied (publickey)</code></td><td>на сервере нет твоего публичного ключа, или ключ не подхватывается клиентом</td><td><code>ssh-copy-id username@ip</code> ещё раз; проверь <code>ssh -i ~/.ssh/id_ed25519</code>; права на <code>~/.ssh</code>: 700, на <code>authorized_keys</code>: 600</td></tr>
+<tr><td><code>Host key verification failed</code></td><td>ключа хоста ещё нет, или сервер переустановлен/восстановлен с бэкапа</td><td>первый раз — подтверди fingerprint; после переустановки — удали старый: <code>ssh-keygen -R ip_address</code></td></tr>
+<tr><td><code>Connection refused</code></td><td>ssh-сервер не запущен или слушает другой порт</td><td><code>sudo systemctl status ssh</code>; проверь порт в <code>sshd_config</code> и <code>-p</code> при подключении</td></tr>
+<tr><td><code>Permission denied (password)</code></td><td>пароль неверный или запрещён</td><td>проверь что <code>PasswordAuthentication yes</code> перед отключением паролей</td></tr>
+</tbody></table>
 <h3>Туннелирование (Port Forwarding)</h3>
 <pre><code># Локальный туннель (доступ к порту на сервере через localhost)
 ssh -L 8080:localhost:80 username@ip_address
