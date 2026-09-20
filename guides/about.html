@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Как устроен проект и сайт — Цифровая Крепость</title>
+<meta name="description" content="Три слоя — волт Obsidian, хомлаба, публичный сайт. Как они связаны и как сайт обновляется автоматически.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+<meta name="theme-color" content="#050b06">
+<style>
+body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.65;background:repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 1px,transparent 1px 3px)}
+h1,h2,.brand{text-shadow:0 0 14px rgba(62,240,106,.22)}
+main{max-width:880px}
+.content h2{border-bottom:1px solid #1c2b1f;padding-bottom:6px;margin-top:34px}
+.content h3{margin-top:22px}
+.content table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px}
+.content th,.content td{border:1px solid #1c2b1f;padding:7px 10px;text-align:left;vertical-align:top}
+.content th{color:#35e6e0;font-weight:600}
+.content code{background:#0a140d;border:1px solid #1c2b1f;border-radius:5px;padding:1px 5px;color:#c9ff87;font-family:ui-monospace,Consolas,monospace;font-size:13px}
+.content pre{background:#0a140d;border:1px solid #1c2b1f;border-radius:10px;padding:14px;overflow-x:auto;line-height:1.55}
+.content pre code{border:0;background:none;padding:0;color:#d9f7d0}
+.content blockquote{border-left:3px solid #3ef06a;margin:14px 0;padding:2px 0 2px 14px;color:#7ba87c}
+.content a{color:#35e6e0}
+.content ul,.content ol{padding-left:22px;margin:10px 0}
+.content img{max-width:100%;border-radius:8px}
+.callout{background:#0a140d;border:1px solid #1c2b1f;border-left:4px solid #3ef06a;border-radius:10px;padding:12px 16px;margin:18px 0}
+.callout .callout-t{color:#35e6e0;font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;font-size:13px}
+.callout.callout-warn,.callout.callout-danger{border-left-color:#ffe14d}
+.callout.callout-danger{border-left-color:#ff6b6b}
+</style>
+</head>
+<body>
+<div class="fnav">
+<i class="cor ctl"></i><i class="cor ctr"></i><i class="cor cbl"></i><i class="cor cbr"></i>
+<nav class="frow"><a href="../index.html" style="--c:#35e6e0"><span class="td"></span>Главная</a>
+<a href="../manifest.html" style="--c:#35e6e0"><span class="td"></span>Манифест</a>
+<a href="../getting-started/index.html" style="--c:#3ef06a"><span class="td"></span>С чего начать</a>
+<a href="../study/index.html" style="--c:#ffe14d"><span class="td"></span>Обучение</a>
+<a href="../electric/index.html" style="--c:#ff55f0"><span class="td"></span>Электрика</a>
+<a href="../homelab/index.html" style="--c:#35e6e0"><span class="td"></span>Homelab</a>
+<a href="../services/index.html" style="--c:#3ef06a"><span class="td"></span>Сервисы</a>
+<a href="../guides/index.html" on style="--c:#ffe14d"><span class="td"></span>Гайды</a>
+<a href="../resources/index.html" style="--c:#ff55f0"><span class="td"></span>Ресурсы</a>
+<a href="../hobbies/index.html" style="--c:#d9f7d0"><span class="td"></span>Досуг</a></nav>
+</div>
+<div class="layout">
+<main>
+<h1>Как устроен проект и сайт</h1>
+<p class="muted">Три слоя — волт Obsidian, хомлаба, публичный сайт. Как они связаны и как сайт обновляется автоматически.</p>
+<div class="content">
+<h1>Как устроен проект и сайт</h1>
+<p>Короткий обзор: из чего состоит «Цифровая крепость» (этот сайт), где живёт контент и как он попадает сюда.</p>
+<h2>Три слоя</h2>
+<table>
+<thead>
+<tr>
+<th>Слой</th>
+<th>Где живёт</th>
+<th>Роль</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Волт Obsidian</td>
+<td>закрытый GitHub + homelab bare</td>
+<td><strong>источник правды</strong>: заметки, черновики</td>
+</tr>
+<tr>
+<td>Хомлаба</td>
+<td><code>iva@192.168.0.244</code> (Ubuntu 24.04)</td>
+<td>сервер: immich, nginx, navidrome, samba, miniDLNA</td>
+</tr>
+<tr>
+<td>Сайт</td>
+<td>GitHub Pages — этот сайт</td>
+<td>публичная витрина</td>
+</tr>
+</tbody>
+</table>
+<h2>Как обновляется сайт</h2>
+<div class="callout callout-note">
+<div class="callout-t">Автоген</div>
+<div class="callout-body">
+> Заметки пишутся в папке `Сайт/` волта → каждые 15 минут хомлаба тянет волт, `gen_vault.py` превращает Markdown в страницы (sitemap и офлайн-кеш согласуются сами), прогоняет тесты и пушит — GitHub Pages деплоит.
+
+Подробности — в <a href="publish.html">publish</a>.
+
+## Статус на 20.09.2026
+
+- Волт подчищен: разрозненные заметки объединены, черновики манифестов в архиве, лайт-ядро пересобрано.
+- Старый SOPDS (`:8081`) — в архиве, работает новая веб-морда (`:8091`).
+- Лицензия: код AGPL-3.0, тексты CC BY-SA 4.0, данные CC0.
+</div>
+<footer>Цифровая Крепость — образовательный сайт. · <a href="https://github.com/boodhis/greisv">Исходный код</a> · Источник статьи: заметка в Obsidian (волт)</footer>
+</main>
+</div>
+<div id="wordday" style="display:none"></div>
+<script src="../study/data/wordday.js"></script>
+<script src="../study/data/widget.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
+<script src="../js/notes.js"></script>
+</body>
+</html>
