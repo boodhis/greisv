@@ -162,9 +162,12 @@ def to_html(body):
 
     # Obsidian callouts: > [!TYPE] Заголовок
     out = []
+    in_callout = False
     for line in body.splitlines():
         m = re.match(r"^\s*> \[!(\w+)\]\s*(.*)$", line)
         if m:
+            if in_callout:
+                out.append("</div></div>")
             ctype = m.group(1).lower()
             ctitle = m.group(2).strip()
             if not ctitle:
@@ -173,8 +176,20 @@ def to_html(body):
             out.append(f'<div class="callout callout-{ctype}">')
             out.append(f'<div class="callout-t">{ctitle}</div>')
             out.append('<div class="callout-body">')
+            in_callout = True
+            continue
+        if in_callout and line.strip():
+            cm = re.match(r"^\s*>\s?(.*)$", line)
+            out.append(cm.group(1) if cm else line)
+            continue
+        if in_callout and not line.strip():
+            out.append("</div></div>")
+            out.append("")
+            in_callout = False
             continue
         out.append(line)
+    if in_callout:
+        out.append("</div></div>")
     body = "\n".join(out)
     # Obsidian wikilinks -> ссылки на страницы сайта
     def wl(m2):
