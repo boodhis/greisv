@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Разработка приложений под Linux — Цифровая Крепость</title>
+<meta name="description" content="Курс: от простого Python-скрипта до программы с окном и автозапуском на сервере. Модули по одной теме, задания, сквозной проект, ИИ-наставник рядом.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+<style>
+body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.65;background:repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 1px,transparent 1px 3px)}
+h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
+pre{background:#0d1117;border:1px solid #2a2f3a;border-radius:8px;padding:12px;overflow-x:auto;font-size:13px;line-height:1.5}
+pre code{color:#d4d8e0}
+.task{background:rgba(255,225,77,.06);border-left:3px solid #ffe14d;border-radius:0 8px 8px 0;padding:10px 14px;margin:12px 0}
+.task b{color:#ffe14d}
+.ai{background:rgba(53,230,224,.06);border-left:3px solid #35e6e0;border-radius:0 8px 8px 0;padding:10px 14px;margin:12px 0}
+.ai b{color:#35e6e0}
+.lesson{border:1px solid #1c2b1f;border-radius:10px;padding:16px 18px;margin:18px 0}
+.lesson h2{margin-top:0;border-bottom:1px solid #1c2b1f;padding-bottom:8px}
+.goal{color:#7ba87c;font-size:14px;margin:-4px 0 12px}
+</style>
+</head>
+<body>
+<a href="../index.html" aria-label="на главную" style="display:block;margin:16px 0 0 20px;color:#35e6e0;text-decoration:none;font-size:14px;font-family:ui-monospace,Consolas,monospace">← на главную</a>
+<div class="layout">
+<main>
+<h1>⚙️ Разработка приложений под Linux</h1>
+<p class="desc">Второй курс. Ты уже знаешь основы Python (или прошёл первый курс) — теперь учишься делать из скрипта настоящую программу: сначала простая утилита, потом командная, потом с окном, а в конце — сервис, который живёт на сервере сам. Всё на твоём хомлабе, по одному модулю за раз.</p>
+
+<div class="callout callout-note">
+<div class="callout-t">Как устроен курс</div>
+<div class="callout-body"><p>Путь: <b>скрипт → CLI → GUI → сервис</b>. Каждый модуль — одна идея + задание. Сквозной проект — <b>«Счётчик расходов»</b>: считалка, которая растёт из консольной тулзы в программу с окном, а под конец становится сервисом, который пишет отчёт раз в день. ИИ-наставник — рядом в каждом модуле.</p></div>
+</div>
+
+<div class="lesson">
+<h2>Модуль 1 · От скрипта к программе: структура и окружение</h2>
+<p class="goal">Цель: понять разницу «скрипт» и «приложение», настроить окружение проекта.</p>
+<p>Скрипт — файл, который делает одну работу. Программа — то же плюс: папка проекта, понятные имена, возможность запуска «по правилам» Linux (права, вывод сообщений, обработка ошибок). Минимум структуры для Python-проекта:</p>
+<pre><code>expenses/           ← папка проекта
+├── expenses.py     ← главный файл (логика)
+└── data/           ← папка для данных (создадим)
+</code></pre>
+<p>Начни с правильной настройки: Python 3 уже есть на сервере (<code>python3 --version</code>). Для чистоты проекта создают виртуальное окружение — «коробку», где живут только библиотеки этого проекта (современный инструмент — <code>uv</code>, спроси ИИ, как поставить).</p>
+<pre><code>cd ~/expenses
+uv venv                # если поставил uv
+source .venv/bin/activate
+python3 --version</code></pre>
+<div class="task"><b>Задание 1.</b> Создай папку проекта, поставь <code>uv</code>, создай окружение. В <code>expenses.py</code> сделай первую версию: та же функция, что в модуле 1 курса Python — печать приветствия и «готов к работе». Запусти так, чтобы увидел свой код.</div>
+<div class="ai"><b>Спроси ИИ:</b> «Зачем виртуальное окружение и что оно решает?» И «Поставь мне uv и проведи по созданию окружения по шагам».</div>
+</div>
+
+<div class="lesson">
+<h2>Модуль 2 · Скрипт, который полезен сам по себе</h2>
+<p class="goal">Цель: автоматизировать скучную задачу и не бояться отдельных кусков.</p>
+<p>Приложение начинается с того, что ты делаешь задачу, которую вручную делал много раз. У «Счётчика расходов» первая ценность — чтение и учёт: ты записываешь траты в файл, скрипт их считает. Работа с путями и файлами — через <code>pathlib</code> (безопасно и по-современному).</p>
+<pre><code>from pathlib import Path
+import json
+
+data_dir = Path.home() / "expenses" / "data"
+data_dir.mkdir(exist_ok=True)
+файл = data_dir / "spend.json"
+
+# Если файла нет — начнём с пустого списка
+список = []
+if файл.exists():
+    список = json.loads(файл.read_text("utf-8"))
+
+трата = {"что": "кофе", "сумма": 150, "день": "2026-09-21"}
+список.append(трата)
+файл.write_text(json.dumps(список, ensure_ascii=False, indent=2), "utf-8")
+print("Записал трату. Всего:", len(список))</code></pre>
+<div class="task"><b>Задание 2.</b> Доведи скрипт до «считалки»: после добавления печатай сумму всех трат и число записей. Проверь, что файл создаётся, данные переживают перезапуск.</div>
+<div class="ai"><b>Спроси ИИ:</b> «Что делает json.dumps(..., indent=2)?» и «Как добавить запись, не затирая старые?» — прежде чем спросить, попробуй сам.</div>
+</div>
+
+<div class="lesson">
+<h2>Модуль 3 · CLI: у программы появляются команды и флаги</h2>
+<p class="goal">Цель: запускать программу как «настоящую», с аргументами и <code>--help</code>.</p>
+<p>CLI-приложение — программа из терминала с осмысленными командами: <code>expenses add 150 кофе</code> и <code>expenses total</code>. Аргументы разбирает <code>argparse</code> — он же генерирует справку. Коды выхода: 0 — всё ок, не 0 — ошибка.</p>
+<pre><code>import argparse
+
+p = argparse.ArgumentParser(description="Счётчик расходов")
+sub = p.add_subparsers(dest="cmd", required=True)
+
+add = sub.add_parser("add", help="добавить трату")
+add.add_argument("--сумма", type=int, required=True)
+add.add_argument("--что", required=True)
+
+total = sub.add_parser("total", help="сумма всех трат")
+
+args = p.parse_args()
+if args.cmd == "add":
+    print(f"Записал: {args.что} на {args.сумма} р.")
+if args.cmd == "total":
+    print("Считаю сумму...")</code></pre>
+<div class="task"><b>Задание 3.</b> Доведи две команды до рабочих: <code>add</code> реально дописывает трату в файл, <code>total</code> печатает сумму. Проверь <code>--help</code>. Сделай команду <code>top</code> — самая крупная трата.</div>
+<div class="ai"><b>Спроси ИИ:</b> «Покажи, как argparse ловит ошибки ввода» и «Проверь мой CLI-код: что не так, без исправлений».</div>
+</div>
+
+<div class="lesson">
+<h2>Модуль 4 · GUI: у программы появляется окно</h2>
+<p class="goal">Цель: собрать то же приложение с кнопками и списком, не раздувая код.</p>
+<p>GUI = окно с элементами: кнопки, поля, списки. Начинать стоит с Tkinter (входит в Python, ничего не ставится). На сервере без экрана окно не покажешь — поэтому этого модуля запускаем на своём компе либо на сервере с удалённым рабочим столом. Логику (работу с файлом) НЕ переписываем: GUI лишь вызывает те же функции.</p>
+<pre><code>import tkinter as tk
+
+root = tk.Tk()
+root.title("Счётчик расходов")
+
+label = tk.Label(root, text="Сколько потрачено?")
+label.pack(pady=10)
+info = tk.Label(root, text="")
+info.pack()
+
+def показать_сумму():
+    # здесь вызываешь свою функцию из expenses.py
+    info.config(text="Сумма посчитается здесь")
+
+кнопка = tk.Button(root, text="Показать сумму", command=показать_сумму)
+кнопка.pack(pady=10)
+root.mainloop()</code></pre>
+<div class="task"><b>Задание 4.</b> Сделай окно с: полем ввода суммы, кнопкой «Добавить», кнопкой «Сумма», меткой с результатом. Используй логику из модулей 2–3 — окно вызывает её.</div>
+<div class="ai"><b>Спроси ИИ:</b> «Что делает mainloop() и почему программа "висит", пока окно открыто?» Продолжи: «Чем tkinter.Tk отличается от окна "взрослого" приложения на GTK/Qt?» — это подведёт к модулю 6.</div>
+</div>
+
+<div class="lesson">
+<h2>Модуль 5 · Сервис: программа, которая живёт на сервере сама</h2>
+<p class="goal">Цель: приложение работает без человека — как демон под systemd.</p>
+<p>Сильнее всего Linux любит сервисы: программу заворачивают в <b>systemd-юнит</b>, и она стартует при загрузке, перезапускается при падении, пишет в журнал. Из «Счётчика» сделаем сервис, который раз в день добавляет напоминание или пишет отчёт дня в журнал.</p>
+<p>Файл юнита <code>/etc/systemd/system/expenses.service</code>:</p>
+<pre><code>[Unit]
+Description=Счётчик расходов: дневной отчёт
+After=network.target
+
+[Service]
+ExecStart=/home/iva/expenses/.venv/bin/python /home/iva/expenses/report_daily.py
+Restart=on-failure
+User=iva
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>Затем включаем демон и смотрим, работает:</p>
+<pre><code>sudo systemctl daemon-reload
+sudo systemctl enable --now expenses
+systemctl status expenses
+journalctl -u expenses -f        # журнал сервиса</code></pre>
+<div class="task"><b>Задание 5.</b> Напиши <code>report_daily.py</code> (считает сумму трат за сегодня и пишет строку в журнал). Создай юнит, включи, проверь статус и журнал. Останови сервис и пойми, почему — до того как чинить.</div>
+<div class="ai"><b>Спроси ИИ:</b> «Объясни каждую строчку юнита с точки зрения новичка» и «Юнит не стартует: journalctl показывает ошибку — помоги прочитать» (не «исправь»).</div>
+</div>
+
+<div class="lesson">
+<h2>Модуль 6 · Жизнь в дистрибутиве: упаковка и запуск</h2>
+<p class="goal">Цель: сделать программы «устанавливаемой» и понятной, как у больших приложений.</p>
+<p>Настоящее приложение в Linux умеет: запускаться из меню (.desktop-файл), устанавливаться (.deb) и работать без «магии». Быстрый вход — <code>.desktop</code> для CLI/GUI программы, народный формат знакомства — собрать свой первый пакет. Для GUI-версии .desktop-файл:</p>
+<pre><code>[Desktop Entry]
+Type=Application
+Name=Счётчик расходов
+Exec=python3 /home/iva/expenses/gui.py
+Path=/home/iva/expenses
+Terminal=false
+Categories=Utility;
+</code></pre>
+<p>Современная альтернатива для «красивого окна» — Tauri (веб-UI, Rust-ядро, собирает .deb/AppImage одной командой) и GTK/Qt для «настоящих» нативных программ. Для первого года жизни Tkinter более чем достаточно.</p>
+<div class="task"><b>Задание 6 (финал).</b> Расположи .desktop-файл так, чтобы программа появилась в меню, и запусти её оттуда. Собери CLI-версию в <code>.deb</code> (попроси ИИ дать минимальный набор: папка с content — и <code>dpkg-deb --build</code>). Установи и запусти.</div>
+<div class="ai"><b>Спроси ИИ:</b> «Что такое AppImage и Flatpak простыми словами?» и «Дай мне план: как из моего скрипта сделать настоящий установщик и не утонуть».</div>
+</div>
+
+<div class="callout callout-note">
+<div class="callout-t">Куда дальше</div>
+<div class="callout-body"><p>Твой путь из Python-новичка: скрипт → утилита → окно → сервис в системе. Совмести это с <a href="../study/python.html">курсом Python</a> (если ещё не прошёл) и с DevOps-курсом — там то, что живёт уже на сервере «по-взрослому»: Docker, деплой, мониторинг.</p></div>
+</div>
+
+<footer>Цифровая Крепость — образовательный сайт. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>
+</main>
+</div>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
+<script src="../js/notes.js"></script>
+</body>
+</html>

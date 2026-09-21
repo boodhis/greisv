@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevOps с нуля до первого Junior — Цифровая Крепость</title>
+<meta name="description" content="Реалистичный план DevOps: 4–6 месяцев, что реально спрашивают на собеседовании, план по месяцам, проекты в портфолио, метод починки сервера, шпаргалки.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+<style>
+body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.65;background:repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 1px,transparent 1px 3px)}
+h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
+pre{background:#0d1117;border:1px solid #2a2f3a;border-radius:8px;padding:12px;overflow-x:auto;font-size:13px;line-height:1.5}
+pre code{color:#d4d8e0}
+.task{background:rgba(255,225,77,.06);border-left:3px solid #ffe14d;border-radius:0 8px 8px 0;padding:10px 14px;margin:12px 0}
+.task b{color:#ffe14d}
+.ai{background:rgba(53,230,224,.06);border-left:3px solid #35e6e0;border-radius:0 8px 8px 0;padding:10px 14px;margin:12px 0}
+.ai b{color:#35e6e0}
+</style>
+</head>
+<body>
+<a href="../index.html" aria-label="на главную" style="display:block;margin:16px 0 0 20px;color:#35e6e0;text-decoration:none;font-size:14px;font-family:ui-monospace,Consolas,monospace">← на главную</a>
+<div class="layout">
+<main>
+<h1>🧭 DevOps с нуля до Junior</h1>
+<p class="desc">Устраиваемся Junior DevOps инженером за 4–6 месяцев при занятиях 1–2 часа в день. Честный план: что спрашивают на собеседовании, что учить по месяцам, какие проекты делать в портфолио. Вся практика — на своём подопытном сервере (хомлабе), вся учёба — в паре с ИИ-наставником.</p>
+
+<div class="callout callout-note">
+<div class="callout-t">Три правила курса</div>
+<div class="callout-body"><p><b>1.</b> Одна тема — один день, повторение через день-два (карточки «слова дня»). <b>2.</b> Каждый модуль заканчивается чекпоинтом — ты что-то реально запустил. <b>3.</b> Застрял — идёшь по <b>методу починки</b> (ниже) и зовёшь ИИ-наставника; он не даёт готовый ответ, а ведёт шагами.</p></div>
+</div>
+
+<h2>Что реально спрашивают на собеседовании (junior)</h2>
+<table>
+<thead><tr><th>Технология</th><th>Уровень</th><th>Что спрашивают</th></tr></thead>
+<tbody>
+<tr><td>Linux</td><td>⭐⭐⭐ базовый</td><td>команды, файловая система, права, процессы, systemd</td></tr>
+<tr><td>Bash</td><td>⭐⭐ средний</td><td>писать простые скрипты, grep, awk, sed</td></tr>
+<tr><td>Git</td><td>⭐⭐⭐ базовый</td><td>clone, commit, push, pull, branches, merge</td></tr>
+<tr><td>Docker</td><td>⭐⭐⭐ базовый</td><td>run, build, volumes, networks, docker-compose</td></tr>
+<tr><td>CI/CD</td><td>⭐⭐ средний</td><td>понимать пайплайн (GitLab CI/GitHub Actions)</td></tr>
+<tr><td>Облака</td><td>⭐ базовый</td><td>основы AWS/GCP/Yandex</td></tr>
+<tr><td>Мониторинг</td><td>⭐⭐</td><td>что такое Prometheus + Grafana</td></tr>
+<tr><td>Networking</td><td>⭐⭐</td><td>TCP/IP, DNS, HTTP, порты, прокси</td></tr>
+</tbody>
+</table>
+
+<h2>План по месяцам</h2>
+<div class="lesson">
+<h3>Месяц 1 · Фундамент: Linux + Bash + Git</h3>
+<p>Команды: <code>ls cd cat grep tail ps kill chmod chown systemctl journalctl</code>. Учимся писать первый скрипт. Git: репозиторий, ветки, пул-реквесты.</p>
+<p><b>Чекпоинт:</b> скрипт, который раз в 5 минут проверяет место на диске и пишет в лог.</p>
+</div>
+<div class="lesson">
+<h3>Месяц 2 · Docker</h3>
+<p>Образы, контейнеры, volumes, сети; свой Dockerfile (Python/Node); Compose: WordPress (nginx+php+mysql+phpmyadmin) одной командой.</p>
+<p><b>Чекпоинт:</b> WordPress в docker-compose, поднятый одной командой.</p>
+</div>
+<div class="lesson">
+<h3>Месяц 3 · CI/CD + GitLab</h3>
+<p><code>.gitlab-ci.yml</code>; пайплайн lint → test → build → push; деплой на сервер по SSH/Docker.</p>
+<p><b>Чекпоинт:</b> пуш → автосборка образа → автодеплой.</p>
+</div>
+<div class="lesson">
+<h3>Месяц 4 · Мониторинг + Cloud</h3>
+<p>Prometheus + Grafana в Compose; метрики сервера; алерты в Telegram; VM в облаке (Yandex/AWS free tier), Docker + деплой.</p>
+<p><b>Чекпоинт:</b> дашборд Grafana с CPU/RAM/Disk.</p>
+</div>
+<div class="lesson">
+<h3>Месяц 5–6 · Проект + собеседования</h3>
+<p>Портфолио на GitHub (3–4 проекта), LinkedIn/HH.ru, 3–5 технических собеседований.</p>
+</div>
+
+<h2>Проекты для портфолио (обязательно)</h2>
+<ol>
+<li><b>Простейший:</b> статический сайт на Nginx в Docker.</li>
+<li><b>Средний:</b> WordPress в Docker Compose с volume для данных.</li>
+<li><b>Сложнее:</b> Todo (React + Node + PostgreSQL) в Compose + CI/CD в GitLab.</li>
+<li><b>Прокачка:</b> то же приложение + Prometheus + Grafana + алерты.</li>
+</ol>
+
+<h2>Ключевые концепции (запомнить)</h2>
+<ul>
+<li><b>Образ (Image)</b> — рецепт/чертёж для создания контейнера.</li>
+<li><b>Контейнер (Container)</b> — запущенный экземпляр образа.</li>
+<li><b>Volume</b> — проброс папки между хостом и контейнером.</li>
+<li><b>Port mapping</b> (<code>-p</code>) — задаётся ТОЛЬКО при создании (<code>docker start</code> его не меняет).</li>
+<li><b>docker-compose.yml</b> — описание группы контейнеров.</li>
+<li><b>Пользовательская сеть Docker</b> — даёт DNS: контейнеры общаются по именам.</li>
+<li><b>Обратный прокси (nginx)</b> — принимает внешние запросы и перенаправляет во внутреннюю сеть (<code>proxy_pass</code>).</li>
+<li><b>IaC</b> — не запускаем руками, пишем «рецепт» в YAML и держим в Git.</li>
+<li><b>Resource limits</b> — «забор» для процессов, чтобы контейнер не съел весь хомлаб.</li>
+</ul>
+
+<h2>Метод починки сервера (факты → логи → гипотеза → проверка → фикс → запись)</h2>
+<p>«Не работает» почти никогда не значит «сломалось» — это значит «надо найти, где порвалась цепочка». Правильный порядок:</p>
+<pre><code>СИМПТОМ → ФАКТЫ → ЛОГИ → ГИПОТЕЗА → ПРОВЕРКА → ФИКС → ЗАПИСЬ
+(что именно    какая ошибка    systemctl,      одна,     дешёвая   минимальный   что было,
+  сломалось)   когда, что       journalctl,    самая      команда   и обратимый    почему,
+               менялось        ss -tlnp        простая    да/нет                чем починил</code></pre>
+<div class="ai"><b>Спроси ИИ:</b> «Сервис не работает. Какую первую команду запустить и что она покажет?» — и пусть наведёт на метод, а не даст ответ. Правило: ИИ показывает <b>как искать</b>, а не <i>что нажать</i>.</div>
+<h3>Шпаргалка разведки (команда → что узнаю)</h3>
+<table>
+<thead><tr><th>Ситуация</th><th>Команда</th><th>Что узнаю</th></tr></thead>
+<tbody>
+<tr><td>«Сервис не работает»</td><td><code>systemctl status &lt;имя&gt;</code></td><td>статус, ошибку, последние строки лога</td></tr>
+<tr><td>«Что он логгирует»</td><td><code>journalctl -u &lt;имя&gt;</code></td><td>весь журнал сервиса</td></tr>
+<tr><td>«Сайт не открывается»</td><td><code>systemctl status nginx</code> + лог</td><td>жив ли nginx, что ругается</td></tr>
+<tr><td>«Порт занят/никакой»</td><td><code>ss -tlnp</code></td><td>кто на каких портах слушает</td></tr>
+<tr><td>«Место кончилось»</td><td><code>df -h</code></td><td>занятость дисков</td></tr>
+<tr><td>«Что-то грузит CPU»</td><td><code>ps aux</code> / <code>top</code></td><td>процессы, нагрузка</td></tr>
+<tr><td>«Где мой процесс»</td><td><code>ps aux | grep &lt;имя&gt;</code></td><td>жив ли процесс, его PID</td></tr>
+<tr><td>«Контейнер молчит»</td><td><code>docker ps</code> + <code>logs</code></td><td>запущен ли, что пишет</td></tr>
+</tbody>
+</table>
+
+<h2>Как искать команду (не LLM)</h2>
+<table>
+<thead><tr><th>Инструмент</th><th>Команда</th><th>Назначение</th></tr></thead>
+<tbody>
+<tr><td>Быстрая помощь</td><td><code>команда --help</code></td><td>«Какой флаг для этого?»</td></tr>
+<tr><td>Практические примеры</td><td><code>tldr команда</code></td><td>«Как это вообще делается?»</td></tr>
+<tr><td>Полная документация</td><td><code>man команда</code></td><td>«Расскажи всё»</td></tr>
+</tbody>
+</table>
+
+<h2>Практика на живом стеке (важные уроки)</h2>
+<ul>
+<li>Проброс порта задаётся при создании контейнера; <code>docker start</code> параметры не меняет.</li>
+<li>Docker-сеть по умолчанию (<code>bridge</code>) изолирована: внутри неё может не быть выхода в интернет.</li>
+<li><code>docker exec -it &lt;имя&gt; bash</code> — зайти внутрь; <code>docker logs &lt;имя&gt;</code> — понять, почему упал.</li>
+<li>nginx внутри контейнера не стартует сам при <code>docker start</code> — запускать вручную через <code>exec</code>.</li>
+</ul>
+
+<div class="callout callout-note">
+<div class="callout-t">Куда дальше</div>
+<div class="callout-body"><p>DevOps опирается на ту же базу, что и разработка: <a href="../study/python.html">Python с нуля</a> (для скриптов автоматизации) и <a href="../study/linux-app-dev.html">разработка приложений под Linux</a> (чтобы понимать, что ты деплоишь). Фундамент курса — 6 карточек «Linux и homelab» на <a href="../study/index.html">главной обучения</a>.</p></div>
+</div>
+
+<footer>Цифровая Крепость — образовательный сайт. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>
+</main>
+</div>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
+<script src="../js/notes.js"></script>
+</body>
+</html>
