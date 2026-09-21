@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python с нуля на реальном проекте — Цифровая Крепость</title>
+<meta name="description" content="Курс Python на примере нашего проекта «Библиотека» (SOPDS): FastAPI, Postgres, поиск. Каждый модуль — разбор настоящего кода + задания.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../style.css">
+<style>
+body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.65;background:repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 1px,transparent 1px 3px)}
+h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
+pre{background:#0d1117;border:1px solid #2a2f3a;border-radius:8px;padding:12px;overflow-x:auto;font-size:13px;line-height:1.5}
+pre code{color:#d4d8e0}
+.task{background:rgba(255,225,77,.06);border-left:3px solid #ffe14d;border-radius:0 8px 8px 0;padding:10px 14px;margin:12px 0}
+.task b{color:#ffe14d}
+</style>
+</head>
+<body>
+<a href="../index.html" aria-label="на главную" style="display:block;margin:16px 0 0 20px;color:#35e6e0;text-decoration:none;font-size:14px;font-family:ui-monospace,Consolas,monospace">← на главную</a>
+<div class="layout">
+<main>
+<h1>🐍 Python с нуля на реальном проекте</h1>
+<p class="desc">Это не абстрактные примеры, а <b>наш живой проект «Библиотека»</b> — веб-морда над каталогом книг (~400 тысяч). Ты видишь код, который реально работает на homelab, и задания: сначала читаешь и разбираешь, потом делаешь своё.</p>
+
+<div class="callout callout-note">
+<div class="callout-t">Как устроен проект</div>
+<div class="callout-body"><p><b>Стек:</b> Python 3 + FastAPI (веб-фреймворк) + Jinja2 (шаблоны) + PostgreSQL (база книг) + psycopg2 (драйвер БД). Весь сервер — один файл <code>app.py</code>. В каждом модуле ниже мы берём настоящий кусок из него.</p></div>
+</div>
+
+<h2>Модуль 1 · Переменные, функции, циклы</h2>
+<p>Самый частый приём в проекте — «взять значение из БД, преобразовать, вставить в HTML». Начнём с маленькой функции, которая превращает число байт в человеческий размер:</p>
+<pre><code>def fmt_size(b):
+    if not b:
+        return ""
+    n = float(b)
+    for unit in ("B", "КБ", "МБ", "ГБ"):
+        if n &lt; 1024 or unit == "ГБ":
+            return f"{n:.1f} {unit}" if unit != "B" else f"{int(n)} {unit}"
+        n /= 1024
+    return f"{n:.1f} ГБ"</code></pre>
+<p>Здесь сразу несколько базовых вещей:</p>
+<ul>
+<li><b>Аргумент и возврат.</b> Функция получает <code>b</code> и возвращает строку.</li>
+<li><b>Условие <code>if not b</code></b> — срабатывает на <code>None</code>, <code>0</code>, пустую строку (в Python это «ложные» значения).</li>
+<li><b>Цикл по кортежу</b> с выходом через <code>return</code> — классический досрочный выход.</li>
+<li><b>f-строки</b> — подстановка значений и форматирование: <code>{n:.1f}</code> — один знак после запятой.</li>
+</ul>
+<div class="task"><b>Задание 1.</b> Напиши функцию <code>fmt_duration(sec)</code>, которая переводит секунды в «Ч:ММ:СС» (например 3661 → «1:01:01»). Подсказка: целочисленное деление <code>//</code> и остаток <code>%</code>.</div>
+
+<h2>Модуль 2 · Словари и списки</h2>
+<p>Книги из базы приходят как списки словарей. В проекте каждый элемент дополняется полем для показа:</p>
+<pre><code>items = books_query(match=random_book_ids(12), only_ru=True, limit=12)
+for it in items:
+    it["size_fmt"] = fmt_size(it["filesize"])</code></pre>
+<ul>
+<li><b>Словарь</b> — это «ключ → значение». Здесь в каждый dict добавляется новый ключ.</li>
+<li><b>Список</b> — упорядоченная коллекция; <code>for it in items</code> проходит по всем.</li>
+<li>Такую же конструкцию можно записать короче — <b>генератором списка</b> (о нём ниже).</li>
+</ul>
+<div class="task"><b>Задание 2.</b> Дан список книг-словарей. Напиши однострочник, который вернёт <b>названия книг, размер которых меньше 1 МБ</b> (через <code>filter</code> или генератор).</div>
+
+<h2>Модуль 3 · Работа с базой данных</h2>
+<p>Проект общается с PostgreSQL через курсор — объект, который выполняет SQL и возвращает строки:</p>
+<pre><code>cur = get_conn().cursor()
+cur.execute(
+    "SELECT id FROM opds_catalog_book WHERE lang = %s ORDER BY random() LIMIT %s",
+    (LANG_RUS, size),
+)
+_pool["ids"] = [r[0] for r in cur.fetchall()]
+cur.close()</code></pre>
+<ul>
+<li><b>Место для параметров — <code>%s</code></b>, значения передаются вторым аргументом. Никогда не подставляй пользовательский ввод прямо в SQL — это уязвимость «инъекция».</li>
+<li><b><code>fetchall()</code></b> возвращает список кортежей; <code>r[0]</code> — первый столбец.</li>
+<li><b><code>r[0] for r in ...</code></b> — генератор списка: компактный способ собрать новый список из другого.</li>
+</ul>
+<div class="task"><b>Задание 3.</b> Запрос с фильтром + счёт: выбери из таблицы <code>opds_catalog_book</code> все id книг автора (столбец <code>author</code> равен значению переменной), и посчитай, сколько их. Подсказка: <code>COUNT(*)</code> вернёт одно число.</div>
+
+<h2>Модуль 4 · Контекстные менеджеры</h2>
+<p>Открыть-использовать-закрыть — частая идиома. Python делает это красиво через <code>with</code>. В проекте курсор так и используется:</p>
+<pre><code>with get_conn().cursor() as cur:
+    cur.execute("SELECT count(*) FROM opds_catalog_book WHERE lang = 'Русский'")
+    total = cur.fetchone()[0]</code></pre>
+<p>Блок <code>with</code> гарантирует <code>close()</code> даже при ошибке. Для этого у объекта определены магические методы <code>__enter__</code> и <code>__exit__</code>. В проекте даже сделана обёртка, которая возвращает соединение в пул:</p>
+<pre><code>class _PoolCursor:
+    def close(self):
+        self._pool.putconn(self._cur.connection)
+        self._cur.close()
+    def __enter__(self):
+        return self
+    def __exit__(self, *exc):
+        self.close()</code></pre>
+<div class="task"><b>Задание 4.</b> Напиши класс <code>Timer</code> с <code>__enter__</code>/<code>__exit__</code>, который замеряет время выполнения блока и печатает его. Добавь поддержку <code>with Timer():</code>.</div>
+
+<h2>Модуль 5 · Веб: маршруты и шаблоны</h2>
+<p>FastAPI превращает функцию в веб-страницу декоратором <code>@app.get(...)</code>. Параметр запроса <code>q</code> — это строка поиска из адреса:</p>
+<pre><code>@app.get("/search", response_class=HTMLResponse)
+def search(request: Request, q: str = "", genre: str = "", ... ):
+    items, page, pages = books_query(q=q, ...)
+    ctx = {"q": q, "items": items, "page": page, "pages": pages}
+    return templates.TemplateResponse(request, "_catalog.html", ctx)</code></pre>
+<ul>
+<li><b>Декоратор</b> — функция, которая добавляет поведение другой функции (здесь — привязку к URL).</li>
+<li><b>Аргумент <code>request</code></b> — FastAPI сам подставляет HTTP-запрос.</li>
+<li><b>Шаблон</b> — HTML-файл со вставками <code>{{ q }}</code>; словарь <code>ctx</code> — данные для подстановки.</li>
+</ul>
+<div class="task"><b>Задание 5.</b> Добавь маршрут <code>/hello</code>, который принимает имя из строки запроса (<code>/hello?name=Иван</code>) и возвращает HTML «Привет, Иван!». Подставь его через шаблон или f-строку.</div>
+
+<h2>Модуль 6 · Производительность и хитрости</h2>
+<p>Проект хранит ~400 000 книг, и «наивный» код не проходит. Главная отдаёт случайные книги — вместо <code>ORDER BY random()</code> по всей таблице (медленно) используется пул, который обновляется раз в 6 часов:</p>
+<pre><code>def _random_pool(size=2000):
+    now = time.time()
+    if _pool.get("ts") and now - _pool["ts"] < 6 * 3600 and _pool.get("ids"):
+        return _pool["ids"]
+    # ... один медленный запрос, результат закеширован в памяти
+    _pool["ids"] = [r[0] for r in cur.fetchall()]
+    return _pool["ids"]</code></pre>
+<ul>
+<li><b>Кеш в памяти</b> — храним результат дорогого запроса и пересчитываем по таймеру.</li>
+<li><b>Поиск <code>%…%</code></b> не использует обычные индексы — в проекте для скорости установлено расширение <b>pg_trgm</b> с GIN-индексом (поиск ускорился с 0.88&nbsp;с до 0.14&nbsp;с).</li>
+<li><b>Измеряй, потом ускоряй</b> — сначала план запроса, потом индекс, а не наоборот.</li>
+</ul>
+<div class="task"><b>Задание 6.</b> Что быстрее для случайного pick из списка: 100 раз выполнить SQL <code>ORDER BY random() LIMIT 1</code> или один раз выбрать 100 id в кеш и далее брать из него? Обоснуй. А затем напиши кеш на 60 секунд для своей любимой медленной функции.</div>
+
+<div class="callout callout-note">
+<div class="callout-t">Что дальше</div>
+<div class="callout-body"><p>Это были первые 6 модулей. Дальше по плану: читалка FB2 (Sparky-структуры, безопасный XML), синхронизация избранного между устройствами, <code>pytest</code>-тесты. Хочешь углубиться в конкретный модуль — скажи, какой.</p></div>
+</div>
+
+<footer>Цифровая Крепость — образовательный сайт. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>
+</main>
+</div>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
+<script src="../js/notes.js"></script>
+</body>
+</html>

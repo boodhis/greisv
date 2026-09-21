@@ -21,6 +21,7 @@ var ASSETS = [
   "study/data/widget.js",
   "study/index.html",
   "study/cheatsheets.html",
+  "study/python.html",
   "electric/index.html",
   "electric/components.html",
   "electric/panels.html",
