@@ -9,6 +9,20 @@
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
+<div class="fnav">
+<i class="cor ctl"></i><i class="cor ctr"></i><i class="cor cbl"></i><i class="cor cbr"></i>
+<nav class="frow"><a href="../index.html" style="--c:#35e6e0"><span class="td"></span>Главная</a>
+<a href="../manifest.html" style="--c:#35e6e0"><span class="td"></span>Манифест</a>
+<a href="../getting-started/index.html" style="--c:#3ef06a"><span class="td"></span>С чего начать</a>
+<a href="../study/index.html" style="--c:#ffe14d"><span class="td"></span>Обучение</a>
+<a href="../electric/index.html" style="--c:#ff55f0"><span class="td"></span>Электрика</a>
+<a href="../homelab/index.html" class="on" style="--c:#35e6e0"><span class="td"></span>Homelab</a>
+<a href="../services/index.html" style="--c:#3ef06a"><span class="td"></span>Сервисы</a>
+<a href="../guides/index.html" style="--c:#ffe14d"><span class="td"></span>Гайды</a>
+<a href="../resources/index.html" style="--c:#ff55f0"><span class="td"></span>Ресурсы</a>
+<a href="../hobbies/index.html" style="--c:#d9f7d0"><span class="td"></span>Досуг</a></nav>
+</div>
+
 <a href="../index.html" aria-label="на главную" style="display:block;margin:16px 0 0 20px;color:#35e6e0;text-decoration:none;font-size:14px;font-family:ui-monospace,Consolas,monospace">← на главную</a>
 <div class="layout">
 <main>
@@ -116,5 +130,9 @@ STACKS="immich navidrome sopds open-webui"
 </main>
 </div><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
 <script src="../js/notes.js"></script>
+<div id="wordday"><div class="wd-t">Слово дня</div><div class="wd-w">…</div><div class="wd-ph"></div><div class="wd-t2"></div><div class="wd-hint">нажми, чтобы раскрыть перевод</div></div>
+<script src="../study/data/wordday.js"></script>
+<script src="../study/data/widget.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
 </body>
 </html>
