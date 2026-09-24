@@ -58,22 +58,17 @@ SECTION_KEYS = {
 }
 
 FRAME_CSS = """/* Рамка-бар в стиле графа: тонкая полоса вокруг окна */
-.fnav{position:fixed;inset:0;z-index:40;pointer-events:none}
-.fnav::before{content:"";position:absolute;inset:8px;border:1px solid #1c2b1f;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(5,11,6,.55),0 0 26px rgba(53,230,224,.05)}
-.fnav .frow{position:absolute;top:12px;left:16px;right:16px;display:flex;align-items:center;gap:2px;overflow-x:auto;white-space:nowrap;pointer-events:auto;padding:4px 2px;scrollbar-width:none}
+.fnav{position:fixed;top:0;left:0;right:0;z-index:40}
+.fnav .frow{display:flex;align-items:center;gap:2px;overflow-x:auto;white-space:nowrap;background:rgba(10,20,13,.92);backdrop-filter:blur(6px);border-bottom:1px solid #1c2b1f;padding:5px 16px;scrollbar-width:none}
 .fnav .frow::-webkit-scrollbar{display:none}
 .fnav .frow a{display:inline-flex;align-items:center;gap:7px;color:#7ba87c;text-decoration:none;font-size:13px;font-family:ui-monospace,Consolas,monospace;padding:6px 10px;border-radius:999px;flex-shrink:0;cursor:pointer}
 .fnav .frow a:hover{color:#fff;background:#1c2b1f}
 .fnav .frow a.on{color:#fff;text-shadow:0 0 10px var(--c)}
 .fnav .frow a.on .td{box-shadow:0 0 12px var(--c),0 0 3px var(--c)}
 .fnav .td{width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 6px var(--c);display:inline-block}
-.fnav .cor{position:absolute;width:16px;height:16px;opacity:.9;filter:drop-shadow(0 0 6px rgba(53,230,224,.6))}
-.fnav .ctl{top:11px;left:11px;border-top:2px solid #35e6e0;border-left:2px solid #35e6e0;border-top-left-radius:6px}
-.fnav .ctr{top:11px;right:11px;border-top:2px solid #35e6e0;border-right:2px solid #35e6e0;border-top-right-radius:6px}
-.fnav .cbl{bottom:11px;left:11px;border-bottom:2px solid #35e6e0;border-left:2px solid #35e6e0;border-bottom-left-radius:6px}
-.fnav .cbr{bottom:11px;right:11px;border-bottom:2px solid #35e6e0;border-right:2px solid #35e6e0;border-bottom-right-radius:6px}
-.layout main{padding-top:76px}
-@media(max-width:820px){.fnav .frow a{font-size:12px;padding:5px 8px}.layout main{padding-top:70px}}"""
+.fnav .cor{display:none}
+.layout main{padding-top:56px}
+@media(max-width:820px){.fnav .frow a{font-size:12px;padding:5px 8px}.layout main{padding-top:50px}}"""
 
 NOTES_CSS = """/* Заметки страницы: одна кнопка, одно текстовое поле */
 #nts-btn{position:fixed;right:16px;bottom:16px;z-index:120;width:46px;height:46px;border-radius:50%;border:1px solid #1c2b1f;background:#0a140d;color:#d9f7d0;cursor:pointer;font-size:18px;line-height:1;box-shadow:0 8px 24px rgba(0,0,0,.45)}
@@ -86,6 +81,21 @@ NOTES_CSS = """/* Заметки страницы: одна кнопка, одн
 .nts-x:hover{color:#fff}
 .nts-t{width:100%;min-height:140px;max-height:40vh;resize:vertical;background:#050a06;color:#d9f7d0;border:0;padding:12px;font-family:inherit;font-size:14px;line-height:1.6;border-radius:0 0 12px 12px;outline:none}
 .nts-t::placeholder{color:#4a6a4c}"""
+
+
+def strip_wordday(path):
+    """Убирает виджет «Слово дня» (html-блок + подключения wordday/widget/srs)."""
+    with open(path, "r", encoding="utf-8") as f:
+        html = f.read()
+    orig = html
+    html = re.sub(r"\s*<div id=\"wordday\">[\s\S]*?</div>\s*</div>", "", html, flags=re.S)
+    for name in ("wordday.js", "widget.js", "srs.js"):
+        html = re.sub(r"\s*<script[^>]*src=\"[^\"]*" + name + r"\"[^>]*></script>\s*", "\n", html)
+    if html != orig:
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(html)
+        return 1
+    return 0
 
 
 def inject_old(path):
@@ -102,12 +112,6 @@ def inject_old(path):
         if HOMELAB in html and "study/index.html" not in html:
             html = html.replace(HOMELAB, NEW_GROUPS + HOMELAB, 1)
             changed += 1
-    if 'id="wordday"' not in html and "</body>" in html:
-        html = html.replace("</body>", WIDGET + "</body>", 1)
-        changed += 1
-    if "max-width:860px" in html:
-        html = html.replace("max-width:860px", "max-width:1180px")
-        changed += 1
     if html != orig:
         with open(path, "w", encoding="utf-8") as f:
             f.write(html)
@@ -149,7 +153,6 @@ def fnav_markup(prefix, cur):
         row.append('<a href="{href}"{on} style="--c:{c}"><span class="td"></span>{label}</a>'.format(
             href=href, on=on, c=c, label=label))
     return ('<div class="fnav">\n'
-            '<i class="cor ctl"></i><i class="cor ctr"></i><i class="cor cbl"></i><i class="cor cbr"></i>\n'
             '<nav class="frow">' + "\n".join(row) + "</nav>\n"
             "</div>\n")
 
@@ -251,6 +254,10 @@ def main():
         if rel == "index.html":
             pass  # корневой граф самоценен — без рамки
         else:
+            c = strip_wordday(path)
+            if c:
+                n_strip += 1
+            changed += c
             c = strip_redundant_back(path)
             if c:
                 n_strip += 1

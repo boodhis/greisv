@@ -101,11 +101,11 @@ def test_sitemap_covers_all_pages():
 
 
 def test_trainer_tags():
-    idx = (ROOT / "index.html").read_text(encoding="utf-8")
+    """Тренажёр слов живёт в study/data (srs.js, widget.js); на главной его нет."""
     wid = (ROOT / "study/data/widget.js").read_text(encoding="utf-8")
     srs = (ROOT / "study/data/srs.js").read_text(encoding="utf-8")
-    for needle in ('wd-reveal', 'wd-forgot', 'wd-ok', '"study/data/srs.js"'):
-        assert needle in idx, f"в index.html нет {needle}"
+    idx = (ROOT / "index.html").read_text(encoding="utf-8")
+    assert 'id="wordday"' not in idx, "на главной больше нет виджета «Слово дня»"
     for needle in ('SRS_DAY', 'SRS.grade', 'wd-forgot', 'wd-ok'):
         assert needle in wid, f"в study/data/widget.js нет {needle}"
     assert "srs_state_v1" in srs, "в study/data/srs.js нет ключа srs_state_v1"
