@@ -137,6 +137,40 @@ def test_html_structure():
         assert "rel=\"icon\"" in html, f"{p}: нет favicon"
 
 
+VOID_TAGS = {"area","base","br","col","embed","hr","img","input","link","meta","param","source","track","wbr"}
+
+
+def _strip_code_html(html):
+    html = re.sub(r"<script\b.*?</script>", "", html, flags=re.S | re.I)
+    html = re.sub(r"<style\b.*?</style>", "", html, flags=re.S | re.I)
+    return html
+
+
+def test_tags_balanced():
+    from collections import Counter
+    for p in all_html_files():
+        html = _strip_code_html(p.read_text(encoding="utf-8"))
+        opens = Counter(re.findall(r"<([a-zA-Z][a-zA-Z0-9]*)\b", html))
+        closes = Counter(re.findall(r"</([a-zA-Z][a-zA-Z0-9]*)\s*>", html))
+        for tag, n in opens.items():
+            if tag.lower() in VOID_TAGS:
+                continue
+            got = closes.get(tag, 0)
+            assert got == n, f"{p}: <{tag}> открыт {n}, закрыт {got}"
+        for tag, n in closes.items():
+            if tag.lower() in VOID_TAGS:
+                continue
+            assert opens.get(tag, 0) == n, f"{p}: лишний </{tag}>"
+
+
+def test_unique_ids():
+    for p in all_html_files():
+        html = p.read_text(encoding="utf-8")
+        ids = re.findall(r"id=\"([^\"]+)\"", html)
+        dups = sorted({i for i in ids if ids.count(i) > 1})
+        assert not dups, f"{p}: дубли id: {dups}"
+
+
 def _run():
     import traceback
     failed = 0

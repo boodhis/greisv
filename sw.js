@@ -71,8 +71,6 @@ var ASSETS = [
   "services/samba.html",
   "services/sopds.html",
   "services/transmission.html",
-  "guides/publish.html",
-  "guides/about.html",
   "guides/obsidian-github.html",
   "guides/opencode-windows.html",
   "guides/powershell.html",

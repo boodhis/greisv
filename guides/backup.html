@@ -158,9 +158,9 @@ rsync -av --progress /home/iva/ /mnt/storage/backups/home/
 
 ### Бекап через tar
 </code></pre>
-<h1>Создание архива</h1>
+<h2>Создание архива</h2>
 <p>tar -czvf /mnt/storage/backups/home-$(date +%Y%m%d).tar.gz /home/iva/</p>
-<h1>Извлечение архива</h1>
+<h2>Извлечение архива</h2>
 <p>tar -xzvf backup.tar.gz -C /home/iva/ ```</p>
 <div class="callout callout-tip"><h4 class="callout-t">Разбор команды</h4><div class="callout-body"><ul><li><code>-c</code> — создать архив</li><li><code>-z</code> — сжать gzip</li><li><code>-v</code> — подробный вывод</li><li><code>-f</code> — имя файла</li></ul></div></div>
 <h3>Автоматический бекап (cron)</h3>
