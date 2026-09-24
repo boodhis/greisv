@@ -1,12 +1,2 @@
-# macOS
-.DS_Store
-
-# Редакторы
-.vscode/
-.idea/
-
-# Python
+.venv/
 __pycache__/
-*.pyc
-
-gen/.vault_state
