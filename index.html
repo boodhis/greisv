@@ -26,7 +26,7 @@ header{display:flex;align-items:center;gap:18px;flex-wrap:wrap;border:1px solid 
 .nav a.on{color:var(--text)}
 .nav a:hover{color:#fff}
 .lede{color:var(--dim);font-size:15px;max-width:760px;margin-bottom:18px}
-.columns{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;align-items:start}
+.columns{display:grid;grid-template-columns:1fr;gap:14px;max-width:900px}
 .panel{border:1px solid var(--line);background:var(--panel);min-width:0}
 .sec{margin:0;padding:11px 14px 9px;color:var(--accent);font-weight:700;font-size:15px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:8px}
 .sec:before{content:"\2550  "}
@@ -45,19 +45,6 @@ footer{margin:20px 0 12px;padding-top:14px;border-top:1px solid var(--line);colo
 footer a{color:var(--accent)}
 @media(max-width:820px){.columns{grid-template-columns:1fr}}
 </style>
-<style>
-/* Заметки страницы: одна кнопка, одно текстовое поле */
-#nts-btn{position:fixed;right:16px;bottom:16px;z-index:120;width:46px;height:46px;border-radius:50%;border:1px solid #1c2b1f;background:#0a140d;color:#d9f7d0;cursor:pointer;font-size:18px;line-height:1;box-shadow:0 8px 24px rgba(0,0,0,.45)}
-#nts-btn:hover{color:#35e6e0;border-color:#35e6e0}
-#nts-btn.on{background:linear-gradient(135deg,#35e6e0,#ffe14d);color:#04141f;border-color:transparent}
-#nts{position:fixed;right:16px;bottom:74px;z-index:120;width:min(360px,calc(100vw - 32px));background:#0a140d;border:1px solid #1c2b1f;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
-#nts[hidden]{display:none}
-.nts-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #1c2b1f;font-size:12px;color:#35e6e0;text-transform:uppercase;letter-spacing:.08em}
-.nts-x{background:none;border:0;color:#7ba87c;cursor:pointer;font-size:14px;padding:2px 6px}
-.nts-x:hover{color:#fff}
-.nts-t{width:100%;min-height:140px;max-height:40vh;resize:vertical;background:#050a06;color:#d9f7d0;border:0;padding:12px;font-family:inherit;font-size:14px;line-height:1.6;border-radius:0 0 12px 12px;outline:none}
-.nts-t::placeholder{color:#4a6a4c}
-</style>
 </head>
 <body>
 <div class="wrap">
@@ -65,16 +52,7 @@ footer a{color:var(--accent)}
 <header>
 <a class="logo" href="index.html">Цифровая Крепость</a>
 <nav class="nav">
-<a href="index.html" class="on">Главная</a>
 <a href="manifest.html">Манифест</a>
-<a href="getting-started/index.html">С чего начать</a>
-<a href="study/index.html">Обучение</a>
-<a href="electric/index.html">Электрика</a>
-<a href="homelab/index.html">Homelab</a>
-<a href="services/index.html">Сервисы</a>
-<a href="guides/index.html">Гайды</a>
-<a href="articles/index.html">Мыслево</a>
-<a href="hobbies/index.html">Досуг</a>
 </nav>
 </header>
 <p class="lede">Linux, homelab и самостоятельное администрирование: гайды, обучение и сервисы нашего домашнего сервера. Работает офлайн, без трекеров.</p>
