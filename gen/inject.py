@@ -18,7 +18,7 @@ import os
 import re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OLD_DIRS = ["getting-started", "homelab", "services", "guides", "resources", "hobbies"]
+OLD_DIRS = ["getting-started", "homelab", "services", "guides", "articles", "hobbies"]
 SKIP_OLD = {"esp32.html"}
 
 MANIFEST_LINK = '<a class="nmain" href="../manifest.html">Манифест</a>'
@@ -48,13 +48,13 @@ FNAV_LINKS = [
     ("lab", "Homelab", "{pf}homelab/index.html", "#35e6e0"),
     ("srv", "Сервисы", "{pf}services/index.html", "#3ef06a"),
     ("guide", "Гайды", "{pf}guides/index.html", "#ffe14d"),
-    ("res", "Ресурсы", "{pf}resources/index.html", "#ff55f0"),
+    ("res", "Статьи", "{pf}articles/index.html", "#ff55f0"),
     ("hobby", "Досуг", "{pf}hobbies/index.html", "#d9f7d0"),
 ]
 SECTION_KEYS = {
     "getting-started": "start", "study": "study", "electric": "elec",
     "homelab": "lab", "services": "srv", "guides": "guide",
-    "resources": "res", "hobbies": "hobby",
+    "articles": "res", "hobbies": "hobby",
 }
 
 FRAME_CSS = """/* Рамка-бар в стиле графа: тонкая полоса вокруг окна */
@@ -157,19 +157,25 @@ def fnav_markup(prefix, cur):
 def inject_frame(path, prefix):
     with open(path, "r", encoding="utf-8") as f:
         html = f.read()
-    if 'class="fnav"' in html:
-        return 0
+    cur = _cur_key(os.path.relpath(path, ROOT).split(os.sep))
+    markup = fnav_markup(prefix, cur)
     orig = html
     changed = 0
-    new = re.sub(r"\s*<aside[^>]*>.*?</aside>\s*", "\n", html, flags=re.S)
-    if new != html:
-        html = new
-        changed += 1
-    m = re.search(r"(<body[^>]*>)", html)
-    if m:
-        cur = _cur_key(os.path.relpath(path, ROOT).split(os.sep))
-        html = html.replace(m.group(1), m.group(1) + "\n" + fnav_markup(prefix, cur), 1)
-        changed += 1
+    if 'class="fnav"' in html:
+        # рамка уже есть — пересобираем заново (метки/ссылки разделов могли измениться)
+        updated = re.sub(r'<div class="fnav">.*?</div>\s*', markup + "\n", html, flags=re.S)
+        if updated != html:
+            html = updated
+            changed += 1
+    else:
+        new = re.sub(r"\s*<aside[^>]*>.*?</aside>\s*", "\n", html, flags=re.S)
+        if new != html:
+            html = new
+            changed += 1
+        m = re.search(r"(<body[^>]*>)", html)
+        if m:
+            html = html.replace(m.group(1), m.group(1) + "\n" + markup, 1)
+            changed += 1
     if "style.css" not in html and "</head>" in html:
         html = html.replace("</head>", "<style>\n" + FRAME_CSS + "\n</style>\n</head>", 1)
         changed += 1

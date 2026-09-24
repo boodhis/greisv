@@ -85,6 +85,25 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 .layout main{padding-top:76px}
 @media(max-width:820px){.fnav .frow a{font-size:12px;padding:5px 8px}.layout main{padding-top:70px}}
 </style>
+<style>
+/* Рамка-бар в стиле графа: тонкая полоса вокруг окна */
+.fnav{position:fixed;inset:0;z-index:40;pointer-events:none}
+.fnav::before{content:"";position:absolute;inset:8px;border:1px solid #1c2b1f;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(5,11,6,.55),0 0 26px rgba(53,230,224,.05)}
+.fnav .frow{position:absolute;top:12px;left:16px;right:16px;display:flex;align-items:center;gap:2px;overflow-x:auto;white-space:nowrap;pointer-events:auto;padding:4px 2px;scrollbar-width:none}
+.fnav .frow::-webkit-scrollbar{display:none}
+.fnav .frow a{display:inline-flex;align-items:center;gap:7px;color:#7ba87c;text-decoration:none;font-size:13px;font-family:ui-monospace,Consolas,monospace;padding:6px 10px;border-radius:999px;flex-shrink:0;cursor:pointer}
+.fnav .frow a:hover{color:#fff;background:#1c2b1f}
+.fnav .frow a.on{color:#fff;text-shadow:0 0 10px var(--c)}
+.fnav .frow a.on .td{box-shadow:0 0 12px var(--c),0 0 3px var(--c)}
+.fnav .td{width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 6px var(--c);display:inline-block}
+.fnav .cor{position:absolute;width:16px;height:16px;opacity:.9;filter:drop-shadow(0 0 6px rgba(53,230,224,.6))}
+.fnav .ctl{top:11px;left:11px;border-top:2px solid #35e6e0;border-left:2px solid #35e6e0;border-top-left-radius:6px}
+.fnav .ctr{top:11px;right:11px;border-top:2px solid #35e6e0;border-right:2px solid #35e6e0;border-top-right-radius:6px}
+.fnav .cbl{bottom:11px;left:11px;border-bottom:2px solid #35e6e0;border-left:2px solid #35e6e0;border-bottom-left-radius:6px}
+.fnav .cbr{bottom:11px;right:11px;border-bottom:2px solid #35e6e0;border-right:2px solid #35e6e0;border-bottom-right-radius:6px}
+.layout main{padding-top:76px}
+@media(max-width:820px){.fnav .frow a{font-size:12px;padding:5px 8px}.layout main{padding-top:70px}}
+</style>
 </head>
 <body>
 <div class="fnav">
@@ -97,7 +116,7 @@ h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
 <a href="../homelab/index.html" style="--c:#35e6e0"><span class="td"></span>Homelab</a>
 <a href="../services/index.html" style="--c:#3ef06a"><span class="td"></span>Сервисы</a>
 <a href="../guides/index.html" style="--c:#ffe14d"><span class="td"></span>Гайды</a>
-<a href="../resources/index.html" style="--c:#ff55f0"><span class="td"></span>Ресурсы</a>
+<a href="../articles/index.html" style="--c:#ff55f0"><span class="td"></span>Статьи</a>
 <a href="../hobbies/index.html" class="on" style="--c:#d9f7d0"><span class="td"></span>Досуг</a></nav>
 </div>
 

@@ -3,7 +3,7 @@
    ВАЖНО: ASSETS должен покрывать все страницы сайта — проверка в tests/test_site.py
    (test_sw_precache_covers_all_pages). После добавления страницы пересобери список
    (git ls-files '*.html') и подними версию CACHE, чтобы старый кэш обновился. */
-var CACHE = "fortress-v21";
+var CACHE = "fortress-v22";
 var ASSETS = [
   "./",
   "index.html",
@@ -24,6 +24,10 @@ var ASSETS = [
   "study/python.html",
   "study/linux-app-dev.html",
   "study/devops.html",
+  "study/git-commands.html",
+  "study/web-dev.html",
+  "articles/index.html",
+  "articles/protivofaza.html",
   "electric/index.html",
   "electric/components.html",
   "electric/panels.html",
@@ -40,27 +44,22 @@ var ASSETS = [
   "guides/diagnostics.html",
   "guides/disk-health.html",
   "guides/index.html",
+  "guides/inxi.html",
   "guides/journalctl.html",
+  "guides/links.html",
   "guides/ssh.html",
   "guides/terminal.html",
   "guides/wifi-fix.html",
   "hobbies/esp32.html",
+  "hobbies/index.html",
   "hobbies/quest3.html",
   "hobbies/guitar.html",
-  "hobbies/index.html",
   "homelab/hardware.html",
   "homelab/homelab-kit.html",
   "homelab/index.html",
   "homelab/network.html",
   "homelab/server-reference.html",
   "homelab/sopds-web.html",
-  "resources/git-commands.html",
-  "resources/index.html",
-  "resources/inxi.html",
-  "resources/links.html",
-  "resources/opencode-windows.html",
-  "resources/protivofaza.html",
-  "resources/web-dev.html",
   "services/docker.html",
   "services/immich.html",
   "services/index.html",
@@ -75,6 +74,7 @@ var ASSETS = [
   "guides/publish.html",
   "guides/about.html",
   "guides/obsidian-github.html",
+  "guides/opencode-windows.html",
   "guides/powershell.html",
 ];
 

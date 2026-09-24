@@ -58,11 +58,9 @@ NAV = """<div class="brand">🛡️ Цифровая Крепость</div>
 <a class="nli" href="../guides/journalctl.html">journalctl</a>
 <a class="nli" href="../guides/auto-shutdown.html">Авто-выключение</a></div>
 
-<div class="ngroup"><div class="ngt">Ресурсы</div>
-<a class="nli" href="../resources/links.html">Ссылки</a>
-<a class="nli" href="../resources/git-commands.html">Git команды</a>
-<a class="nli" href="../resources/inxi.html">INXI</a>
-<a class="nli" href="../resources/opencode-windows.html">OpenCode на Windows</a></div>
+<div class="ngroup"><div class="ngt">Статьи</div>
+<a class="nli" href="../articles/index.html">Мысли и тексты</a>
+<a class="nli" href="../articles/protivofaza.html">Противофаза</a></div>
 
 <div class="ngroup"><div class="ngt">Хобби</div>
 <a class="nli" href="../hobbies/index.html">Досуг</a>
