@@ -171,6 +171,18 @@ def test_unique_ids():
         assert not dups, f"{p}: дубли id: {dups}"
 
 
+def test_no_redundant_back():
+    """Не должно быть ручной «← на главную» (дублирует чип «Главная» в frow)
+    и дублей inline-стиля рамки (инжектор не должен наслаивать второй <style>)."""
+    for p in all_html_files():
+        html = p.read_text(encoding="utf-8")
+        if 'class="fnav"' in html:
+            assert 'aria-label="на главную"' not in html, f"{p}: лишняя ссылка «← на главную»"
+            assert '>← на главную<' not in html, f"{p}: лишняя ссылка «← на главную»"
+            n = html.count(".fnav{")
+            assert n <= 1, f"{p}: {n} inline-блоков .fnav{{ — инжектор задвоил стиль"
+
+
 def _run():
     import traceback
     failed = 0

@@ -176,6 +176,7 @@ def inject_frame(path, prefix):
         if m:
             html = html.replace(m.group(1), m.group(1) + "\n" + markup, 1)
             changed += 1
+    html = re.sub(r"\s*<style>\s*/\* Рамка-бар в стиле графа[\s\S]*?</style>", "\n", html, flags=re.S)
     if "style.css" not in html and "</head>" in html:
         html = html.replace("</head>", "<style>\n" + FRAME_CSS + "\n</style>\n</head>", 1)
         changed += 1
@@ -183,6 +184,21 @@ def inject_frame(path, prefix):
         with open(path, "w", encoding="utf-8") as f:
             f.write(html)
     return changed
+
+
+def strip_redundant_back(path):
+    """Убирает ручную ссылку «← на главную»: она дублирует чип «Главная» в
+    frow-баре (leжат поверх него под фиксированной рамкой)."""
+    with open(path, "r", encoding="utf-8") as f:
+        html = f.read()
+    orig = html
+    if 'class="fnav"' in html:
+        html = re.sub(r'\s*<a href="[^"]*index\.html" aria-label="на главную"[^>]*>← на главную</a>\s*', "\n", html)
+    if html != orig:
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(html)
+        return 1
+    return 0
 
 
 def strip_old_wall(path):
@@ -235,6 +251,10 @@ def main():
         if rel == "index.html":
             pass  # корневой граф самоценен — без рамки
         else:
+            c = strip_redundant_back(path)
+            if c:
+                n_strip += 1
+            changed += c
             if parts[0] in OLD_DIRS and name not in SKIP_OLD:
                 c = inject_old(path)
                 if c:
