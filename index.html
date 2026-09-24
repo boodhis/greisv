@@ -3,117 +3,70 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Цифровая Крепость — Linux, homelab, обучение</title>
-<meta name="description" content="Образовательный сайт о Linux, homelab и самостоятельном администрировании. Шпаргалки, гайды, сервисы. Работает офлайн и бесплатно.">
+<title>Цифровая Крепость — Linux · homelab · обучение</title>
+<meta name="description" content="Образовательный сайт о Linux, homelab и самостоятельном администрировании. Гайды, обучение, сервисы. Бесплатно, офлайн, без трекеров.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#050b06">
 <style>
-:root{--bg:#050b06;--panel:#0a140d;--line:#1c2b1f;--text:#d9f7d0;--dim:#7ba87c;--accent:#35e6e0;--green:#3ef06a}
+:root{--bg:#050b06;--panel:#0a140d;--line:#1c2b1f;--text:#d9f7d0;--dim:#7ba87c;--accent:#35e6e0}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:ui-monospace,'Cascadia Code','JetBrains Mono','Liberation Mono',Consolas,monospace;line-height:1.6;font-size:15px}
-body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.5;background:repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 1px,transparent 1px 3px)}
-a{color:var(--accent)}
-a:hover{text-decoration:none}
-.wrap{max-width:1120px;margin:0 auto;padding:14px 22px 30px}
-.tbar{display:flex;justify-content:space-between;color:var(--dim);font-size:12px;border:1px solid var(--line);background:var(--panel);padding:4px 12px}
-header{display:flex;align-items:center;gap:18px;flex-wrap:wrap;border:1px solid var(--line);border-top:none;background:var(--panel);padding:10px 14px;margin-bottom:16px}
-.logo{color:var(--accent);font-weight:700;letter-spacing:.4px;text-decoration:none;font-size:17px}
-.logo:before{content:"\00bb "}
-.logo:hover{color:#aef0ae}
-.nav{margin-left:auto;display:flex;gap:14px;flex-wrap:wrap}
-.nav a{color:var(--dim);text-decoration:none;font-size:14px}
-.nav a.on{color:var(--text)}
-.nav a:hover{color:#fff}
-.lede{color:var(--dim);font-size:15px;max-width:760px;margin-bottom:18px}
-.columns{display:grid;grid-template-columns:1fr;gap:14px;max-width:900px}
-.panel{border:1px solid var(--line);background:var(--panel);min-width:0}
-.sec{margin:0;padding:11px 14px 9px;color:var(--accent);font-weight:700;font-size:15px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:8px}
-.sec:before{content:"\2550  "}
-.sec a{color:inherit;text-decoration:none}
-.sec a:hover{color:#fff}
-.sec small{color:var(--dim);font-weight:400;font-size:12px}
-.row{padding:0 14px}
-.row a{display:flex;justify-content:space-between;gap:12px;align-items:baseline;color:var(--text);text-decoration:none;padding:6px 0;border-bottom:1px dashed rgba(28,43,31,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.row a:hover{color:var(--accent)}
-.row a:hover span{color:var(--dim)}
-.row span{color:#4a6a4c;font-size:12px;flex:none}
-.row.all a{border-bottom:none;color:var(--dim);font-style:italic}
-.row.all a:before{content:"+ "}
-.row.all a:hover{color:var(--accent)}
-footer{margin:20px 0 12px;padding-top:14px;border-top:1px solid var(--line);color:var(--dim);font-size:13px;text-align:center}
+body{background:var(--bg);color:var(--text);font-family:ui-monospace,'Cascadia Code','JetBrains Mono',Consolas,monospace;line-height:1.6;font-size:15px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:900px;margin:0 auto;padding:16px 22px 34px}
+.tbar{display:flex;justify-content:space-between;color:var(--dim);font-size:12.5px;border-bottom:1px dashed var(--line);padding-bottom:8px}
+header{margin:26px 0 8px}
+.logo{font-size:24px;font-weight:700;color:var(--accent);letter-spacing:.6px}
+.logo:before{content:"\25A0 ";color:var(--accent)}
+.lede{color:var(--dim);font-size:15px;max-width:640px;margin-top:6px}
+.list{border:1px solid var(--line);background:var(--panel);border-radius:14px;margin-top:26px}
+.row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);color:var(--text);font-size:15px}
+.row:last-child{border-bottom:none}
+.row:hover{background:rgba(53,230,224,.05);text-decoration:none}
+.row .td{width:9px;height:9px;border-radius:50%;background:var(--c);box-shadow:0 0 9px var(--c);flex-shrink:0}
+.row b{font-weight:700;color:var(--text)}
+.row .tag{color:var(--dim);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .cnt{margin-left:auto;color:var(--dim);font-size:12px;flex-shrink:0}
+.row .cnt:after{content:"  \2192";color:var(--dim)}
+footer{margin-top:30px;border-top:1px solid var(--line);padding-top:14px;color:var(--dim);font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
 footer a{color:var(--accent)}
-@media(max-width:820px){.columns{grid-template-columns:1fr}}
+</style>
+<style>
+/* Заметки страницы: одна кнопка, одно текстовое поле */
+#nts-btn{position:fixed;right:16px;bottom:16px;z-index:120;width:46px;height:46px;border-radius:50%;border:1px solid #1c2b1f;background:#0a140d;color:#d9f7d0;cursor:pointer;font-size:18px;line-height:1;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+#nts-btn:hover{color:#35e6e0;border-color:#35e6e0}
+#nts-btn.on{background:linear-gradient(135deg,#35e6e0,#ffe14d);color:#04141f;border-color:transparent}
+#nts{position:fixed;right:16px;bottom:74px;z-index:120;width:min(360px,calc(100vw - 32px));background:#0a140d;border:1px solid #1c2b1f;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+#nts[hidden]{display:none}
+.nts-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #1c2b1f;font-size:12px;color:#35e6e0;text-transform:uppercase;letter-spacing:.08em}
+.nts-x{background:none;border:0;color:#7ba87c;cursor:pointer;font-size:14px;padding:2px 6px}
+.nts-x:hover{color:#fff}
+.nts-t{width:100%;min-height:140px;max-height:40vh;resize:vertical;background:#050a06;color:#d9f7d0;border:0;padding:12px;font-family:inherit;font-size:14px;line-height:1.6;border-radius:0 0 12px 12px;outline:none}
+.nts-t::placeholder{color:#4a6a4c}
 </style>
 </head>
 <body>
 <div class="wrap">
-<div class="tbar"><span>путеводитель по сайту</span><span>бесплатно · офлайн · без трекеров</span></div>
+<div class="tbar"><span>Цифровая Крепость</span><span>офлайн · бесплатно · без трекеров</span></div>
 <header>
-<a class="logo" href="index.html">Цифровая Крепость</a>
-<nav class="nav">
-<a href="manifest.html">Манифест</a>
-</nav>
+<div class="logo">Цифровая Крепость</div>
+<p class="lede">Образовательный сайт о Linux, homelab и самостоятельном администрировании. Гайды, обучение, сервисы. Работает офлайн и бесплатно.</p>
 </header>
-<p class="lede">Linux, homelab и самостоятельное администрирование: гайды, обучение и сервисы нашего домашнего сервера. Работает офлайн, без трекеров.</p>
-<div class="columns">
-<div class="panel">
-<div class="sec"><a href="guides/index.html">Гайды</a><small>12</small></div>
-<div class="row"><a href="guides/terminal.html">Терминал<span>основы</span></a></div>
-<div class="row"><a href="guides/disk-health.html">Диски и SMART<span>данные</span></a></div>
-<div class="row"><a href="guides/ssh.html">SSH<span>сервер</span></a></div>
-<div class="row"><a href="guides/backup.html">Бекапы<span>данные</span></a></div>
-<div class="row"><a href="guides/diagnostics.html">Диагностика<span>сервер</span></a></div>
-<div class="row all"><a href="guides/index.html">все 12 гайдов</a></div>
-</div>
-<div class="panel">
-<div class="sec"><a href="services/index.html">Сервисы</a><small>8</small></div>
-<div class="row"><a href="services/docker.html">Docker<span>контейнеры</span></a></div>
-<div class="row"><a href="services/navidrome.html">Navidrome<span>музыка</span></a></div>
-<div class="row"><a href="services/immich.html">Immich<span>фото</span></a></div>
-<div class="row"><a href="services/samba.html">Samba<span>файлы</span></a></div>
-<div class="row"><a href="services/sopds.html">SOPDS<span>библиотека</span></a></div>
-<div class="row all"><a href="services/index.html">все 8 сервисов</a></div>
-</div>
-<div class="panel">
-<div class="sec"><a href="study/index.html">Обучение</a><small>4</small></div>
-<div class="row"><a href="study/cheatsheets.html">Шпаргалки<span>повторение</span></a></div>
-<div class="row"><a href="study/python.html">Курс Python<span>язык</span></a></div>
-<div class="row"><a href="study/git-commands.html">Git<span>инструменты</span></a></div>
-<div class="row"><a href="study/web-dev.html">Веб-разработка<span>фронтенд</span></a></div>
-</div>
-<div class="panel">
-<div class="sec"><a href="getting-started/index.html">С чего начать</a><small>3</small></div>
-<div class="row"><a href="getting-started/install-ubuntu.html">Установка Ubuntu<span>шаг 1</span></a></div>
-<div class="row"><a href="getting-started/first-steps.html">Первые шаги<span>шаг 2</span></a></div>
-<div class="row"><a href="getting-started/bootable-usb.html">Загрузочная флешка<span>шаг 1</span></a></div>
-</div>
-<div class="panel">
-<div class="sec"><a href="homelab/index.html">Homelab</a><small>4</small></div>
-<div class="row"><a href="homelab/hardware.html">Железо<span>сервер</span></a></div>
-<div class="row"><a href="homelab/network.html">Сеть<span>инфраструктура</span></a></div>
-<div class="row"><a href="homelab/server-reference.html">Сервер<span>справка</span></a></div>
-<div class="row"><a href="homelab/sopds-web.html">Библиотека<span>проект</span></a></div>
-</div>
-<div class="panel">
-<div class="sec"><a href="electric/index.html">Электрика</a><small>4</small></div>
-<div class="row"><a href="electric/safety.html">Безопасность<span>основы</span></a></div>
-<div class="row"><a href="electric/panels.html">Щиты<span>монтаж</span></a></div>
-<div class="row"><a href="electric/wiring.html">Кабели<span>монтаж</span></a></div>
-<div class="row"><a href="electric/smart.html">Умный дом<span>автоматика</span></a></div>
-</div>
-<div class="panel">
-<div class="sec"><a href="articles/index.html">Мыслево</a><small>1</small></div>
-<div class="row"><a href="articles/protivofaza.html">Противофаза<span>статья</span></a></div>
-</div>
-<div class="panel">
-<div class="sec"><a href="hobbies/index.html">Досуг</a><small>3</small></div>
-<div class="row"><a href="hobbies/guitar.html">Гитара<span>хобби</span></a></div>
-<div class="row"><a href="hobbies/esp32.html">ESP32<span>электроника</span></a></div>
-<div class="row"><a href="hobbies/quest3.html">Quest 3<span>VR</span></a></div>
-</div>
-</div>
-<footer>Своими руками, с резервными копиями и свободой выхода. <a href="manifest.html">Подробнее в манифесте →</a></footer>
+<nav class="list">
+<a class="row" href="guides/index.html" style="--c:#ffe14d"><span class="td"></span><b>Гайды</b><span class="tag">диски · ssh · терминал · бекапы</span><span class="cnt">12</span></a>
+<a class="row" href="study/index.html" style="--c:#35e6e0"><span class="td"></span><b>Обучение</b><span class="tag">шпаргалки · python · git · веб</span><span class="cnt">4</span></a>
+<a class="row" href="getting-started/index.html" style="--c:#3ef06a"><span class="td"></span><b>С чего начать</b><span class="tag">ubuntu · первые шаги · флешка</span><span class="cnt">3</span></a>
+<a class="row" href="electric/index.html" style="--c:#ff4dd2"><span class="td"></span><b>Электрика</b><span class="tag">безопасность · щиты · умный дом</span><span class="cnt">4</span></a>
+<a class="row" href="homelab/index.html" style="--c:#35e6e0"><span class="td"></span><b>Homelab</b><span class="tag">железо · сеть · сервер · библиотека</span><span class="cnt">4</span></a>
+<a class="row" href="services/index.html" style="--c:#3ef06a"><span class="td"></span><b>Сервисы</b><span class="tag">docker · samba · navidrome · sopds</span><span class="cnt">8</span></a>
+<a class="row" href="articles/index.html" style="--c:#ff55f0"><span class="td"></span><b>Мыслево</b><span class="tag">статьи · стихи</span><span class="cnt">1</span></a>
+<a class="row" href="hobbies/index.html" style="--c:#d9f7d0"><span class="td"></span><b>Досуг</b><span class="tag">гитара · esp32 · vr</span><span class="cnt">3</span></a>
+</nav>
+<footer>
+<span>Своими руками, с резервными копиями и свободой выхода. <a href="manifest.html">Манифест</a></span>
+<span>без рекламы · без трекеров</span>
+</footer>
 </div>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js");}</script>
 <script src="js/notes.js"></script>
