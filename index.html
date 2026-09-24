@@ -4,18 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Цифровая Крепость — Linux · homelab · обучение</title>
-<meta name="description" content="Образовательный сайт о Linux, homelab и самостоятельном администрировании. Гайды, обучение, сервисы. Бесплатно, офлайн, без трекеров.">
+<meta name="description" content="Образовательный сайт о Linux, homelab и самостоятельном администрировании. Гайды, обучение, сервисы. Работает офлайн и бесплатно, без трекеров.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#050b06">
 <style>
 :root{--bg:#050b06;--panel:#0a140d;--line:#1c2b1f;--text:#d9f7d0;--dim:#7ba87c;--accent:#35e6e0}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:ui-monospace,'Cascadia Code','JetBrains Mono',Consolas,monospace;line-height:1.6;font-size:15px}
+body{background:var(--bg);color:var(--text);font-family:ui-monospace,\"Cascadia Code\",\"JetBrains Mono\",Consolas,monospace;line-height:1.6;font-size:15px}
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
-.wrap{max-width:900px;margin:0 auto;padding:16px 22px 34px}
-.tbar{display:flex;justify-content:space-between;color:var(--dim);font-size:12.5px;border-bottom:1px dashed var(--line);padding-bottom:8px}
+.wrap{max-width:1120px;margin:0 auto;padding:14px 22px 30px}
+.tbar{display:flex;justify-content:space-between;color:var(--dim);font-size:12px;border-bottom:1px dashed var(--line);padding-bottom:8px}
 header{margin:26px 0 8px}
 .logo{font-size:24px;font-weight:700;color:var(--accent);letter-spacing:.6px}
 .lede{color:var(--dim);font-size:15px;max-width:640px;margin-top:6px}
@@ -24,49 +24,35 @@ header{margin:26px 0 8px}
 .row:last-child{border-bottom:none}
 .row:hover{background:rgba(53,230,224,.05);text-decoration:none}
 .row b{font-weight:700;color:var(--text)}
-.row .tag{color:var(--dim);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.row .cnt{margin-left:auto;color:var(--dim);font-size:12px;flex-shrink:0}
-.row .cnt:after{content:"  \2192";color:var(--dim)}
-footer{margin-top:30px;border-top:1px solid var(--line);padding-top:14px;color:var(--dim);font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.row .tag{color:var(--dim);font-size:13px}
+.row .cnt{margin-left:auto;color:var(--dim);font-size:12px}
+.row .cnt:after{content:\"  →\";color:var(--dim)}
+footer{margin-top:30px;border-top:1px solid var(--line);padding-top:14px;color:var(--dim);font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 footer a{color:var(--accent)}
-</style>
-<style>
-/* Заметки страницы: одна кнопка, одно текстовое поле */
-#nts-btn{position:fixed;right:16px;bottom:16px;z-index:120;width:46px;height:46px;border-radius:50%;border:1px solid #1c2b1f;background:#0a140d;color:#d9f7d0;cursor:pointer;font-size:18px;line-height:1;box-shadow:0 8px 24px rgba(0,0,0,.45)}
-#nts-btn:hover{color:#35e6e0;border-color:#35e6e0}
-#nts-btn.on{background:linear-gradient(135deg,#35e6e0,#ffe14d);color:#04141f;border-color:transparent}
-#nts{position:fixed;right:16px;bottom:74px;z-index:120;width:min(360px,calc(100vw - 32px));background:#0a140d;border:1px solid #1c2b1f;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
-#nts[hidden]{display:none}
-.nts-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #1c2b1f;font-size:12px;color:#35e6e0;text-transform:uppercase;letter-spacing:.08em}
-.nts-x{background:none;border:0;color:#7ba87c;cursor:pointer;font-size:14px;padding:2px 6px}
-.nts-x:hover{color:#fff}
-.nts-t{width:100%;min-height:140px;max-height:40vh;resize:vertical;background:#050a06;color:#d9f7d0;border:0;padding:12px;font-family:inherit;font-size:14px;line-height:1.6;border-radius:0 0 12px 12px;outline:none}
-.nts-t::placeholder{color:#4a6a4c}
 </style>
 </head>
 <body>
-<div class="wrap">
-<div class="tbar"><span>Цифровая Крепость</span><span>офлайн · бесплатно · без трекеров</span></div>
+<div class=\"wrap\">
+<div class=\"tbar\"><span>Цифровая Крепость</span><span>офлайн · бесплатно · без трекеров</span></div>
 <header>
-<div class="logo">Цифровая Крепость</div>
-<p class="lede">Образовательный сайт о Linux, homelab и самостоятельном администрировании. Гайды, обучение, сервисы. Работает офлайн и бесплатно.</p>
+<div class=\"logo\">Цифровая Крепость</div>
+<p class=\"lede\">Образовательный сайт о Linux, homelab и самостоятельном администрировании. Гайды, обучение, сервисы. Работает офлайн и бесплатно, без трекеров.</p>
 </header>
-<nav class="list">
-<a class="row" href="guides/index.html" style="--c:#ffe14d"><b>Гайды</b><span class="tag">диски · ssh · терминал · бекапы</span><span class="cnt">12</span></a>
-<a class="row" href="study/index.html" style="--c:#35e6e0"><b>Обучение</b><span class="tag">шпаргалки · python · git · веб</span><span class="cnt">4</span></a>
-<a class="row" href="getting-started/index.html" style="--c:#3ef06a"><b>С чего начать</b><span class="tag">ubuntu · первые шаги · флешка</span><span class="cnt">3</span></a>
-<a class="row" href="electric/index.html" style="--c:#ff4dd2"><b>Электрика</b><span class="tag">безопасность · щиты · умный дом</span><span class="cnt">4</span></a>
-<a class="row" href="homelab/index.html" style="--c:#35e6e0"><b>Homelab</b><span class="tag">железо · сеть · сервер · библиотека</span><span class="cnt">4</span></a>
-<a class="row" href="services/index.html" style="--c:#3ef06a"><b>Сервисы</b><span class="tag">docker · samba · navidrome · sopds</span><span class="cnt">8</span></a>
-<a class="row" href="articles/index.html" style="--c:#ff55f0"><b>Мыслево</b><span class="tag">статьи · стихи</span><span class="cnt">1</span></a>
-<a class="row" href="hobbies/index.html" style="--c:#d9f7d0"><b>Досуг</b><span class="tag">гитара · esp32 · vr</span><span class="cnt">3</span></a>
+<nav class=\"list\">
+<a class=\"row\" href=\"guides/index.html\" style=\"--c:#ffe14d\"><b>Гайды</b><span class=\"tag\">диски · ssh · терминал · бекапы</span><span class=\"cnt\">12</span></a>
+<a class=\"row\" href=\"study/index.html\" style=\"--c:#35e6e0\"><b>Обучение</b><span class=\"tag\">шпаргалки · python · git · веб</span><span class=\"cnt\">4</span></a>
+<a class=\"row\" href=\"getting-started/index.html\" style=\"--c:#3ef06a\"><b>С чего начать</b><span class=\"tag\">ubuntu · первые шаги · флешка</span><span class=\"cnt\">3</span></a>
+<a class=\"row\" href=\"electric/index.html\" style=\"--c:#ff4dd2\"><b>Электрика</b><span class=\"tag\">безопасность · щиты · умный дом</span><span class=\"cnt\">4</span></a>
+<a class=\"row\" href=\"homelab/index.html\" style=\"--c:#35e6e0\"><b>Homelab</b><span class=\"tag\">железо · сеть · сервер · библиотека</span><span class=\"cnt\">4</span></a>
+<a class=\"row\" href=\"services/index.html\" style=\"--c:#3ef06a\"><b>Сервисы</b><span class=\"tag\">docker · samba · navidrome · sopds</span><span class=\"cnt\">8</span></a>
+<a class=\"row\" href=\"articles/index.html\" style=\"--c:#ff55f0\"><b>Мыслево</b><span class=\"tag\">статьи · стихи</span><span class=\"cnt\">1</span></a>
+<a class=\"row\" href=\"hobbies/index.html\" style=\"--c:#d9f7d0\"><b>Досуг</b><span class=\"tag\">гитара · esp32 · vr</span><span class=\"cnt\">3</span></a>
 </nav>
 <footer>
-<span>Своими руками, с резервными копиями и свободой выхода. <a href="manifest.html">Манифест</a></span>
-<span>без рекламы · без трекеров</span>
+<span>Своими руками, с резервными копиями и свободой выхода. <a href=\"manifest.html\">Манифест</a></span>
+<span>офлайн · бесплатно · без трекеров</span>
 </footer>
 </div>
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js");}</script>
-<script src="js/notes.js"></script>
+<script>if(\"serviceWorker\" in navigator){navigator.serviceWorker.register(\"sw.js\");}</script>
 </body>
 </html>
