@@ -48,7 +48,7 @@ FNAV_LINKS = [
     ("lab", "Homelab", "{pf}homelab/index.html", "#35e6e0"),
     ("srv", "Сервисы", "{pf}services/index.html", "#3ef06a"),
     ("guide", "Гайды", "{pf}guides/index.html", "#ffe14d"),
-    ("res", "Статьи", "{pf}articles/index.html", "#ff55f0"),
+    ("res", "Мыслево", "{pf}articles/index.html", "#ff55f0"),
     ("hobby", "Досуг", "{pf}hobbies/index.html", "#d9f7d0"),
 ]
 SECTION_KEYS = {
