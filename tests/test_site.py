@@ -123,6 +123,20 @@ def test_no_empty_wordday():
         assert 'study/data/widget.js' in html, f"{p}: #wordday есть, но widget.js не подключён"
 
 
+def test_html_structure():
+    """Каждая страница — валидный каркас: doctype, lang, title, viewport, desc, favicon."""
+    for p in all_html_files():
+        html = p.read_text(encoding="utf-8")
+        assert re.search(r"<!doctype html>", html, re.I), f"{p}: нет doctype"
+        assert "lang=\"ru\"" in html, f"{p}: нет lang=ru"
+        m = re.search(r"<title>(.*?)</title>", html, re.S)
+        assert m and m.group(1).strip(), f"{p}: пустой/нет title"
+        assert "Цифровая Крепость" in m.group(1), f"{p}: title без бренда"
+        assert "name=\"viewport\"" in html and "width=device-width" in html, f"{p}: нет viewport"
+        assert "name=\"description\"" in html, f"{p}: нет meta description"
+        assert "rel=\"icon\"" in html, f"{p}: нет favicon"
+
+
 def _run():
     import traceback
     failed = 0
