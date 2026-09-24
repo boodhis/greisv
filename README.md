@@ -30,7 +30,7 @@
 ├── study/                     — «Обучение»: слово дня, шпаргалки
 │   └── data/  srs.js · wordday.js · widget.js
 ├── electric/                  — «Электрика» (генерируется gen/gen_electric.py)
-├── getting-started/ homelab/ services/ guides/ resources/ hobbies/
+├── getting-started/ homelab/ services/ guides/ articles/ hobbies/
 │                              — разделы-статьи (исторически первый контент)
 ├── gen/                       — Генераторы (см. ниже)
 └── tests/test_site.py         — Проверки сайта
