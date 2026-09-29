@@ -228,6 +228,31 @@ def test_no_external_resources():
             assert "192.168." in url, f"{p}: внешний ресурс {url} — сайт должен работать офлайн"
 
 
+def test_no_text_shadow():
+    """Фаза 4: тема «тёплая бумага» — без свечения, развёртки и градиентов."""
+    banned = ("text-shadow", "body::after", "backdrop-filter", "linear-gradient")
+    css = (ROOT / "style.css").read_text(encoding="utf-8")
+    for b in banned:
+        assert b not in css, f"style.css: вернулось {b} — тема должна быть матовая"
+    for p in all_html_files():
+        html = p.read_text(encoding="utf-8")
+        assert "text-shadow" not in html, f"{p}: text-shadow в инлайне"
+        assert "body::after" not in html, f"{p}: CRT-развёртка в инлайне"
+
+
+def test_no_neon_colors():
+    """Фаза 4: неоновые цвета переведены в тёмные (на светлой бумаге не видны)."""
+    neon = ("#35e6e0", "#3ef06a", "#ffe14d", "#ff55f0", "#ff4dd2", "#d9f7d0",
+            "#050b06", "#0a140d", "#1c2b1f", "#0d1117")
+    for p in all_html_files():
+        html = p.read_text(encoding="utf-8").lower()
+        for n in neon:
+            assert n not in html, f"{p}: остался неоновый цвет {n}"
+    css = (ROOT / "style.css").read_text(encoding="utf-8").lower()
+    for n in neon:
+        assert n not in css, f"style.css: остался неоновый цвет {n}"
+
+
 def _run():
     import traceback
     failed = 0
