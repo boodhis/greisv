@@ -7,9 +7,9 @@
      снятие <aside>, тонкая рамка вокруг окна с узлами-точками разделов
      (у текущего раздела подсветка .on); для страниц без style.css —
      inline-CSS рамки;
-  3) заметки страницы (во все страницы): кнопка-кружок «📝» + текстовое поле,
-     js/notes.js; для страниц без style.css — inline-CSS заметок;
-  4) вычистка старого: стена-рисовалка (bgwall, wall-* , js/wall.js, inline wall CSS)
+ 3) (заметки страницы отключены: локальные, для обмена между посетителями
+     не годятся);
+ 4) вычистка старого: стена-рисовалка (bgwall, wall-* , js/wall.js, inline wall CSS)
      и подключения js/nav.js.
 
 Запуск из корня проекта:  python3 gen/inject.py
@@ -119,22 +119,7 @@ def inject_old(path):
 
 
 def inject_notes(path, prefix):
-    with open(path, "r", encoding="utf-8") as f:
-        html = f.read()
-    orig = html
-    changed = 0
-    if "js/notes.js" not in html and "</body>" in html:
-        html = html.replace("</body>", '<script src="' + prefix + 'js/notes.js"></script>\n</body>', 1)
-        changed += 1
-    if "style.css" not in html and "js/notes.js" in html and "<style>" not in html:
-        pass
-    if "style.css" not in html and ".nts-t{" not in html and "</head>" in html:
-        html = html.replace("</head>", "<style>\n" + NOTES_CSS + "\n</style>\n</head>", 1)
-        changed += 1
-    if html != orig:
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(html)
-    return changed
+    return 0
 
 
 def _cur_key(parts):
