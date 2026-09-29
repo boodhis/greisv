@@ -183,6 +183,51 @@ def test_no_redundant_back():
             assert n <= 1, f"{p}: {n} inline-блоков .fnav{{ — инжектор задвоил стиль"
 
 
+def test_single_style_source():
+    """Фаза 2: страницы на общем style.css, инлайн-дубль темы запрещён.
+    Корневой index.html — витрина со своим CSS, он исключён."""
+    dupes = ("body::after{content:", "h1,h2,.brand,a.nmain{text-shadow")
+    for p in all_html_files():
+        if p.parent == ROOT and p.name == "index.html":
+            continue
+        html = p.read_text(encoding="utf-8")
+        if "<style" not in html:
+            continue
+        for d in dupes:
+            assert d not in html, f"{p}: дубль темы в инлайне ({d}…) — правило есть в style.css"
+
+
+def test_no_dead_refs():
+    """Фаза 1/3: страницы не ссылаются на удалённое (стена, заметки)."""
+    dead = ("wall.js", "js/notes.js", "bgwall", "nts-btn", "wordday.js в стене")
+    for p in all_html_files():
+        html = p.read_text(encoding="utf-8")
+        for d in dead:
+            assert d not in html, f"{p}: ссылка на удалённое {d}"
+
+
+def test_electric_no_dead_refs():
+    """Раздел «Электрика» — обычные страницы: без генератора, стены, заметок."""
+    bad = ("wall.js", "words.html", "wordday", "widget.js", "aside", "bgwall")
+    pages = [p for p in all_html_files() if p.parent.name == "electric"]
+    assert pages, "раздел electric/ пуст — переименовал папку?"
+    for p in pages:
+        html = p.read_text(encoding="utf-8")
+        for d in bad:
+            assert d not in html, f"{p}: мёртвая ссылка {d}"
+
+
+def test_no_external_resources():
+    """Оффлайн-сайт: не тянуть внешние шрифты/стили/картинки.
+    Обычные ссылки <a href> на внешние сайты допустимы — это не ресурс."""
+    res = re.compile(r'(?:src|srcset)="(https?://[^"]+)"', re.I)
+    link = re.compile(r'<link[^>]+href="(https?://[^"]+)"', re.I)
+    for p in all_html_files():
+        html = p.read_text(encoding="utf-8")
+        for url in res.findall(html) + link.findall(html):
+            assert "192.168." in url, f"{p}: внешний ресурс {url} — сайт должен работать офлайн"
+
+
 def _run():
     import traceback
     failed = 0
