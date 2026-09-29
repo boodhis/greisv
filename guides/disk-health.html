@@ -6,81 +6,9 @@
 <title>Диски и SMART — Цифровая Крепость</title>
 <meta name="description" content="Мониторинг состояния жёстких дисков">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
-<style>
-:root{--bg:#050b06;--panel:#0a140d;--line:#1c2b1f;--text:#d9f7d0;--dim:#7ba87c;--accent:#35e6e0;--code:#3ef06a;--green:#3ef06a;--tip:#3ef06a;--note:#3ef06a}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:ui-monospace,'Cascadia Code','JetBrains Mono','Liberation Mono',Consolas,monospace;line-height:1.65;font-size:16px}
-.layout{display:flex;min-height:100vh}
-aside{width:270px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);padding:16px 12px;position:sticky;top:0;height:100vh;overflow-y:auto}
-.brand{font-size:17px;font-weight:700;color:var(--accent);padding:6px 10px 14px;border-bottom:1px solid var(--line);margin-bottom:12px}
-.ngroup{margin-bottom:10px}
-.ngt{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);padding:6px 10px 4px}
-a.nli{display:block;padding:6px 12px;color:var(--text);text-decoration:none;border-radius:6px;font-size:14px}
-a.nli:hover{background:#1c2b1f;color:#fff}
-a.nli.on{background:var(--accent);color:#04141f;font-weight:600}
-a.nmain{display:block;padding:7px 10px;color:var(--accent);text-decoration:none;font-weight:600;border-radius:6px;font-size:14px}
-a.nmain:hover{background:#1c2b1f}
-main{flex:1;padding:40px 48px;max-width:1180px}
-h1{font-size:30px;margin-bottom:6px;color:var(--accent)}
-.desc{color:var(--dim);margin-bottom:26px;font-size:16px}
-h2{font-size:23px;margin:30px 0 12px;color:var(--accent);border-bottom:1px solid var(--line);padding-bottom:6px}
-h3{font-size:19px;margin:24px 0 10px}
-h4{font-size:16px;margin:18px 0 8px}
-p{margin:0 0 14px}
-ul,ol{margin:0 0 16px 22px}
-li{margin:3px 0}
-a{color:var(--accent)}
-a:hover{text-decoration:none}
-code{background:#1c2b1f;padding:2px 6px;border-radius:4px;font-family:ui-monospace,Consolas,monospace;font-size:.88em;color:var(--green)}
-pre{background:#050a06;border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto;margin:0 0 16px}
-pre code{background:transparent;padding:0;color:var(--green)}
-table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:14px}
-th,td{border:1px solid var(--line);padding:8px 10px;text-align:left}
-th{background:var(--panel);color:var(--accent);font-weight:600}
-tr:nth-child(even) td{background:#071108}
-hr{border:none;border-top:1px solid var(--line);margin:24px 0}
-em{color:var(--dim)}
-.callout{border-left:4px solid var(--tip);background:rgba(62,240,106,.07);border-radius:6px;padding:12px 14px;margin:0 0 16px}
-.callout-note{border-color:var(--note);background:rgba(137,87,229,.08)}
-.callout-warning{border-color:#ffe14d;background:rgba(227,179,65,.08)}
-.callout-t{color:var(--accent);font-size:13px;text-transform:uppercase;letter-spacing:.04em}
-.callout-body p:last-child{margin-bottom:0}
-footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);color:var(--dim);font-size:13px}
-@media(max-width:820px){.layout{flex-direction:column}aside{width:100%;height:auto;position:static}main{padding:24px 18px}}
-</style>
-<style>
-body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.65;background:repeating-linear-gradient(0deg,rgba(0,0,0,.07) 0 1px,transparent 1px 3px)}
-h1,h2,.brand,a.nmain{text-shadow:0 0 14px rgba(62,240,106,.22)}
-</style>
+<link rel="stylesheet" href="../style.css">
 
-<style>
-/* Заметки страницы: одна кнопка, одно текстовое поле */
-#nts-btn{position:fixed;right:16px;bottom:16px;z-index:120;width:46px;height:46px;border-radius:50%;border:1px solid #1c2b1f;background:#0a140d;color:#d9f7d0;cursor:pointer;font-size:18px;line-height:1;box-shadow:0 8px 24px rgba(0,0,0,.45)}
-#nts-btn:hover{color:#35e6e0;border-color:#35e6e0}
-#nts-btn.on{background:linear-gradient(135deg,#35e6e0,#ffe14d);color:#04141f;border-color:transparent}
-#nts{position:fixed;right:16px;bottom:74px;z-index:120;width:min(360px,calc(100vw - 32px));background:#0a140d;border:1px solid #1c2b1f;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
-#nts[hidden]{display:none}
-.nts-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #1c2b1f;font-size:12px;color:#35e6e0;text-transform:uppercase;letter-spacing:.08em}
-.nts-x{background:none;border:0;color:#7ba87c;cursor:pointer;font-size:14px;padding:2px 6px}
-.nts-x:hover{color:#fff}
-.nts-t{width:100%;min-height:140px;max-height:40vh;resize:vertical;background:#050a06;color:#d9f7d0;border:0;padding:12px;font-family:inherit;font-size:14px;line-height:1.6;border-radius:0 0 12px 12px;outline:none}
-.nts-t::placeholder{color:#4a6a4c}
-</style>
 
-<style>
-/* Рамка-бар в стиле графа: тонкая полоса вокруг окна */
-.fnav{position:fixed;top:0;left:0;right:0;z-index:40}
-.fnav .frow{display:flex;align-items:center;gap:2px;overflow-x:auto;white-space:nowrap;background:rgba(10,20,13,.92);backdrop-filter:blur(6px);border-bottom:1px solid #1c2b1f;padding:5px 16px;scrollbar-width:none}
-.fnav .frow::-webkit-scrollbar{display:none}
-.fnav .frow a{display:inline-flex;align-items:center;gap:7px;color:#7ba87c;text-decoration:none;font-size:13px;font-family:ui-monospace,Consolas,monospace;padding:6px 10px;border-radius:999px;flex-shrink:0;cursor:pointer}
-.fnav .frow a:hover{color:#fff;background:#1c2b1f}
-.fnav .frow a.on{color:#fff;text-shadow:0 0 10px var(--c)}
-.fnav .frow a.on .td{box-shadow:0 0 12px var(--c),0 0 3px var(--c)}
-.fnav .td{width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 6px var(--c);display:inline-block}
-.fnav .cor{display:none}
-.layout main{padding-top:56px}
-@media(max-width:820px){.fnav .frow a{font-size:12px;padding:5px 8px}.layout main{padding-top:50px}}
-</style>
 </head>
 <body>
 <div class="fnav">
