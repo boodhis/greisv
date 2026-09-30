@@ -23,15 +23,17 @@
 /
 ├── index.html                 — Главная (hero, карточки, граф-навигация)
 ├── manifest.html              — Манифест проекта
-├── style.css                  — Единая тёмная тема
+├── style.css                  — Единая тема «тёплая бумага» (e-ink)
 
 ├── sw.js / manifest.webmanifest / icon-192.png / icon-512.png — PWA/офлайн
-├── study/                     — «Обучение»: слово дня, шпаргалки
+├── getting-started/           — «Крепость»: ubuntu, первые шаги, флешка
+├── homelab/                   — «Homelab»: железо, сеть, сервисы, гайды
+├── electric/                  — «Электрика»: безопасность, щиты, монтаж,
+│                                инструменты, нормативы
+├── study/                     — «Обучение»: курсы, шпаргалки, разборы
 │   └── data/  srs.js · wordday.js · widget.js
-├── electric/                  — «Электрика» (генерируется gen/gen_electric.py)
-├── getting-started/ homelab/ services/ guides/ articles/ hobbies/
-│                              — разделы-статьи (исторически первый контент)
-├── gen/                       — Генераторы (см. ниже)
+├── articles/                  — «Заметки»: эссе, книги, досуг
+├── gen/                       — Скрипты (см. ниже)
 └── tests/test_site.py         — Проверки сайта
 ```
 
@@ -46,13 +48,15 @@ cd greisv
 
 Push в `main` → GitHub Actions автоматически деплоит на GitHub Pages.
 
-## Генераторы (`gen/`)
+## Скрипты (`gen/`)
 
 ```bash
-python3 gen/gen_electric.py # шаблон навигации + контент → electric/*.html
-python3 gen/gen_icons.py    # простые PNG-иконки для PWA (без зависимостей)
-python3 gen/inject.py       # инжектит навигацию/виджет/SW в старые страницы
+python3 gen/inject.py    # пересобирает рамку-бар навигации на всех страницах
+python3 gen/gen_icons.py # простые PNG-иконки для PWA (без зависимостей)
 ```
+
+`gen/gen_electric.py` удалён: он перезаписывал `electric/*.html` старой
+боковой навигацией. Электрика правится руками.
 
 Колоды карточек строятся из `gen/words.txt` (формат: `слово | транскрипция | перевод`,
 секция команд — после маркера `# --- терминал:`).
