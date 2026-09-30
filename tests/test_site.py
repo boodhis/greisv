@@ -253,6 +253,40 @@ def test_no_neon_colors():
         assert n not in css, f"style.css: остался неоновый цвет {n}"
 
 
+def test_five_sections_nav():
+    """Фаза 5: ровно пять разделов, навигация одинакова на всех страницах."""
+    nav = ["Главная", "Крепость", "Homelab", "Электрика", "Обучение", "Заметки"]
+    for p in all_html_files():
+        if p.parent == ROOT and p.name == "index.html":
+            continue  # витрина со своим оформлением, без рамки-бара
+        html = p.read_text(encoding="utf-8")
+        labels = re.findall(r'<span class="td"></span>([^<]+)</a>', html)
+        assert labels == nav, f"{p}: навигация {labels} != {nav}"
+        assert html.count('class="on"') == 1, f"{p}: подсвечен не один раздел"
+
+
+def test_no_dissolved_sections():
+    """Фаза 5: разделы guides/ services/ hobbies/ разобраны, ссылок на них нет."""
+    for d in ("guides", "services", "hobbies"):
+        assert not (ROOT / d).exists(), f"каталог {d}/ должен быть разобран"
+    for p in ROOT.rglob("*"):
+        if p.suffix not in (".html", ".md", ".xml", ".js") or ".git" in p.parts:
+            continue
+        text = p.read_text(encoding="utf-8", errors="replace")
+        for d in ("guides", "services", "hobbies"):
+            assert f'href="{d}/' not in text, f"{p}: ссылка на разобранный {d}/"
+            assert f'../{d}/' not in text, f"{p}: ссылка на разобранный ../{d}/"
+
+
+def test_electric_has_eight_pages():
+    """Фаза 5: «Электрика» расширена до 8 страниц (было 6)."""
+    pages = sorted(p.name for p in (ROOT / "electric").glob("*.html"))
+    assert len(pages) == 8, f"в electric/ {len(pages)} страниц, ожидалось 8: {pages}"
+    for needed in ("index.html", "safety.html", "wiring.html", "panels.html",
+                   "components.html", "smart.html", "tools.html", "standards.html"):
+        assert needed in pages, f"в electric/ нет {needed}"
+
+
 def _run():
     import traceback
     failed = 0

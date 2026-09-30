@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Инжектит во все страницы сайта:
-  1) old-инъекция (только для разделов с инлайн-стилем): ссылка «Манифест»,
-     группы «Обучение»/«Электрика», виджет «Слова дня» + wordday.js/widget.js/sw.js;
-  2) рамка-бар навигации (во все страницы, кроме корневого index.html-графа):
-     снятие <aside>, тонкая рамка вокруг окна с узлами-точками разделов
-     (у текущего раздела подсветка .on); для страниц без style.css —
-     inline-CSS рамки;
- 3) (заметки страницы отключены: локальные, для обмена между посетителями
-     не годятся);
- 4) вычистка старого: стена-рисовалка (bgwall, wall-* , js/wall.js, inline wall CSS)
-     и подключения js/nav.js.
+  1) рамку-бар навигации (во все страницы, кроме корневого index.html):
+     верхняя строка .frow с точками-разделами, у текущего раздела класс .on;
+  2) вычистку старого: стену-рисовалку (bgwall, wall-*, js/wall.js, inline
+     wall CSS), подключения js/nav.js, виджет «Слова дня», ручную ссылку
+     «← на главную» (её дублирует чип «Главная» в frow).
+
+Навигация (6 пунктов, тема «тёплая бумага»):
+    Главная · Крепость · Homelab · Электрика · Обучение · Заметки
 
 Запуск из корня проекта:  python3 gen/inject.py
 """
@@ -18,69 +16,19 @@ import os
 import re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OLD_DIRS = ["getting-started", "homelab", "services", "guides", "articles", "hobbies"]
-SKIP_OLD = {"esp32.html"}
-
-MANIFEST_LINK = '<a class="nmain" href="../manifest.html">Манифест</a>'
-NEW_GROUPS = ('<div class="ngroup"><div class="ngt">Обучение</div>'
-              '<a class="nli" href="../study/index.html">Обучение</a>'
-              '<a class="nli" href="../study/words.html">Тренажёр карточек</a>'
-              '<a class="nli" href="../study/cheatsheets.html">Шпаргалки</a></div>\n'
-              '<div class="ngroup"><div class="ngt">Электрика</div>'
-              '<a class="nli" href="../electric/index.html">Раздел</a>'
-              '<a class="nli" href="../electric/safety.html">Безопасность</a>'
-              '<a class="nli" href="../electric/panels.html">Щиты и автоматы</a>'
-              '<a class="nli" href="../electric/wiring.html">Кабели и монтаж</a>'
-              '<a class="nli" href="../electric/smart.html">Умный дом</a></div>\n')
-WIDGET = ('<div id="wordday"><div class="wd-t">Слово дня</div><div class="wd-w">…</div>'
-          '<div class="wd-ph"></div><div class="wd-t2"></div><div class="wd-hint">нажми, чтобы раскрыть перевод</div></div>\n'
-          '<script src="../study/data/wordday.js"></script>\n'
-          '<script src="../study/data/widget.js"></script>\n'
-          '<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>\n')
-HOMELAB = '<div class="ngroup"><div class="ngt">Homelab</div>'
 
 FNAV_LINKS = [
-    ("home", "Главная", "{pf}index.html", "#35e6e0"),
-    ("manifest", "Манифест", "{pf}manifest.html", "#35e6e0"),
-    ("start", "С чего начать", "{pf}getting-started/index.html", "#3ef06a"),
-    ("study", "Обучение", "{pf}study/index.html", "#ffe14d"),
-    ("elec", "Электрика", "{pf}electric/index.html", "#ff55f0"),
-    ("lab", "Homelab", "{pf}homelab/index.html", "#35e6e0"),
-    ("srv", "Сервисы", "{pf}services/index.html", "#3ef06a"),
-    ("guide", "Гайды", "{pf}guides/index.html", "#ffe14d"),
-    ("res", "Мыслево", "{pf}articles/index.html", "#ff55f0"),
-    ("hobby", "Досуг", "{pf}hobbies/index.html", "#d9f7d0"),
+    ("home", "Главная", "{pf}index.html", "#0a5c52"),
+    ("fort", "Крепость", "{pf}getting-started/index.html", "#3d5c2c"),
+    ("lab", "Homelab", "{pf}homelab/index.html", "#0a5c52"),
+    ("elec", "Электрика", "{pf}electric/index.html", "#7a2f6b"),
+    ("study", "Обучение", "{pf}study/index.html", "#7d611b"),
+    ("notes", "Заметки", "{pf}articles/index.html", "#6b6659"),
 ]
 SECTION_KEYS = {
-    "getting-started": "start", "study": "study", "electric": "elec",
-    "homelab": "lab", "services": "srv", "guides": "guide",
-    "articles": "res", "hobbies": "hobby",
+    "getting-started": "fort", "study": "study", "electric": "elec",
+    "homelab": "lab", "articles": "notes",
 }
-
-FRAME_CSS = """/* Рамка-бар в стиле графа: тонкая полоса вокруг окна */
-.fnav{position:fixed;top:0;left:0;right:0;z-index:40}
-.fnav .frow{display:flex;align-items:center;gap:2px;overflow-x:auto;white-space:nowrap;background:rgba(10,20,13,.92);backdrop-filter:blur(6px);border-bottom:1px solid #1c2b1f;padding:5px 16px;scrollbar-width:none}
-.fnav .frow::-webkit-scrollbar{display:none}
-.fnav .frow a{display:inline-flex;align-items:center;gap:7px;color:#7ba87c;text-decoration:none;font-size:13px;font-family:ui-monospace,Consolas,monospace;padding:6px 10px;border-radius:999px;flex-shrink:0;cursor:pointer}
-.fnav .frow a:hover{color:#fff;background:#1c2b1f}
-.fnav .frow a.on{color:#fff;text-shadow:0 0 10px var(--c)}
-.fnav .frow a.on .td{box-shadow:0 0 12px var(--c),0 0 3px var(--c)}
-.fnav .td{width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 6px var(--c);display:inline-block}
-.fnav .cor{display:none}
-.layout main{padding-top:56px}
-@media(max-width:820px){.fnav .frow a{font-size:12px;padding:5px 8px}.layout main{padding-top:50px}}"""
-
-NOTES_CSS = """/* Заметки страницы: одна кнопка, одно текстовое поле */
-#nts-btn{position:fixed;right:16px;bottom:16px;z-index:120;width:46px;height:46px;border-radius:50%;border:1px solid #1c2b1f;background:#0a140d;color:#d9f7d0;cursor:pointer;font-size:18px;line-height:1;box-shadow:0 8px 24px rgba(0,0,0,.45)}
-#nts-btn:hover{color:#35e6e0;border-color:#35e6e0}
-#nts-btn.on{background:linear-gradient(135deg,#35e6e0,#ffe14d);color:#04141f;border-color:transparent}
-#nts{position:fixed;right:16px;bottom:74px;z-index:120;width:min(360px,calc(100vw - 32px));background:#0a140d;border:1px solid #1c2b1f;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
-#nts[hidden]{display:none}
-.nts-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #1c2b1f;font-size:12px;color:#35e6e0;text-transform:uppercase;letter-spacing:.08em}
-.nts-x{background:none;border:0;color:#7ba87c;cursor:pointer;font-size:14px;padding:2px 6px}
-.nts-x:hover{color:#fff}
-.nts-t{width:100%;min-height:140px;max-height:40vh;resize:vertical;background:#050a06;color:#d9f7d0;border:0;padding:12px;font-family:inherit;font-size:14px;line-height:1.6;border-radius:0 0 12px 12px;outline:none}
-.nts-t::placeholder{color:#4a6a4c}"""
 
 
 def strip_wordday(path):
@@ -98,35 +46,11 @@ def strip_wordday(path):
     return 0
 
 
-def inject_old(path):
-    with open(path, "r", encoding="utf-8") as f:
-        html = f.read()
-    orig = html
-    changed = 0
-    if "<aside" in html:
-        if "Манифест" not in html:
-            anchor = '<a class="nmain" href="../index.html">Главная</a>'
-            if anchor in html:
-                html = html.replace(anchor, anchor + MANIFEST_LINK, 1)
-                changed += 1
-        if HOMELAB in html and "study/index.html" not in html:
-            html = html.replace(HOMELAB, NEW_GROUPS + HOMELAB, 1)
-            changed += 1
-    if html != orig:
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(html)
-    return changed
-
-
-def inject_notes(path, prefix):
-    return 0
-
-
 def _cur_key(parts):
     if parts[0] in SECTION_KEYS:
         return SECTION_KEYS[parts[0]]
     if parts[-1] == "manifest.html":
-        return "manifest"
+        return "fort"
     return ""
 
 
@@ -156,18 +80,11 @@ def inject_frame(path, prefix):
             html = updated
             changed += 1
     else:
-        new = re.sub(r"\s*<aside[^>]*>.*?</aside>\s*", "\n", html, flags=re.S)
-        if new != html:
-            html = new
-            changed += 1
         m = re.search(r"(<body[^>]*>)", html)
         if m:
             html = html.replace(m.group(1), m.group(1) + "\n" + markup, 1)
             changed += 1
     html = re.sub(r"\s*<style>\s*/\* Рамка-бар в стиле графа[\s\S]*?</style>", "\n", html, flags=re.S)
-    if "style.css" not in html and "</head>" in html:
-        html = html.replace("</head>", "<style>\n" + FRAME_CSS + "\n</style>\n</head>", 1)
-        changed += 1
     if html != orig:
         with open(path, "w", encoding="utf-8") as f:
             f.write(html)
@@ -176,7 +93,7 @@ def inject_frame(path, prefix):
 
 def strip_redundant_back(path):
     """Убирает ручную ссылку «← на главную»: она дублирует чип «Главная» в
-    frow-баре (leжат поверх него под фиксированной рамкой)."""
+    frow-баре."""
     with open(path, "r", encoding="utf-8") as f:
         html = f.read()
     orig = html
@@ -212,7 +129,7 @@ def strip_old_wall(path):
 def all_pages():
     found = []
     for root, dirs, files in os.walk(ROOT):
-        dirs[:] = [d for d in dirs if d not in ("gen", "tests", "node_modules")]
+        dirs[:] = [d for d in dirs if d not in ("gen", "tests", "node_modules", ".venv", ".git")]
         for name in files:
             if name.endswith(".html"):
                 found.append(os.path.join(root, name))
@@ -221,14 +138,11 @@ def all_pages():
 
 def main():
     pages = all_pages()
-    n_old = 0
     n_frame = 0
-    n_notes = 0
     n_strip = 0
     for path in pages:
         rel = os.path.relpath(path, ROOT)
         parts = rel.split(os.sep)
-        name = parts[-1]
         depth = len(parts) - 1
         prefix = "../" * depth
         changed = 0
@@ -237,7 +151,7 @@ def main():
             n_strip += 1
         changed += c
         if rel == "index.html":
-            pass  # корневой граф самоценен — без рамки
+            pass  # корневая витрина — без рамки, у неё своя тема
         else:
             c = strip_wordday(path)
             if c:
@@ -247,21 +161,12 @@ def main():
             if c:
                 n_strip += 1
             changed += c
-            if parts[0] in OLD_DIRS and name not in SKIP_OLD:
-                c = inject_old(path)
-                if c:
-                    n_old += 1
-                changed += c
             c = inject_frame(path, prefix)
             if c:
                 n_frame += 1
             changed += c
-        c = inject_notes(path, prefix)
-        if c:
-            n_notes += 1
-        changed += c
         print(("+" if changed else "="), rel)
-    print(f"Страниц обработано: {len(pages)} | old: {n_old} | рамка: {n_frame} | заметки: {n_notes} | вычищено: {n_strip}")
+    print(f"Страниц обработано: {len(pages)} | рамка: {n_frame} | вычищено: {n_strip}")
 
 
 if __name__ == "__main__":

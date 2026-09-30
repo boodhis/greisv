@@ -12,15 +12,11 @@
 <body>
 <div class="fnav">
 <nav class="frow"><a href="../index.html" style="--c:#0a5c52"><span class="td"></span>Главная</a>
-<a href="../manifest.html" style="--c:#0a5c52"><span class="td"></span>Манифест</a>
-<a href="../getting-started/index.html" style="--c:#3d5c2c"><span class="td"></span>С чего начать</a>
-<a href="../study/index.html" style="--c:#7d611b"><span class="td"></span>Обучение</a>
-<a href="../electric/index.html" style="--c:#7a2f6b"><span class="td"></span>Электрика</a>
+<a href="../getting-started/index.html" style="--c:#3d5c2c"><span class="td"></span>Крепость</a>
 <a href="../homelab/index.html" class="on" style="--c:#0a5c52"><span class="td"></span>Homelab</a>
-<a href="../services/index.html" style="--c:#3d5c2c"><span class="td"></span>Сервисы</a>
-<a href="../guides/index.html" style="--c:#7d611b"><span class="td"></span>Гайды</a>
-<a href="../articles/index.html" style="--c:#7a2f6b"><span class="td"></span>Мыслево</a>
-<a href="../hobbies/index.html" style="--c:#6b6659"><span class="td"></span>Досуг</a></nav>
+<a href="../electric/index.html" style="--c:#7a2f6b"><span class="td"></span>Электрика</a>
+<a href="../study/index.html" style="--c:#7d611b"><span class="td"></span>Обучение</a>
+<a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav>
 </div>
 
 <div class="layout">
@@ -54,8 +50,49 @@
 <p>Homelab — это не только «как классно». Это ещё и <strong>ответственность за данные</strong>. Минимальный набор:</p>
 <ul><li><strong>SSH только по ключам</strong> — пароль для входа отключить</li><li><strong>Firewall</strong> — <code>ufw</code>, открыты только нужные порты в локальной сети</li><li><strong>Без проброса портов наружу</strong> — внешний доступ через VPN (WireGuard/Tailscale), а не открытые в интернет порты</li><li><strong>Обновления</strong> — регулярно, или автоматически через <code>unattended-upgrades</code></li><li><strong>Бэкапы 3-2-1</strong> — три копии, два носителя, одна — вне дома</li><li><strong>Fail2ban</strong> — если открыт доступ извне, блокирует перебор паролей</li></ul>
 <div class="callout callout-warning"><h4 class="callout-t">Предупреждение</h4><div class="callout-body"><p>Старый ноутбук работает 24/7 — следи за <strong>температурой</strong>, <strong>пылью</strong> и состоянием <strong>батареи</strong>. Если батарея вздулась — убери её и работай от сети.</p></div></div>
+<h2 id="services">Сервисы</h2>
+<p>Всё, что крутится на сервере, живёт в Docker и управляется одним compose-файлом. Репозиторий инфраструктуры: <code>github.com/boodhis/homelab-infra</code>.</p>
+<h3>Медиа</h3>
+<table><thead><tr><th>Сервис</th><th>Зачем</th><th>Порт</th></tr></thead><tbody>
+<tr><td><a href="navidrome.html">Navidrome</a></td><td>Музыкальный сервер — Spotify для себя</td><td>4533</td></tr>
+<tr><td><a href="jellyfin.html">Jellyfin</a></td><td>Медиа-сервер с обложками и метаданными</td><td>8096</td></tr>
+<tr><td><a href="minidlna.html">MiniDLNA</a></td><td>Медиа-сервер для ТВ</td><td>8200</td></tr>
+<tr><td><a href="transmission.html">Transmission</a></td><td>Торрент-клиент</td><td>9091</td></tr>
+</tbody></table>
+<h3>Фото и файлы</h3>
+<table><thead><tr><th>Сервис</th><th>Зачем</th><th>Порт</th></tr></thead><tbody>
+<tr><td><a href="immich.html">Immich</a></td><td>Фотохранилище — свой Google Photos</td><td>2283</td></tr>
+<tr><td><a href="samba.html">Samba</a></td><td>Сетевые папки, видны из Windows</td><td>445</td></tr>
+<tr><td><a href="sopds.html">SOPDS</a> и <a href="sopds-web.html">веб-каталог</a></td><td>Каталог книг с чтением прямо в браузере</td><td>—</td></tr>
+</tbody></table>
+<h3>Автоматизация и контейнеры</h3>
+<table><thead><tr><th>Сервис</th><th>Зачем</th><th>Порт</th></tr></thead><tbody>
+<tr><td><a href="docker.html">Docker</a></td><td>Контейнеризация всего остального</td><td>—</td></tr>
+<tr><td><a href="mqtt.html">MQTT / ESPHome</a></td><td>Умный дом и датчики</td><td>1883</td></tr>
+</tbody></table>
+<div class="callout"><div class="callout-t">Запуск любого сервиса</div><div class="callout-body"><p>Клонируешь репозиторий, заходишь в папку сервиса и поднимаешь compose-файл. <code>docker compose up -d</code> — флаг <code>-d</code> отцепляет контейнеры от терминала, чтобы связка жила после закрытия SSH.</p></div></div>
+
+<h2 id="guides">Практические гайды</h2>
+<p>Пошаговые инструкции для типовых задач: всё проверено на этом же сервере.</p>
+<h3>Сервер и железо</h3>
+<table><thead><tr><th>Гайд</th><th>Что делает</th></tr></thead><tbody>
+<tr><td><a href="auto-setup.html">Автосборка сервера</a></td><td>Быстрая настройка свежего Ubuntu Server с нуля</td></tr>
+<tr><td><a href="inxi.html">INXI</a></td><td>Информация о системе и железе одной командой</td></tr>
+<tr><td><a href="auto-shutdown.html">Авто-выключение</a></td><td>Гашение сервера по таймеру</td></tr>
+</tbody></table>
+<h3>Данные и диски</h3>
+<table><thead><tr><th>Гайд</th><th>Что делает</th></tr></thead><tbody>
+<tr><td><a href="disk-health.html">Диски и SMART</a></td><td>Мониторинг состояния дисков, усыпление</td></tr>
+<tr><td><a href="backup.html">Бекапы</a></td><td>Резервное копирование: rsync + tmux</td></tr>
+</tbody></table>
+<h3>Диагностика и сеть</h3>
+<table><thead><tr><th>Гайд</th><th>Что делает</th></tr></thead><tbody>
+<tr><td><a href="journalctl.html">Журналы system/journalctl</a></td><td>Разбор системных логов</td></tr>
+<tr><td><a href="diagnostics.html">Диагностика</a></td><td>Поиск и решение проблем</td></tr>
+<tr><td><a href="wifi-fix.html">Wi-Fi фикс</a></td><td>Если сеть отвалилась</td></tr>
+</tbody></table>
 <h2 id="start">Как начать?</h2>
-<ol><li><strong>Выбери железо</strong> — подойдёт даже старый ноутбук или мини-ПК</li><li><strong>Установи Ubuntu Server</strong> — инструкция в <a href="../getting-started/install-ubuntu.html">разделе «С чего начать»</a></li><li><strong>Настрой SSH и UFW</strong> — <a href="../guides/ssh.html">гайд по SSH</a></li><li><strong>Поставь Docker</strong> — <a href="../services/docker.html">как запустить свой первый сервис</a></li><li><strong>Настрой бэкапы</strong> — <a href="../guides/backup.html">гайд по резервному копированию</a></li><li><strong>Документируй</strong> — записывай, что делаешь, чтобы повторить на новом железе</li></ol>
+<ol><li><strong>Выбери железо</strong> — подойдёт даже старый ноутбук или мини-ПК</li><li><strong>Установи Ubuntu Server</strong> — инструкция в <a href="../getting-started/install-ubuntu.html">разделе «С чего начать»</a></li><li><strong>Настрой SSH и UFW</strong> — <a href="../study/ssh.html">гайд по SSH</a></li><li><strong>Поставь Docker</strong> — <a href="../homelab/docker.html">как запустить свой первый сервис</a></li><li><strong>Настрой бэкапы</strong> — <a href="../homelab/backup.html">гайд по резервному копированию</a></li><li><strong>Документируй</strong> — записывай, что делаешь, чтобы повторить на новом железе</li></ol>
 <h2>Дальше по плану</h2>
 <ul><li><strong>VPN</strong> — WireGuard или Tailscale для доступа снаружи дома</li><li><strong>Мониторинг</strong> — Uptime Kuma / Netdata для наглядности</li><li><strong>Умный дом</strong> — связка MQTT + ESPHome уже работает, расширяем</li>
 <li><strong>Развернуть всё без сети</strong> — готовый <a href="homelab-kit.html">homelab-kit</a>: оффлайн-стек на одном диске</li></ul>
