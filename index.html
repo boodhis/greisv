@@ -16,7 +16,10 @@
   --text:#1c1c1a;
   --dim:#6b6659;
   --accent:#0a5c52;
-  --hover:#ebe6d8;
+  --mortar:#cfc9b6;
+  --brick-top:#fdfbf5;
+  --brick-bot:#ece7d6;
+  --brick-line:#b9b19a;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
@@ -49,37 +52,83 @@ header{margin:30px 0 0}
   color:var(--dim);
 }
 
-/* список разделов */
+/* ===== стена ===== */
 .list{
   margin:30px 0 0;
+  padding:18px;
+  background-color:var(--mortar);
+  background-image:
+    repeating-linear-gradient(0deg,
+      rgba(0,0,0,.05) 0 1px,
+      transparent 1px 26px),
+    repeating-linear-gradient(90deg,
+      rgba(0,0,0,.04) 0 1px,
+      transparent 1px 44px);
   border:1px solid var(--line);
-  border-radius:3px;
-  background:var(--panel);
-  overflow:hidden;
+  border-radius:4px;
+  box-shadow:
+    inset 0 3px 10px rgba(0,0,0,.10),
+    inset 0 -2px 4px rgba(0,0,0,.06);
+  display:flex;
+  flex-direction:column;
+  gap:14px;
 }
+
+/* ===== кирпич ===== */
 .row{
   position:relative;
   display:flex;
   align-items:baseline;
   gap:14px;
-  padding:18px 22px;
-  border-bottom:1px solid var(--line);
+  padding:16px 22px 16px 26px;
+  width:100%;
+  background:linear-gradient(180deg,var(--brick-top) 0%,var(--brick-bot) 100%);
+  border:1px solid var(--brick-line);
+  border-radius:3px;
   color:var(--text);
   font-size:19px;
-  transition:background-color .15s ease;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.95),
+    inset 0 -3px 0 rgba(0,0,0,.06),
+    0 2px 0 rgba(0,0,0,.08),
+    0 2px 4px rgba(0,0,0,.05);
+  transition:transform .15s ease, background .15s ease, box-shadow .15s ease;
 }
+
+/* ---- разная длина + прижатие к краю = кладка вперевязку ---- */
+.row:nth-child(1){width:82%;align-self:flex-start}
+.row:nth-child(2){width:100%;align-self:flex-end}
+.row:nth-child(3){width:90%;align-self:flex-start}
+.row:nth-child(4){width:72%;align-self:flex-end}
+.row:nth-child(5){width:100%;align-self:flex-start}
+
+/* цветная метка слева — закрашенный торец кирпича */
 .row::before{
   content:"";
   position:absolute;
-  inset:0 auto 0 0;
+  top:7px;
+  bottom:7px;
+  left:8px;
   width:4px;
+  border-radius:2px;
   background:var(--c,var(--accent));
-  opacity:0;
+  opacity:.75;
   transition:opacity .15s ease;
 }
-.row:last-child{border-bottom:0}
-.row:hover,.row:focus-visible{background:var(--hover);text-decoration:none}
+
+/* ховер — кирпич «выпирает» из стены */
+.row:hover,.row:focus-visible{
+  background:linear-gradient(180deg,#fffef9 0%,#f4efdd 100%);
+  transform:translateY(-2px);
+  text-decoration:none;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.95),
+    inset 0 -3px 0 rgba(0,0,0,.06),
+    0 4px 0 rgba(0,0,0,.12),
+    0 8px 16px rgba(0,0,0,.10);
+}
 .row:hover::before,.row:focus-visible::before{opacity:1}
+
 .row b{font-weight:700}
 .row .tag{color:var(--dim);font-size:16px}
 .row .cnt{
@@ -108,10 +157,22 @@ footer{
   font-size:16px;
 }
 
-@media (max-width:560px){
+@media (max-width:640px){
   body{font-size:18px}
   .logo{font-size:28px}
-  .row{flex-wrap:wrap;font-size:17px}
+  .list{padding:12px;gap:10px}
+  .row,
+  .row:nth-child(1),
+  .row:nth-child(2),
+  .row:nth-child(3),
+  .row:nth-child(4),
+  .row:nth-child(5){
+    width:100%;
+    align-self:stretch;
+    flex-wrap:wrap;
+    font-size:17px;
+    padding:14px 18px 14px 22px;
+  }
   .row .tag{order:3;flex-basis:100%;font-size:15px}
 }
 @media (prefers-reduced-motion: reduce){
