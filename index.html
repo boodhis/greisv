@@ -12,9 +12,12 @@
 :root{
   --bg:#f4f1e8;
   --panel:#fbf9f3;
+  --panel-2:#f7f4ec;
   --line:#d8d3c2;
+  --line-2:#e6e1d2;
   --text:#1c1c1a;
   --dim:#6b6659;
+  --mute:#8c8677;
   --accent:#0a5c52;
   --mortar:#cfc9b6;
   --brick-top:#fdfbf5;
@@ -22,103 +25,101 @@
   --brick-line:#b9b19a;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{
   background:var(--bg);
   color:var(--text);
   font-family:Georgia,"Iowan Old Style",Charter,"Liberation Serif",serif;
-  line-height:1.7;
-  font-size:20px;
+  line-height:1.65;
+  font-size:17px;
 }
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
-:focus-visible{outline:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
 
-.wrap{max-width:1120px;margin:0 auto;padding:16px 24px 48px}
+.wrap{max-width:1240px;margin:0 auto;padding:20px 28px 60px}
 
-/* шапка */
-header{margin:30px 0 0}
-.logo{
-  font-size:34px;
-  font-weight:700;
-  line-height:1.2;
-  color:var(--accent);
-  letter-spacing:.6px;
+/* ===== верхняя служебная строка ===== */
+.tbar{
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 16px;
+  color:var(--dim);font-size:12px;letter-spacing:.04em;
+  border-bottom:1px dashed var(--line);padding-bottom:8px;
+}
+.tbar .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);vertical-align:middle;margin-right:6px}
+
+/* ===== шапка ===== */
+header.hero{
+  display:grid;
+  grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
+  gap:36px;
+  align-items:end;
+  margin:36px 0 4px;
+}
+.brand{
+  font-size:44px;font-weight:700;line-height:1.1;
+  color:var(--accent);letter-spacing:.5px;
 }
 .lede{
-  margin:10px 0 0;
-  max-width:660px;
-  font-size:19px;
-  color:var(--dim);
+  margin:14px 0 0;max-width:620px;font-size:18px;color:var(--dim);
+}
+.stats{
+  display:flex;flex-wrap:wrap;gap:22px;justify-content:flex-end;
+  text-align:right;
+}
+.stat b{
+  display:block;font-size:26px;font-weight:700;color:var(--text);line-height:1.1;
+}
+.stat span{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--mute)}
+
+@media (max-width:820px){
+  header.hero{grid-template-columns:1fr;gap:20px;align-items:start}
+  .stats{justify-content:flex-start;text-align:left;gap:20px 28px}
+  .brand{font-size:34px}
 }
 
-/* ===== стена ===== */
-.list{
-  margin:30px 0 0;
-  padding:18px;
+/* ===== стена разделов ===== */
+.sections{
+  margin:44px 0 0;
+  padding:20px;
   background-color:var(--mortar);
   background-image:
-    repeating-linear-gradient(0deg,
-      rgba(0,0,0,.05) 0 1px,
-      transparent 1px 26px),
-    repeating-linear-gradient(90deg,
-      rgba(0,0,0,.04) 0 1px,
-      transparent 1px 44px);
+    repeating-linear-gradient(0deg,rgba(0,0,0,.05) 0 1px,transparent 1px 26px),
+    repeating-linear-gradient(90deg,rgba(0,0,0,.04) 0 1px,transparent 1px 44px);
   border:1px solid var(--line);
-  border-radius:4px;
+  border-radius:5px;
   box-shadow:
     inset 0 3px 10px rgba(0,0,0,.10),
     inset 0 -2px 4px rgba(0,0,0,.06);
-  display:flex;
-  flex-direction:column;
-  gap:14px;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
 }
+@media (max-width:960px){ .sections{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:600px){ .sections{grid-template-columns:1fr;padding:12px;gap:12px} }
 
-/* ===== кирпич ===== */
-.row{
+.card{
   position:relative;
-  display:flex;
-  align-items:baseline;
-  gap:14px;
-  padding:16px 22px 16px 26px;
-  width:100%;
+  display:flex;flex-direction:column;
+  gap:8px;
+  padding:22px 22px 20px 26px;
   background:linear-gradient(180deg,var(--brick-top) 0%,var(--brick-bot) 100%);
   border:1px solid var(--brick-line);
   border-radius:3px;
   color:var(--text);
-  font-size:19px;
+  min-height:170px;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.95),
     inset 0 -3px 0 rgba(0,0,0,.06),
     0 2px 0 rgba(0,0,0,.08),
     0 2px 4px rgba(0,0,0,.05);
-  transition:transform .15s ease, background .15s ease, box-shadow .15s ease;
-  will-change:transform, box-shadow;
+  transition:transform .15s ease,background .15s ease,box-shadow .15s ease;
+  will-change:transform,box-shadow;
 }
-
-/* ---- разная длина + прижатие к краю = кладка вперевязку ---- */
-.row:nth-child(1){width:82%;align-self:flex-start}
-.row:nth-child(2){width:100%;align-self:flex-end}
-.row:nth-child(3){width:90%;align-self:flex-start}
-.row:nth-child(4){width:72%;align-self:flex-end}
-.row:nth-child(5){width:100%;align-self:flex-start}
-
-/* цветная метка слева — закрашенный торец кирпича */
-.row::before{
-  content:"";
-  position:absolute;
-  top:7px;
-  bottom:7px;
-  left:8px;
-  width:4px;
-  border-radius:2px;
-  background:var(--c,var(--accent));
-  opacity:.75;
-  transition:opacity .15s ease;
+.card::before{
+  content:"";position:absolute;top:9px;bottom:9px;left:9px;width:4px;border-radius:2px;
+  background:var(--c,var(--accent));opacity:.8;transition:opacity .15s ease;
 }
-
-/* ховер — кирпич «выпирает» из стены */
-.row:hover{
+.card:hover{
   background:linear-gradient(180deg,#fffef9 0%,#f4efdd 100%);
   transform:translateY(-2px);
   text-decoration:none;
@@ -126,15 +127,12 @@ header{margin:30px 0 0}
     inset 0 1px 0 rgba(255,255,255,.95),
     inset 0 -3px 0 rgba(0,0,0,.06),
     0 4px 0 rgba(0,0,0,.12),
-    0 8px 16px rgba(0,0,0,.10);
+    0 10px 20px rgba(0,0,0,.12);
 }
-.row:hover::before{opacity:1}
-
-/* фокус: кирпич загорается, свет льётся на стену */
-.row:focus-visible{
+.card:hover::before{opacity:1}
+.card:focus-visible{
   outline:none;
   border-color:var(--c,var(--accent));
-  background:linear-gradient(180deg,#fffef9 0%,#f6f1e0 100%);
   transform:translateY(-2px);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.95),
@@ -142,108 +140,198 @@ header{margin:30px 0 0}
     0 4px 0 rgba(0,0,0,.12),
     0 10px 22px rgba(0,0,0,.14),
     0 0 0 1px var(--c,var(--accent)),
-    0 0 28px 6px var(--c,var(--accent));
-  animation:brick-glow 2.4s ease-in-out infinite;
+    0 0 24px 4px var(--c,var(--accent));
 }
-.row:focus-visible::before{opacity:1}
+.card .cnum{
+  font-size:13px;font-family:var(--mono,ui-monospace,monospace);
+  color:var(--dim);letter-spacing:.04em;
+}
+.card h3{
+  font-size:22px;font-weight:700;line-height:1.2;color:var(--text);
+}
+.card .ctag{
+  font-size:14px;color:var(--dim);line-height:1.5;
+}
+.card .cgo{
+  margin-top:auto;padding-top:12px;
+  font-size:13px;color:var(--dim);letter-spacing:.04em;
+  display:flex;align-items:center;gap:8px;
+}
+.card .cgo .arw{transition:transform .15s ease}
+.card:hover .cgo .arw{transform:translateX(4px)}
 
-@keyframes brick-glow{
-  0%,100%{ filter:brightness(1); }
-  50%    { filter:brightness(1.06); }
+/* ===== нижний блок: свежее + манифест ===== */
+.split{
+  margin:36px 0 0;
+  display:grid;
+  grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);
+  gap:24px;
+}
+@media (max-width:900px){ .split{grid-template-columns:1fr} }
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:22px 24px;
+}
+.panel h2{
+  font-size:15px;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--mute);font-weight:600;margin-bottom:14px;
 }
 
-.row b{font-weight:700}
-.row .tag{color:var(--dim);font-size:16px}
-.row .cnt{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  margin-left:auto;
-  color:var(--dim);
-  font-size:16px;
-  white-space:nowrap;
-  font-variant-numeric:tabular-nums;
+/* список свежего */
+.fresh{list-style:none;margin:0;padding:0}
+.fresh li{border-top:1px solid var(--line-2)}
+.fresh li:first-child{border-top:0}
+.fresh a{
+  display:grid;
+  grid-template-columns:80px 1fr auto;
+  gap:14px;
+  align-items:baseline;
+  padding:11px 0;
+  color:var(--text);
 }
-.row .arw{font-style:normal;transition:transform .15s ease}
-.row:hover .arw,
-.row:focus-visible .arw{transform:translateX(3px)}
+.fresh a:hover{text-decoration:none;color:var(--accent)}
+.fresh .date{font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums}
+.fresh .ttl{font-size:16px;line-height:1.35}
+.fresh .tg{font-size:12px;color:var(--dim);letter-spacing:.03em;white-space:nowrap}
+@media (max-width:600px){
+  .fresh a{grid-template-columns:1fr auto;gap:4px 10px}
+  .fresh .date{grid-column:1 / -1;font-size:12px}
+  .fresh .ttl{font-size:15px}
+}
 
-/* подвал */
+/* манифест */
+.manifesto p{margin:0 0 14px;font-size:15.5px;color:var(--text)}
+.manifesto p.dim{color:var(--dim);font-size:14px}
+.manifesto a{font-size:14px}
+
+/* ===== подвал ===== */
 footer{
-  display:flex;
-  justify-content:space-between;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:38px;
-  padding-top:16px;
-  border-top:1px solid var(--line);
-  color:var(--dim);
-  font-size:16px;
+  margin-top:44px;padding-top:16px;border-top:1px solid var(--line);
+  color:var(--dim);font-size:13px;
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
 }
+footer a{color:var(--dim)}
 
-@media (max-width:640px){
-  body{font-size:18px}
-  .logo{font-size:28px}
-  .list{padding:12px;gap:10px}
-  .row,
-  .row:nth-child(1),
-  .row:nth-child(2),
-  .row:nth-child(3),
-  .row:nth-child(4),
-  .row:nth-child(5){
-    width:100%;
-    align-self:stretch;
-    flex-wrap:wrap;
-    font-size:17px;
-    padding:14px 18px 14px 22px;
-  }
-  .row .tag{order:3;flex-basis:100%;font-size:15px}
-}
-@media (prefers-reduced-motion: reduce){
+@media (prefers-reduced-motion:reduce){
   *{transition:none !important;animation:none !important}
+  html{scroll-behavior:auto}
 }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <div class="logo">Цифровая Крепость</div>
-    <p class="lede">война с энтропией</p>
+
+  <!-- верхняя строка -->
+  <div class="tbar">
+    <span><span class="dot"></span>офлайн · без трекеров · бесплатно</span>
+    <span>своими руками, с резервными копиями</span>
+  </div>
+
+  <!-- шапка -->
+  <header class="hero">
+    <div>
+      <div class="brand">Цифровая Крепость</div>
+      <p class="lede">Linux, homelab, электрика, обучение. Всё, что можно собрать, починить и настроить своими руками — от первого щита до бэкапов, которые действительно восстанавливаются.</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>5</b><span>разделов</span></div>
+      <div class="stat"><b>50</b><span>материалов</span></div>
+      <div class="stat"><b>↻</b><span>обновляется</span></div>
+    </div>
   </header>
 
-  <nav class="list" aria-label="Разделы сайта">
+  <!-- разделы: сетка карточек -->
+  <nav class="sections" aria-label="Разделы сайта">
 
-    <a class="row" href="getting-started/index.html" style="--c:#3d5c2c">
-      <b>Крепость</b>
-      <span class="tag">манифест · ubuntu · первые шаги</span>
-      <span class="cnt">4<span class="arw" aria-hidden="true">→</span></span>
+    <a class="card" href="getting-started/index.html" style="--c:#3d5c2c">
+      <span class="cnum">01 · 4 материала</span>
+      <h3>Крепость</h3>
+      <span class="ctag">манифест · ubuntu · первые шаги</span>
+      <span class="cgo">перейти<span class="arw" aria-hidden="true">→</span></span>
     </a>
 
-    <a class="row" href="homelab/index.html" style="--c:#0a5c52">
-      <b>Homelab</b>
-      <span class="tag">железо · сеть · сервисы · гайды</span>
-      <span class="cnt">22<span class="arw" aria-hidden="true">→</span></span>
+    <a class="card" href="homelab/index.html" style="--c:#0a5c52">
+      <span class="cnum">02 · 22 материала</span>
+      <h3>Homelab</h3>
+      <span class="ctag">железо · сеть · сервисы · гайды</span>
+      <span class="cgo">перейти<span class="arw" aria-hidden="true">→</span></span>
     </a>
 
-    <a class="row" href="electric/index.html" style="--c:#7a2f6b">
-      <b>Электрика</b>
-      <span class="tag">безопасность · щиты · нормативы</span>
-      <span class="cnt">7<span class="arw" aria-hidden="true">→</span></span>
+    <a class="card" href="electric/index.html" style="--c:#7a2f6b">
+      <span class="cnum">03 · 7 материалов</span>
+      <h3>Электрика</h3>
+      <span class="ctag">безопасность · щиты · нормативы</span>
+      <span class="cgo">перейти<span class="arw" aria-hidden="true">→</span></span>
     </a>
 
-    <a class="row" href="study/index.html" style="--c:#7d611b">
-      <b>Обучение</b>
-      <span class="tag">python · devops · шпаргалки</span>
-      <span class="cnt">12<span class="arw" aria-hidden="true">→</span></span>
+    <a class="card" href="study/index.html" style="--c:#7d611b">
+      <span class="cnum">04 · 12 материалов</span>
+      <h3>Обучение</h3>
+      <span class="ctag">python · devops · шпаргалки</span>
+      <span class="cgo">перейти<span class="arw" aria-hidden="true">→</span></span>
     </a>
 
-    <a class="row" href="articles/index.html" style="--c:#6b6659">
-      <b>Заметки</b>
-      <span class="tag">эссе · книги · досуг</span>
-      <span class="cnt">5<span class="arw" aria-hidden="true">→</span></span>
+    <a class="card" href="articles/index.html" style="--c:#6b6659">
+      <span class="cnum">05 · 5 материалов</span>
+      <h3>Заметки</h3>
+      <span class="ctag">эссе · книги · досуг</span>
+      <span class="cgo">перейти<span class="arw" aria-hidden="true">→</span></span>
     </a>
 
   </nav>
+
+  <!-- свежее + манифест -->
+  <div class="split">
+
+    <section class="panel">
+      <h2>Свежее</h2>
+      <ul class="fresh">
+        <!-- ▼ замени заголовки и ссылки на свои ▼ -->
+        <li><a href="articles/esp32.html">
+          <span class="date">2025·09</span>
+          <span class="ttl">ESP32: первые шаги в домашней автоматизации</span>
+          <span class="tg">заметки</span>
+        </a></li>
+        <li><a href="articles/protivofaza.html">
+          <span class="date">2025·09</span>
+          <span class="ttl">Противофаза и почему её стоит бояться</span>
+          <span class="tg">электрика</span>
+        </a></li>
+        <li><a href="homelab/index.html">
+          <span class="date">2025·08</span>
+          <span class="ttl">Что поставить на домашний сервер в первую очередь</span>
+          <span class="tg">homelab</span>
+        </a></li>
+        <li><a href="study/index.html">
+          <span class="date">2025·08</span>
+          <span class="ttl">Bash-скрипты, которые экономят час в день</span>
+          <span class="tg">обучение</span>
+        </a></li>
+        <li><a href="getting-started/first-steps.html">
+          <span class="date">2025·07</span>
+          <span class="ttl">Первые шаги в Ubuntu: что делать после установки</span>
+          <span class="tg">крепость</span>
+        </a></li>
+        <li><a href="articles/books.html">
+          <span class="date">2025·07</span>
+          <span class="ttl">Книги, которые стоит прочитать про инфраструктуру</span>
+          <span class="tg">заметки</span>
+        </a></li>
+        <!-- ▲ замени заголовки и ссылки на свои ▲ -->
+      </ul>
+    </section>
+
+    <aside class="panel manifesto">
+      <h2>О чём это</h2>
+      <p>Крепость — это не про паранойю. Это про контроль: над своей техникой, своими данными, своим временем.</p>
+      <p class="dim">Всё, что здесь написано — проверено на живом железе. Инструкции, которые можно повторить. Ошибки, на которых можно не спотыкаться.</p>
+      <p><a href="manifest.html">Читать манифест →</a></p>
+    </aside>
+
+  </div>
 
   <footer>
     <span>Своими руками, с резервными копиями.</span>
