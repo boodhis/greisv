@@ -32,7 +32,7 @@ body{
 }
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+:focus-visible{outline:none}
 
 .wrap{max-width:1120px;margin:0 auto;padding:16px 24px 48px}
 
@@ -93,6 +93,7 @@ header{margin:30px 0 0}
     0 2px 0 rgba(0,0,0,.08),
     0 2px 4px rgba(0,0,0,.05);
   transition:transform .15s ease, background .15s ease, box-shadow .15s ease;
+  will-change:transform, box-shadow;
 }
 
 /* ---- разная длина + прижатие к краю = кладка вперевязку ---- */
@@ -117,7 +118,7 @@ header{margin:30px 0 0}
 }
 
 /* ховер — кирпич «выпирает» из стены */
-.row:hover,.row:focus-visible{
+.row:hover{
   background:linear-gradient(180deg,#fffef9 0%,#f4efdd 100%);
   transform:translateY(-2px);
   text-decoration:none;
@@ -127,7 +128,29 @@ header{margin:30px 0 0}
     0 4px 0 rgba(0,0,0,.12),
     0 8px 16px rgba(0,0,0,.10);
 }
-.row:hover::before,.row:focus-visible::before{opacity:1}
+.row:hover::before{opacity:1}
+
+/* фокус: кирпич загорается, свет льётся на стену */
+.row:focus-visible{
+  outline:none;
+  border-color:var(--c,var(--accent));
+  background:linear-gradient(180deg,#fffef9 0%,#f6f1e0 100%);
+  transform:translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.95),
+    inset 0 -3px 0 rgba(0,0,0,.06),
+    0 4px 0 rgba(0,0,0,.12),
+    0 10px 22px rgba(0,0,0,.14),
+    0 0 0 1px var(--c,var(--accent)),
+    0 0 28px 6px var(--c,var(--accent));
+  animation:brick-glow 2.4s ease-in-out infinite;
+}
+.row:focus-visible::before{opacity:1}
+
+@keyframes brick-glow{
+  0%,100%{ filter:brightness(1); }
+  50%    { filter:brightness(1.06); }
+}
 
 .row b{font-weight:700}
 .row .tag{color:var(--dim);font-size:16px}
@@ -142,7 +165,8 @@ header{margin:30px 0 0}
   font-variant-numeric:tabular-nums;
 }
 .row .arw{font-style:normal;transition:transform .15s ease}
-.row:hover .arw{transform:translateX(3px)}
+.row:hover .arw,
+.row:focus-visible .arw{transform:translateX(3px)}
 
 /* подвал */
 footer{
@@ -176,7 +200,7 @@ footer{
   .row .tag{order:3;flex-basis:100%;font-size:15px}
 }
 @media (prefers-reduced-motion: reduce){
-  *{transition:none !important}
+  *{transition:none !important;animation:none !important}
 }
 </style>
 </head>
