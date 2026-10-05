@@ -51,24 +51,13 @@ a:hover{text-decoration:underline}
 header.hero{
   display:grid;
   grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
-  gap:36px;
-  align-items:end;
+  gap:36px;align-items:end;
   margin:36px 0 4px;
 }
-.brand{
-  font-size:44px;font-weight:700;line-height:1.1;
-  color:var(--accent);letter-spacing:.5px;
-}
-.lede{
-  margin:14px 0 0;max-width:620px;font-size:18px;color:var(--dim);
-}
-.stats{
-  display:flex;flex-wrap:wrap;gap:22px;justify-content:flex-end;
-  text-align:right;
-}
-.stat b{
-  display:block;font-size:26px;font-weight:700;color:var(--text);line-height:1.1;
-}
+.brand{font-size:44px;font-weight:700;line-height:1.1;color:var(--accent);letter-spacing:.5px}
+.lede{margin:14px 0 0;max-width:620px;font-size:18px;color:var(--dim)}
+.stats{display:flex;flex-wrap:wrap;gap:22px;justify-content:flex-end;text-align:right}
+.stat b{display:block;font-size:26px;font-weight:700;color:var(--text);line-height:1.1}
 .stat span{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--mute)}
 
 @media (max-width:820px){
@@ -79,17 +68,14 @@ header.hero{
 
 /* ===== стена разделов ===== */
 .sections{
-  margin:44px 0 0;
-  padding:20px;
+  margin:44px 0 0;padding:20px;
   background-color:var(--mortar);
   background-image:
     repeating-linear-gradient(0deg,rgba(0,0,0,.05) 0 1px,transparent 1px 26px),
     repeating-linear-gradient(90deg,rgba(0,0,0,.04) 0 1px,transparent 1px 44px);
   border:1px solid var(--line);
   border-radius:5px;
-  box-shadow:
-    inset 0 3px 10px rgba(0,0,0,.10),
-    inset 0 -2px 4px rgba(0,0,0,.06);
+  box-shadow:inset 0 3px 10px rgba(0,0,0,.10),inset 0 -2px 4px rgba(0,0,0,.06);
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
   gap:16px;
@@ -97,16 +83,16 @@ header.hero{
 @media (max-width:960px){ .sections{grid-template-columns:repeat(2,minmax(0,1fr))} }
 @media (max-width:600px){ .sections{grid-template-columns:1fr;padding:12px;gap:12px} }
 
+/* ===== карточка-кирпич ===== */
 .card{
   position:relative;
   display:flex;flex-direction:column;
-  gap:8px;
-  padding:22px 22px 20px 26px;
+  padding:20px 20px 14px 26px;
   background:linear-gradient(180deg,var(--brick-top) 0%,var(--brick-bot) 100%);
   border:1px solid var(--brick-line);
   border-radius:3px;
   color:var(--text);
-  min-height:170px;
+  min-height:220px;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.95),
     inset 0 -3px 0 rgba(0,0,0,.06),
@@ -117,50 +103,82 @@ header.hero{
 }
 .card::before{
   content:"";position:absolute;top:9px;bottom:9px;left:9px;width:4px;border-radius:2px;
-  background:var(--c,var(--accent));opacity:.8;transition:opacity .15s ease;
+  background:var(--c,var(--accent));opacity:.8;
 }
 .card:hover{
   background:linear-gradient(180deg,#fffef9 0%,#f4efdd 100%);
   transform:translateY(-2px);
-  text-decoration:none;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.95),
     inset 0 -3px 0 rgba(0,0,0,.06),
     0 4px 0 rgba(0,0,0,.12),
     0 10px 20px rgba(0,0,0,.12);
 }
-.card:hover::before{opacity:1}
-.card:focus-visible{
-  outline:none;
-  border-color:var(--c,var(--accent));
-  transform:translateY(-2px);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.95),
-    inset 0 -3px 0 rgba(0,0,0,.06),
-    0 4px 0 rgba(0,0,0,.12),
-    0 10px 22px rgba(0,0,0,.14),
-    0 0 0 1px var(--c,var(--accent)),
-    0 0 24px 4px var(--c,var(--accent));
-}
-.card .cnum{
-  font-size:13px;font-family:var(--mono,ui-monospace,monospace);
-  color:var(--dim);letter-spacing:.04em;
-}
-.card h3{
-  font-size:22px;font-weight:700;line-height:1.2;color:var(--text);
-}
-.card .ctag{
-  font-size:14px;color:var(--dim);line-height:1.5;
-}
-.card .cgo{
-  margin-top:auto;padding-top:12px;
-  font-size:13px;color:var(--dim);letter-spacing:.04em;
-  display:flex;align-items:center;gap:8px;
-}
-.card .cgo .arw{transition:transform .15s ease}
-.card:hover .cgo .arw{transform:translateX(4px)}
 
-/* ===== нижний блок: свежее + манифест ===== */
+/* шапка карточки — кликабельный заголовок раздела */
+.card-head{
+  display:block;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--brick-line);
+  color:var(--text);
+  margin-bottom:10px;
+}
+.card-head:hover{text-decoration:none;color:var(--text)}
+.card-head:hover .card-title{color:var(--c,var(--accent))}
+.card-head:focus-visible{outline:none;border-radius:2px}
+.card-head:focus-visible .card-title{color:var(--c,var(--accent))}
+
+.card-num{
+  font-size:12px;font-family:ui-monospace,"SF Mono",Consolas,monospace;
+  color:var(--dim);letter-spacing:.06em;text-transform:uppercase;
+}
+.card-title{
+  display:block;font-size:22px;font-weight:700;line-height:1.2;
+  color:var(--text);margin-top:2px;
+  transition:color .15s ease;
+}
+
+/* ===== сегменты внутри карточки ===== */
+.seg-list{
+  list-style:none;margin:0;padding:0;
+  display:flex;flex-direction:column;gap:2px;
+}
+.seg-list li{display:block}
+.seg{
+  display:flex;align-items:baseline;gap:10px;
+  padding:7px 8px 7px 6px;
+  border-radius:2px;
+  color:var(--text);
+  font-size:15px;
+  border-left:2px solid transparent;
+  transition:background .12s ease,border-color .12s ease,color .12s ease;
+}
+.seg:hover{
+  text-decoration:none;
+  color:var(--c,var(--accent));
+  background:rgba(0,0,0,.035);
+  border-left-color:var(--c,var(--accent));
+}
+.seg:focus-visible{
+  outline:none;
+  background:rgba(0,0,0,.04);
+  border-left-color:var(--c,var(--accent));
+}
+.seg .seg-name{font-weight:600}
+.seg .seg-hint{color:var(--dim);font-size:13px}
+.seg .seg-cnt{
+  margin-left:auto;color:var(--mute);font-size:12px;
+  font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+.seg .arw{
+  margin-left:6px;color:var(--mute);font-style:normal;
+  opacity:0;transform:translateX(-4px);
+  transition:opacity .12s ease,transform .12s ease;
+}
+.seg:hover .arw,
+.seg:focus-visible .arw{opacity:1;transform:translateX(0);color:var(--c,var(--accent))}
+
+/* ===== нижний блок ===== */
 .split{
   margin:36px 0 0;
   display:grid;
@@ -180,17 +198,13 @@ header.hero{
   color:var(--mute);font-weight:600;margin-bottom:14px;
 }
 
-/* список свежего */
 .fresh{list-style:none;margin:0;padding:0}
 .fresh li{border-top:1px solid var(--line-2)}
 .fresh li:first-child{border-top:0}
 .fresh a{
-  display:grid;
-  grid-template-columns:80px 1fr auto;
-  gap:14px;
-  align-items:baseline;
-  padding:11px 0;
-  color:var(--text);
+  display:grid;grid-template-columns:80px 1fr auto;
+  gap:14px;align-items:baseline;
+  padding:11px 0;color:var(--text);
 }
 .fresh a:hover{text-decoration:none;color:var(--accent)}
 .fresh .date{font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums}
@@ -202,12 +216,10 @@ header.hero{
   .fresh .ttl{font-size:15px}
 }
 
-/* манифест */
-.manifesto p{margin:0 0 14px;font-size:15.5px;color:var(--text)}
+.manifesto p{margin:0 0 14px;font-size:15.5px}
 .manifesto p.dim{color:var(--dim);font-size:14px}
 .manifesto a{font-size:14px}
 
-/* ===== подвал ===== */
 footer{
   margin-top:44px;padding-top:16px;border-top:1px solid var(--line);
   color:var(--dim);font-size:13px;
@@ -224,13 +236,11 @@ footer a{color:var(--dim)}
 <body>
 <div class="wrap">
 
-  <!-- верхняя строка -->
   <div class="tbar">
     <span><span class="dot"></span>офлайн · без трекеров · бесплатно</span>
     <span>своими руками, с резервными копиями</span>
   </div>
 
-  <!-- шапка -->
   <header class="hero">
     <div>
       <div class="brand">Цифровая Крепость</div>
@@ -243,53 +253,167 @@ footer a{color:var(--dim)}
     </div>
   </header>
 
-  <!-- разделы: сетка карточек -->
   <nav class="sections" aria-label="Разделы сайта">
 
-    <a class="card" href="getting-started/index.html" style="--c:#3d5c2c">
-      <span class="cnum">01 · 4 материала</span>
-      <h3>Крепость</h3>
-      <span class="ctag">манифест · ubuntu · первые шаги</span>
-      <span class="cgo">перейти<span class="arw" aria-hidden="true">→</span></span>
-    </a>
+    <!-- 01 Крепость -->
+    <div class="card" style="--c:#3d5c2c">
+      <a class="card-head" href="getting-started/index.html">
+        <span class="card-num">01 · 4 материала</span>
+        <span class="card-title">Крепость</span>
+      </a>
+      <ul class="seg-list">
+        <li><a class="seg" href="getting-started/index.html">
+          <span class="seg-name">Манифест</span>
+          <span class="seg-hint">зачем всё это</span>
+          <span class="seg-cnt">1</span>
+          <i class="arw" aria-hidden="true">→</i>
+        </a></li>
+        <li><a class="seg" href="getting-started/install-ubuntu.html">
+          <span class="seg-name">Установка Ubuntu</span>
+          <span class="seg-hint">с нуля</span>
+          <span class="seg-cnt">1</span>
+          <i class="arw" aria-hidden="true">→</i>
+        </a></li>
+        <li><a class="seg" href="getting-started/first-steps.html">
+          <span class="seg-name">Первые шаги</span>
+          <span class="seg-hint">после установки</span>
+          <span class="seg-cnt">1</span>
+          <i class="arw" aria-hidden="true">→</i>
+        </a></li>
+        <li><a class="seg" href="getting-started/bootable-usb.html">
+          <span class="seg-name">Загрузочная флешка</span>
+          <span class="seg-hint">создание</span>
+          <span class="seg-cnt">1</span>
+          <i class="arw" aria-hidden="true">→</i>
+        </a></li>
+      </ul>
+    </div>
 
-    <a class="card" href="homelab/index.html" style="--c:#0a5c52">
-      <span class="cnum">02 · 22 материала</span>
-      <h3>Homelab</h3>
-      <span class="ctag">железо · сеть · сервисы · гайды</span>
-      <span class="cgo">перейти<span class="arw" aria-hidden="true">→</span></span>
-    </a>
+    <!-- 02 Homelab -->
+    <div class="card" style="--c:#0a5c52">
+      <a class="card-head" href="homelab/index.html">
+        <span class="card-num">02 · 22 материала</span>
+        <span class="card-title">Homelab</span>
+      </a>
+      <ul class="seg-list">
+        <li><a class="seg" href="homelab/index.html">
+          <span class="seg-name">Обзор раздела</span>
+          <span class="seg-cnt">1</span>
+          <i class="arw" aria-hidden="true">→</i>
+        </a></li>
+        <li><a class="seg" href="homelab/index.html#hardware">
+          <span class="seg-name">Железо</span>
+          <span class="seg-hint">сервер, диски, сети</span>
+          <span class="seg-cnt">8</span>
+          <i class="arw" aria-hidden="true">→</i>
+        </a></li>
+        <li><a class="seg" href="homelab/index.html#services">
+          <span class="seg-name">Сервисы</span>
+          <span class="seg-hint">docker, nginx, proxmox</span>
+          <span class="seg-cnt">9</span>
+          <i class="arw" aria-hidden="true">→</i>
+        </a></li>
+        <li><a class="seg" href="homelab/index.html#guides">
+          <span class="seg-name">Гайды</span>
+          <span class="seg-hint">пошагово</span>
+          <span class="seg-cnt">4</span>
+          <i class="arw" aria-hidden="true">→</i>
+        </a></li>
+      </ul>
+    </div>
 
-    <a class="card" href="electric/index.html" style="--c:#7a2f6b">
-      <span class="cnum">03 · 7 материалов</span>
-      <h3>Электрика</h3>
-      <span class="ctag">безопасность · щиты · нормативы</span>
-      <span class="cgo">перейти<span class="arw" aria-hidden="true">→</span></span>
-    </a>
+    <!-- 03 Электрика -->
+    <div class="card" style="--c:#7a2f6b">
+      <a class="card-head" href="electric/index.html">
+        <span class="card-num">03 · 7 материалов</span>
+        <span class="card-title">Электрика</span>
+      </a>
+      <ul class="seg-list">
+        <li><a class="seg" href="electric/index.html">
+          <span class="seg-name">Обзор раздела</span>
+          <span class="seg-cnt">1</span>
+          <i class="arw" aria-hidden="true">→</i>
+        </a></li>
+        <li><a class="seg" href="electric/index.html#safety">
+          <span class="seg-name">Безопасность</span>
+          <span class="seg-hint">что нельзя делать</span>
+          <span class="seg-cnt">3</span>
+          <i class="arw" aria-hidden="true">→</i>
+        </a></li>
+        <li><a class="seg" href="electric/index.html#panels">
+          <span class="seg-name">Щиты</span>
+          <span class="seg-hint">сборка и нормативы</span>
+          <span class="seg-cnt">3</span>
+          <i class="arw" aria-hidden="true">→</i>
+        </a></li>
+      </ul>
+    </div>
 
-    <a class="card" href="study/index.html" style="--c:#7d611b">
-      <span class="cnum">04 · 12 материалов</span>
-      <h3>Обучение</h3>
-      <span class="ctag">python · devops · шпаргалки</span>
-      <span class="cgo">перейти<span class="arw" aria-hidden="true">→</span></span>
-    </a>
+    <!-- 04 Обучение -->
+    <div class="card" style="--c:#7d611b">
+      <a class="card-head" href="study/index.html">
+        <span class="card-num">04 · 12 материалов</span>
+        <span class="card-title">Обучение</span>
+      </a>
+      <ul class="seg-list">
+        <li><a class="seg" href="study/index.html#python">
+          <span class="seg-name">Python</span>
+          <span class="seg-hint">основы и практика</span>
+          <span class="seg-cnt">5</span>
+          <i class="arw" aria-hidden="true">→</i>
+        </a></li>
+        <li><a class="seg" href="study/index.html#devops">
+          <span class="seg-name">DevOps</span>
+          <span class="seg-hint">инструменты</span>
+          <span class="seg-cnt">4</span>
+          <i class="arw" aria-hidden="true">→</i>
+        </a></li>
+        <li><a class="seg" href="study/index.html#cheats">
+          <span class="seg-name">Шпаргалки</span>
+          <span class="seg-hint">быстро под рукой</span>
+          <span class="seg-cnt">3</span>
+          <i class="arw" aria-hidden="true">→</i>
+        </a></li>
+      </ul>
+    </div>
 
-    <a class="card" href="articles/index.html" style="--c:#6b6659">
-      <span class="cnum">05 · 5 материалов</span>
-      <h3>Заметки</h3>
-      <span class="ctag">эссе · книги · досуг</span>
-      <span class="cgo">перейти<span class="arw" aria-hidden="true">→</span></span>
-    </a>
+    <!-- 05 Заметки -->
+    <div class="card" style="--c:#6b6659">
+      <a class="card-head" href="articles/index.html">
+        <span class="card-num">05 · 5 материалов</span>
+        <span class="card-title">Заметки</span>
+      </a>
+      <ul class="seg-list">
+        <li><a class="seg" href="articles/books.html">
+          <span class="seg-name">Книги</span>
+          <span class="seg-cnt">1</span>
+          <i class="arw" aria-hidden="true">→</i>
+        </a></li>
+        <li><a class="seg" href="articles/esp32.html">
+          <span class="seg-name">ESP32</span>
+          <span class="seg-cnt">1</span>
+          <i class="arw" aria-hidden="true">→</i>
+        </a></li>
+        <li><a class="seg" href="articles/protivofaza.html">
+          <span class="seg-name">Противофаза</span>
+          <span class="seg-cnt">1</span>
+          <i class="arw" aria-hidden="true">→</i>
+        </a></li>
+        <li><a class="seg" href="articles/quest3.html">
+          <span class="seg-name">Quest 3</span>
+          <span class="seg-cnt">1</span>
+          <i class="arw" aria-hidden="true">→</i>
+        </a></li>
+      </ul>
+    </div>
 
   </nav>
 
-  <!-- свежее + манифест -->
   <div class="split">
 
     <section class="panel">
       <h2>Свежее</h2>
       <ul class="fresh">
-        <!-- ▼ замени заголовки и ссылки на свои ▼ -->
         <li><a href="articles/esp32.html">
           <span class="date">2025·09</span>
           <span class="ttl">ESP32: первые шаги в домашней автоматизации</span>
@@ -320,7 +444,6 @@ footer a{color:var(--dim)}
           <span class="ttl">Книги, которые стоит прочитать про инфраструктуру</span>
           <span class="tg">заметки</span>
         </a></li>
-        <!-- ▲ замени заголовки и ссылки на свои ▲ -->
       </ul>
     </section>
 
