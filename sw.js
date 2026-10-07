@@ -3,7 +3,7 @@
    ВАЖНО: ASSETS должен покрывать все страницы сайта — проверка в tests/test_site.py
    (test_sw_precache_covers_all_pages). После добавления страницы пересобери список
    (git ls-files '*.html') и подними версию CACHE, чтобы старый кэш обновился. */
-var CACHE = "fortress-v28";
+var CACHE = "fortress-v29";
 var ASSETS = [
   "articles/books.html",
   "articles/esp32.html",
@@ -37,18 +37,31 @@ var ASSETS = [
   "homelab/jellyfin.html",
   "homelab/journalctl.html",
   "homelab/minidlna.html",
+  "homelab/monitoring.html",
   "homelab/mqtt.html",
   "homelab/navidrome.html",
   "homelab/network.html",
+  "homelab/nginx.html",
+  "homelab/proxmox.html",
   "homelab/samba.html",
   "homelab/server-reference.html",
+  "homelab/server.html",
   "homelab/sopds-web.html",
   "homelab/sopds.html",
+  "homelab/storage.html",
   "homelab/transmission.html",
+  "homelab/vpn.html",
   "homelab/wifi-fix.html",
   "index.html",
   "manifest.html",
+  "study/cheats-bash.html",
+  "study/cheats-docker.html",
+  "study/cheats-git.html",
   "study/cheatsheets.html",
+  "study/devops-ansible.html",
+  "study/devops-ci.html",
+  "study/devops-docker.html",
+  "study/devops-git.html",
   "study/devops.html",
   "study/git-commands.html",
   "study/index.html",
@@ -57,14 +70,15 @@ var ASSETS = [
   "study/obsidian-github.html",
   "study/opencode-windows.html",
   "study/powershell.html",
+  "study/python-automation.html",
+  "study/python-basics.html",
+  "study/python-files.html",
+  "study/python-functions.html",
   "study/python.html",
   "study/ssh.html",
   "study/terminal.html",
-  "study/web-dev.html",
-  "favicon.svg",
-  "manifest.webmanifest",
-  "style.css"
-];
+  "study/web-dev.html"
+  ];
 
 self.addEventListener("install", function (e) {
   e.waitUntil(

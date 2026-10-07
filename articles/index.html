@@ -4,8 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Заметки — Цифровая Крепость</title>
-<meta name="description" content="Личное: эссе, книги и досуг. Всё, что не вписывается ни в обучение, ни в гайды.">
+<meta name="description" content="Заметки: книги, ESP32, противофаза, Meta Quest 3">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="manifest" href="../manifest.webmanifest">
+<meta name="theme-color" content="#f4f1e8">
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
@@ -18,29 +20,50 @@
 <a href="../articles/index.html" class="on" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav>
 </div>
 
-<div class="layout">
-<main>
-<h1>Заметки</h1>
-<p class="desc">Всё личное: мысли, книги и досуг. Сюда попадает то, что не вписывается ни в обучение, ни в инструкции, — потому что это не про настройку сервера.</p>
+<div class="wrap">
+<div class="tbar">
+  <span><span class="dot"></span>офлайн · без трекеров · бесплатно</span>
+  <span>своими руками, с резервными копиями</span>
+</div>
 
-<h2>Мысли</h2>
-<table><thead><tr><th>Материал</th><th>О чём</th></tr></thead><tbody>
-<tr><td><a href="protivofaza.html">Противофаза: философия фазового перехода</a></td><td>Эссе о разуме, ИИ и страхе стать чем-то новым: биология и кремний как фазы одного перехода</td></tr>
-<tr><td><a href="books.html">Книги, которые нас сделали</a></td><td>Не список литературы, а обратный список: что из меня эти книги изменили</td></tr>
-</tbody></table>
+<header class="hero">
+  <div>
+    <div class="brand">Заметки</div>
+    <p class="lede">Короткие заметки и наблюдения: книги, электроника, VR и прочее.</p>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>5</b><span>материалов</span></div>
+    <div class="stat"><b>1</b><span>группа</span></div>
+    <div class="stat"><b>↻</b><span>разное</span></div>
+  </div>
+</header>
 
-<h2>Досуг</h2>
-<p>Убежище — это не только серверы и код. Это место, где можно остановиться, подышать и заняться тем, что приносит радость.</p>
-<table><thead><tr><th>Занятие</th><th>Что внутри</th></tr></thead><tbody>
-<tr><td><a href="guitar.html">Гитара и аккорды</a></td><td>Не нужно быть профессионалом: несколько аккордов, чтобы играть любимые песни</td></tr>
-<tr><td><a href="quest3.html">Meta Quest 3</a></td><td>Настройка под РФ, перенос фильмов с ПК и Mac, VR-плееры с просмотром по сети</td></tr>
-<tr><td><a href="esp32.html">ESP32 / Heltec V3</a></td><td>LoRa-радио, OLED, BLE: гоняем данные по радио в домашнюю инфраструктуру через MQTT</td></tr>
-</tbody></table>
-
-<div class="callout"><div class="callout-t">Почему это вместе</div><div class="callout-body"><p>Раньше «Мыслево» и «Досуг» были двумя отдельными разделами, а между ними — пропасть. По факту у них одна природа: и то и другое — про смысл, а не про строчки команд. Книги, эссе и гитара — это одна и та же рубрика «личное», просто раньше она была разрезана на куски по случаю.</p></div></div>
-
-<footer>Цифровая Крепость — образовательный сайт о Linux и homelab. Все примеры проверены на реальном сервере.</footer>
+<main class="groups">
+  <section class="group" id="notes" style="--c:#6b6659">
+    <div class="group-head">
+      <span class="group-num">Раздел 05</span>
+      <h2 class="group-title"><a href="../articles/index.html">Заметки</a></h2>
+      <span class="group-count">5 материалов</span>
+    </div>
+    <p class="group-desc">Наблюдения, эксперименты, краткие заметки.</p>
+    <div class="tiles">
+      <a class="tile" href="../articles/books.html" style="--c:#6b6659"><div class="t-head"><span class="t-name">Книги</span><span class="t-tag">читатель</span></div><div class="t-desc">Книжные заметки</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../articles/esp32.html" style="--c:#6b6659"><div class="t-head"><span class="t-name">ESP32</span><span class="t-tag">iot</span></div><div class="t-desc">Заметки по ESP32</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../articles/guitar.html" style="--c:#6b6659"><div class="t-head"><span class="t-name">Гитара</span><span class="t-tag">hobby</span></div><div class="t-desc">Упражнения и заметки</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../articles/protivofaza.html" style="--c:#6b6659"><div class="t-head"><span class="t-name">Противофаза</span><span class="t-tag">электр.</span></div><div class="t-desc">Наблюдения и расчёты</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../articles/quest3.html" style="--c:#6b6659"><div class="t-head"><span class="t-name">Meta Quest 3</span><span class="t-tag">vr</span></div><div class="t-desc">Настройка, опыт использования</div><i class="t-arw">→</i></a>
+    </div>
+  </section>
 </main>
-</div><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
+
+<footer>
+  <span>© 2025 Цифровая Крепость</span>
+  <span><a href="../index.html">Главная</a></span>
+</footer>
+</div>
+<div id="wordday"><div class="wd-w" aria-live="polite"></div></div>
+<script src="../study/data/srs.js"></script>
+<script src="../study/data/widget.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
 </body>
 </html>

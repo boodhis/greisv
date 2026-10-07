@@ -4,10 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Обучение — Цифровая Крепость</title>
-<meta name="description" content="Раздел обучения: курс Linux и homelab, тренажёр карточек с интервальным повторением, шпаргалки.">
+<meta name="description" content="Обучение: Python, DevOps, Linux, Git, SSH, PowerShell, Web, шпаргалки">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="manifest" href="../manifest.webmanifest">
+<meta name="theme-color" content="#f4f1e8">
 <link rel="stylesheet" href="../style.css">
-
 </head>
 <body>
 <div class="fnav">
@@ -19,75 +20,79 @@
 <a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav>
 </div>
 
-<div class="layout">
-<main>
-<h1>📚 Обучение</h1>
-<p class="desc">Наш курс по Linux и homelab + курсы программирования (Python, разработка под Linux, DevOps) + инструменты для повторения. Читай с телефона, повторяй карточки, закрепляй между делами.</p>
-
-<h2>Программа курса</h2>
-<div class="grid">
-<div class="card"><b>1 · Linux с нуля</b><p>Терминал, файлы, права доступа. <a href="../getting-started/index.html">С чего начать</a> + <a href="../study/terminal.html">«Терминал»</a>.</p><p>Освоишь: навигация по fs, ls/cd/cp/mv, права chmod, ssh по ключам.</p></div>
-<div class="card"><b>2 · Сеть</b><p>IP, маршруты, Wi-Fi. <a href="../homelab/network.html">Сеть в homelab</a> и <a href="../homelab/wifi-fix.html">лайфхак с Wi-Fi</a>.</p><p>Освоишь: ip a/r, ping, сетевые службы, диагностику подключения.</p></div>
-<div class="card"><b>3 · Сервисы и Docker</b><p><a href="../homelab/docker.html">Docker</a>, systemd, compose — разбираем на живом стеке хомлаба.</p><p>Освоишь: docker run/ps/logs, systemctl, compose-файл.</p></div>
-<div class="card"><b>4 · Диски и бэкапы</b><p><a href="../homelab/disk-health.html">SMART</a>, <a href="../homelab/backup.html">бэкапы</a>, rsync. Правило трёх копий.</p><p>Освоишь: lsblk, smartctl, rsync, деплой по правилу 3-2-1.</p></div>
-<div class="card"><b>5 · Автоматизация</b><p><a href="../homelab/auto-setup.html">Автосборка сервера</a>, <a href="../homelab/auto-shutdown.html">авто-выключение</a>, журналы <a href="../homelab/journalctl.html">journalctl</a>.</p><p>Освоишь: таймеры systemd, скрипты-запускаторы, чтение логов.</p></div>
-<div class="card"><b>6 · Безопасность</b><p>SSH за ключами, права, минимум поверхностей. <a href="../study/ssh.html">SSH</a> от и до.</p><p>Освоишь: настройка ключей, ufw, читаемое «кто и когда» в логах.</p></div>
+<div class="wrap">
+<div class="tbar">
+  <span><span class="dot"></span>офлайн · без трекеров · бесплатно</span>
+  <span>своими руками, с резервными копиями</span>
 </div>
 
-<h2>Инструменты</h2>
-<table>
-<thead><tr><th>Инструмент</th><th>Зачем</th><th>Перейти</th></tr></thead>
-<tbody>
-<tr><td>Курс Python</td><td>Python с нуля для совсем зелёных: 10 коротких уроков с задачками, проект «Менеджер дел»</td><td><a href="python.html">Курс →</a></td></tr>
-<tr><td>Разработка под Linux</td><td>Скрипт → CLI → окно → сервис: собираем «Счётчик расходов» по кирпичику</td><td><a href="linux-app-dev.html">Курс →</a></td></tr>
-<tr><td>Курс DevOps</td><td>До Junior за 4–6 месяцев: что спрашивают на собеседовании, план и проекты</td><td><a href="devops.html">Курс →</a></td></tr>
-<tr><td>Шпаргалки</td><td>Быстрые таблицы: git, systemd, docker, сеть</td><td><a href="cheatsheets.html">Шпаргалки →</a></td></tr>
-<tr><td>Git команды</td><td>Шпаргалка по системе контроля версий: коммит, ветки, merge, rebase</td><td><a href="git-commands.html">Шпаргалка →</a></td></tr>
-<tr><td>Веб-разработка</td><td>Node.js (nvm), запуск серверов, каркас HTML — стартовая шпаргалка</td><td><a href="web-dev.html">Шпаргалка →</a></td></tr>
-<tr><td>Электрика</td><td>Ликбез для монтажников и хозяев</td><td><a href="../electric/index.html">Электрика →</a></td></tr>
-<tr><td>Слово дня</td><td>Мини-тренажёр терминов с интервальным повторением</td><td><a href="../index.html">На главной →</a></td></tr>
-</tbody>
-</table>
+<header class="hero">
+  <div>
+    <div class="brand">Обучение</div>
+    <p class="lede">База знаний для самостоятельного обучения: Python, DevOps, Linux, Git, терминал, веб-разработка и шпаргалки.</p>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>12</b><span>материалов</span></div>
+    <div class="stat"><b>3</b><span>группы</span></div>
+    <div class="stat"><b>↻</b><span>конспекты</span></div>
+  </div>
+</header>
 
-<h2>Шпаргалки и разборы</h2>
-<p>Готовые таблицы и пошаговые разборы — то, что нужно под рукой в конкретный момент, а не программа на месяц.</p>
-<table>
-<thead><tr><th>Материал</th><th>Что внутри</th><th>Перейти</th></tr></thead>
-<tbody>
-<tr><td>Терминал</td><td>Команды, утилиты, тренажёры печати — база, с которой начинают все</td><td><a href="terminal.html">Разбор →</a></td></tr>
-<tr><td>SSH</td><td>Удалённый доступ к серверу: ключи вместо паролей, конфиги, алиасы</td><td><a href="ssh.html">Гайд →</a></td></tr>
-<tr><td>PowerShell</td><td>Окно в Linux-мир с другой стороны: сеть, RDP и 1С из консоли</td><td><a href="powershell.html">Гайд →</a></td></tr>
-<tr><td>OpenCode на Windows</td><td>Установка агента в Windows-окружении и его настройка</td><td><a href="opencode-windows.html">Гайд →</a></td></tr>
-<tr><td>Obsidian через GitHub</td><td>Бесплатная синхронизация заметок обычным git-репозиторием</td><td><a href="obsidian-github.html">Гайд →</a></td></tr>
-<tr><td>Каталог ссылок</td><td>Внешние материалы для изучения, отобранные по делу</td><td><a href="links.html">Ссылки →</a></td></tr>
-</tbody>
-</table>
-<div class="callout callout-note">
-<div class="callout-t">Куда ушли инструкции сервера</div>
-<div class="callout-body"><p>Гайды про диски, бэкапы, журналы, автосборку и диагностику — это работа с живым железом, а не учебная программа. Они теперь в разделе <a href="../homelab/index.html">Homelab</a>, рядом с описанием того, к чему они относятся. Ссылка на каждый осталась и здесь, в программе курса.</p></div>
-</div>
-<h2>Обучаемся — вопрос — ответ</h2>
-<table><thead><tr><th>Вопрос</th><th>Ответ</th><th>Куда смотреть</th></tr></thead><tbody>
-<tr><td>С чего начать, если никогда не открывал терминал?</td><td>Модуль 1, «С чего начать»: установка Ubuntu и первые команды.</td><td><a href="../getting-started/index.html">С чего начать</a></td></tr>
-<tr><td>Сколько времени нужно в день?</td><td>15–20 минут достаточно: одна тема + повторение карточек слова дня.</td><td><a href="../index.html">Главная</a></td></tr>
-<tr><td>Можно ли учиться без своего сервера?</td><td>Да, первые модули — терминал и сеть — подходят и на обычном ПК. Homelab усиливает практику, но не обязателен в начале.</td><td><a href="../study/terminal.html">Терминал</a></td></tr>
-<tr><td>Что делать, если забыл команду?</td><td>Лови себя на этом — это сигнал для карточки повторения. Плюс шпаргалки под рукой.</td><td><a href="cheatsheets.html">Шпаргалки</a></td></tr>
-</tbody></table>
+<main class="groups">
+  <section class="group" id="python" style="--c:#7d611b">
+    <div class="group-head">
+      <span class="group-num">Раздел 04 · Гр. A</span>
+      <h2 class="group-title"><a href="../study/index.html">Python</a></h2>
+      <span class="group-count">3 материала</span>
+    </div>
+    <p class="group-desc">Основа автоматизации для homelab.</p>
+    <div class="tiles">
+      <a class="tile" href="../study/python.html" style="--c:#7d611b"><div class="t-head"><span class="t-name">Python</span><span class="t-tag">база</span></div><div class="t-desc">Основы Python</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../study/git-commands.html" style="--c:#7d611b"><div class="t-head"><span class="t-name">Git</span><span class="t-tag">vcs</span></div><div class="t-desc">Команды и workflow</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../study/linux-app-dev.html" style="--c:#7d611b"><div class="t-head"><span class="t-name">Linux App Dev</span><span class="t-tag">dev</span></div><div class="t-desc">Разработка под Linux</div><i class="t-arw">→</i></a>
+    </div>
+  </section>
 
-<h2>Метод: как учимся</h2>
-<ul>
-<li><strong>Одна тема — один день.</strong> Не распыляйся, повтори её через день-два.</li>
-<li><strong>Интервальное повторение</strong> — слова и команды возвращаются через 2·5·10·25·60 мин и до 8 дней, как на панели Heltec.</li>
-<li><strong>Практика на живом стеке</strong> — каждый модуль опирается на реальный homelab: если что-то не проверено — это предположение, а не инструкция.</li>
-</ul>
-<div class="callout callout-note">
-<div class="callout-t">Дальше в программе</div>
-<div class="callout-body"><p>В планах: <strong>VPN</strong> (WireGuard/Tailscale), <strong>мониторинг</strong> (Uptime Kuma), <strong>умный дом</strong> (MQTT + ESPHome). Следи за <a href="../homelab/index.html">разделом homelab</a>.</p></div>
-</div>
+  <section class="group" id="devops" style="--c:#7d611b">
+    <div class="group-head">
+      <span class="group-num">Раздел 04 · Гр. B</span>
+      <h2 class="group-title"><a href="../study/index.html">DevOps</a></h2>
+      <span class="group-count">7 материалов</span>
+    </div>
+    <p class="group-desc">Терминал, SSH, PowerShell, Obsidian+GitHub, opencode.</p>
+    <div class="tiles">
+      <a class="tile" href="../study/terminal.html" style="--c:#7d611b"><div class="t-head"><span class="t-name">Терминал</span><span class="t-tag">shell</span></div><div class="t-desc">Bash/zsh, навигация</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../study/ssh.html" style="--c:#7d611b"><div class="t-head"><span class="t-name">SSH</span><span class="t-tag">remote</span></div><div class="t-desc">Ключи, подключение</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../study/powershell.html" style="--c:#7d611b"><div class="t-head"><span class="t-name">PowerShell</span><span class="t-tag">windows</span></div><div class="t-desc">Базовые команды</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../study/devops.html" style="--c:#7d611b"><div class="t-head"><span class="t-name">DevOps</span><span class="t-tag">tools</span></div><div class="t-desc">Обзор инструментов</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../study/obsidian-github.html" style="--c:#7d611b"><div class="t-head"><span class="t-name">Obsidian+GitHub</span><span class="t-tag">notes</span></div><div class="t-desc">Синхронизация заметок</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../study/opencode-windows.html" style="--c:#7d611b"><div class="t-head"><span class="t-name">opencode Windows</span><span class="t-tag">ai</span></div><div class="t-desc">Настройка opencode</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../study/web-dev.html" style="--c:#7d611b"><div class="t-head"><span class="t-name">Web Dev</span><span class="t-tag">html/css/js</span></div><div class="t-desc">Основы веба</div><i class="t-arw">→</i></a>
+    </div>
+  </section>
 
-<footer>Цифровая Крепость — образовательный сайт. · <a href="https://github.com/boodhis/greisv">Исходный код</a></footer>
+  <section class="group" id="cheats" style="--c:#7d611b">
+    <div class="group-head">
+      <span class="group-num">Раздел 04 · Гр. C</span>
+      <h2 class="group-title"><a href="../study/index.html">Шпаргалки</a></h2>
+      <span class="group-count">2 материала</span>
+    </div>
+    <p class="group-desc">Ссылки и коллекции шпаргалок.</p>
+    <div class="tiles">
+      <a class="tile" href="../study/cheatsheets.html" style="--c:#7d611b"><div class="t-head"><span class="t-name">Шпаргалки</span><span class="t-tag">refs</span></div><div class="t-desc">Полезные шпаргалки</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../study/links.html" style="--c:#7d611b"><div class="t-head"><span class="t-name">Полезные ссылки</span><span class="t-tag">links</span></div><div class="t-desc">Коллекция ссылок</div><i class="t-arw">→</i></a>
+    </div>
+  </section>
 </main>
+
+<footer>
+  <span>© 2025 Цифровая Крепость</span>
+  <span><a href="../index.html">Главная</a></span>
+</footer>
 </div>
+<div id="wordday"><div class="wd-w" aria-live="polite"></div></div>
+<script src="../study/data/srs.js"></script>
+<script src="../study/data/widget.js"></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
 </body>
 </html>

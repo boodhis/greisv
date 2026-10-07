@@ -3,11 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>С чего начать — Цифровая Крепость</title>
-<meta name="description" content="Первые шаги для тех, кто хочет перейти на Linux">
+<title>Крепость — Цифровая Крепость</title>
+<meta name="description" content="С чего начать работу с Linux: манифест, загрузочная флешка, установка Ubuntu и первые шаги">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="manifest" href="../manifest.webmanifest">
+<meta name="theme-color" content="#f4f1e8">
 <link rel="stylesheet" href="../style.css">
-
 </head>
 <body>
 <div class="fnav">
@@ -19,25 +20,65 @@
 <a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav>
 </div>
 
-<div class="layout">
-<main><h2>Добро пожаловать в Linux!</h2>
-<p>Если ты читаешь это, значит ты задумываешься о переходе на Linux. Это отличное решение! Вот что нужно знать:</p>
-<h3>Почему Linux?</h3>
-<ul><li><strong>Бесплатный</strong>: никаких лицензий и активаций</li><li><strong>Безопасный</strong>: меньше вирусов, прозрачный код</li><li><strong>Гибкий</strong>: можно настроить под любые задачи</li><li><strong>Быстрый</strong>: работает даже на старом железе</li><li><strong>Общество</strong>: огромное сообщество помощи</li></ul>
-<h3>Чего бояться не стоит</h3>
-<table><thead><tr><th>Страх</th><th>Реальность</th></tr></thead><tbody><tr><td>"Всё сломается"</td><td>Ubuntu устанавливается проще Windows</td></tr><tr><td>"Нет программ"</td><td>90% нужного ПО есть в Linux</td></tr><tr><td>"Сложный терминал"</td><td>Можно работать через графический интерфейс</td></tr><tr><td>"Нет поддержки"</td><td>Огромное сообщество и документация</td></tr></tbody></table>
-<h3>Что нужно для старта?</h3>
-<ol><li><strong>Компьютер</strong> — подойдёт даже старый ноутбук</li><li><strong>Флешка</strong> — 8 ГБ для установки</li><li><strong>Желание учиться</strong> — это самое важное</li></ol>
-<h3>План действий</h3>
-<ol><li><strong><a href="../getting-started/install-ubuntu.html">Установка Ubuntu</a></strong> — пошаговая инструкция</li><li><strong><a href="../getting-started/first-steps.html">Первые шаги</a></strong> — что делать после установки</li><li><strong><a href="../getting-started/bootable-usb.html">Загрузочная флешка</a></strong> — как создать</li></ol>
-<h3>Наш подход</h3>
-<p>Мы не просто даём команды. Мы объясняем <strong>почему</strong> это нужно делать. Каждый гайд написан на основе реального опыта:</p>
-<ul><li><strong>Сервер</strong>: Ubuntu Server 24.04 на Acer Extensa 2520G</li><li><strong>Диски</strong>: 5 накопителей общим объёмом 4 ТБ</li><li><strong>Сервисы</strong>: Docker, Samba, Navidrome, Immich, ESPHome</li><li><strong>Опыт</strong>: все ошибки уже прошли и описали</li></ul>
-<hr/>
-<p><em>Начни с установки Ubuntu — это проще чем кажется!</em></p>
-<footer>Цифровая Крепость — образовательный сайт о Linux и homelab. Все примеры проверены на реальном сервере.</footer>
-</main>
-</div><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
+<div class="wrap">
+<div class="tbar">
+  <span><span class="dot"></span>офлайн · без трекеров · бесплатно</span>
+  <span>своими руками, с резервными копиями</span>
+</div>
 
+<header class="hero">
+  <div>
+    <div class="brand">Крепость</div>
+    <p class="lede">Зачем всё это и с чего начать. Пошагово от загрузочной флешки до первых шагов после установки Ubuntu.</p>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>4</b><span>материала</span></div>
+    <div class="stat"><b>1</b><span>группа</span></div>
+    <div class="stat"><b>↻</b><span>базовый старт</span></div>
+  </div>
+</header>
+
+<main class="groups">
+  <section class="group" id="start" style="--c:#3d5c2c">
+    <div class="group-head">
+      <span class="group-num">Раздел 01</span>
+      <h2 class="group-title"><a href="../getting-started/index.html">Крепость</a></h2>
+      <span class="group-count">4 материала</span>
+    </div>
+    <p class="group-desc">Манифест, создание загрузочного носителя, установка и первые шаги после Ubuntu.</p>
+    <div class="tiles">
+      <a class="tile" href="../getting-started/bootable-usb.html" style="--c:#3d5c2c">
+        <div class="t-head"><span class="t-name">Загрузочная флешка</span><span class="t-tag">шаг 1</span></div>
+        <div class="t-desc">Создание установочного носителя</div>
+        <i class="t-arw" aria-hidden="true">→</i>
+      </a>
+      <a class="tile" href="../getting-started/install-ubuntu.html" style="--c:#3d5c2c">
+        <div class="t-head"><span class="t-name">Установка Ubuntu</span><span class="t-tag">шаг 2</span></div>
+        <div class="t-desc">Пошаговая установка с нуля</div>
+        <i class="t-arw" aria-hidden="true">→</i>
+      </a>
+      <a class="tile" href="../getting-started/first-steps.html" style="--c:#3d5c2c">
+        <div class="t-head"><span class="t-name">Первые шаги</span><span class="t-tag">шаг 3</span></div>
+        <div class="t-desc">Что делать после установки</div>
+        <i class="t-arw" aria-hidden="true">→</i>
+      </a>
+      <a class="tile" href="../manifest.html" style="--c:#3d5c2c">
+        <div class="t-head"><span class="t-name">Манифест</span><span class="t-tag">философия</span></div>
+        <div class="t-desc">Зачем цифровая крепость</div>
+        <i class="t-arw" aria-hidden="true">→</i>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>© 2025 Цифровая Крепость</span>
+  <span><a href="../index.html">Главная</a> · <a href="../study/data/widget.js" aria-hidden="true" hidden></a></span>
+</footer>
+</div>
+<div id="wordday"><div class="wd-w" aria-live="polite"></div></div>
+<script src="../study/data/srs.js"></script>
+<script src="../study/data/widget.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
 </body>
 </html>

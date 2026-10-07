@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Мониторинг — Цифровая Крепость</title>
+<meta name="description" content="Мониторинг homelab: ресурсы, сеть, логи, процессы">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="manifest" href="../manifest.webmanifest">
+<meta name="theme-color" content="#f4f1e8">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="fnav">
+<nav class="frow"><a href="../index.html" style="--c:#0a5c52"><span class="td"></span>Главная</a>
+<a href="../getting-started/index.html" style="--c:#3d5c2c"><span class="td"></span>Крепость</a>
+<a href="../homelab/index.html" class="on" style="--c:#0a5c52"><span class="td"></span>Homelab</a>
+<a href="../electric/index.html" style="--c:#7a2f6b"><span class="td"></span>Электрика</a>
+<a href="../study/index.html" style="--c:#7d611b"><span class="td"></span>Обучение</a>
+<a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav>
+</div>
+
+<div class="wrap">
+<div class="tbar">
+  <span><span class="dot"></span>офлайн · без трекеров · бесплатно</span>
+  <span>своими руками, с резервными копиями</span>
+</div>
+
+<nav class="crumbs" aria-label="Хлебные крошки">
+  <a href="../index.html">Главная</a>
+  <span class="sep">/</span>
+  <a href="index.html">Homelab</a>
+  <span class="sep">/</span>
+  <span>Мониторинг</span>
+</nav>
+
+<h1>Мониторинг</h1>
+<p class="desc">Быстрая проверка состояния сервера: CPU, ОЗУ, диски, сеть, логи.</p>
+
+<main>
+<h2>Системные ресурсы</h2>
+<pre><code>htop
+free -h
+uptime</code></pre>
+
+<h2>Диски</h2>
+<pre><code>df -hT
+lsblk
+du -sh /* 2>/dev/null | sort -h</code></pre>
+
+<h2>Сеть</h2>
+<pre><code>ip addr show
+ss -tulnp
+ping -c 4 1.1.1.1</code></pre>
+
+<h2>Логи</h2>
+<pre><code>journalctl -p err -b --since "1h ago"
+journalctl -u &lt;service&gt;.service -n 20</code></pre>
+
+<h2>Контейнеры</h2>
+<pre><code>docker ps
+docker stats --no-stream</code></pre>
+</main>
+
+<footer>
+  <span>© 2025 Цифровая Крепость</span>
+  <span><a href="../index.html">Главная</a></span>
+</footer>
+</div>
+<div id="wordday"><div class="wd-w" aria-live="polite"></div></div>
+<script src="../study/data/srs.js"></script>
+<script src="../study/data/widget.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
+</body>
+</html>

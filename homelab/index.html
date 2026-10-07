@@ -3,11 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Homelab: что это, зачем нужен и как собрать — Цифровая Крепость</title>
-<meta name="description" content="Что такое homelab, зачем он нужен и как собрать домашнюю лабораторию из старого ноутбука: сервер, Docker, хранилище, безопасность и бэкапы.">
+<title>Homelab — Цифровая Крепость</title>
+<meta name="description" content="Homelab: железо, сеть, сервисы, диагностика, бэкапы. Настройка домашнего сервера с нуля">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="manifest" href="../manifest.webmanifest">
+<meta name="theme-color" content="#f4f1e8">
 <link rel="stylesheet" href="../style.css">
-
 </head>
 <body>
 <div class="fnav">
@@ -19,88 +20,103 @@
 <a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav>
 </div>
 
-<div class="layout">
-<main><h1 id="top">Что такое Homelab?</h1>
-<p><strong>Homelab</strong> — это домашняя лаборатория для изучения технологий. Это как научная лаборатория, но для компьютерных наук: сервер из старого ноутбука, Docker-сервисы, своё хранилище и бэкапы. Всё — бесплатно и под своим контролем.</p>
-<p class="desc" style="margin-bottom:20px">На этой странице: <a href="#why">Зачем</a> · <a href="#stack">Стек</a> · <a href="#security">Безопасность</a> · <a href="#start">Как начать</a></p>
-<h2 id="why">Зачем нужен homelab?</h2>
-<table><thead><tr><th>Цель</th><th>Пример</th><th>Что получишь на практике</th></tr></thead><tbody><tr><td><strong>Обучение</strong></td><td>Linux, Docker, сети</td><td>Умение настраивать серверы, а не только читать про них</td></tr><tr><td><strong>Эксперименты</strong></td><td>Новое ПО в контейнерах</td><td>Проверка софта без риска сломать основную систему</td></tr><tr><td><strong>Автоматизация</strong></td><td>Умный дом, бэкапы, мониторинг</td><td>Сервисы работают сами, пока ты занимаешься своим делом</td></tr><tr><td><strong>Безопасность</strong></td><td>Данные под своим контролем</td><td>Фото и файлы не лежат в чужих облаках</td></tr><tr><td><strong>Экономия</strong></td><td>Бесплатные аналоги облачных сервисов</td><td>Spotify, Google Photos, iCloud — без подписок</td></tr></tbody></table>
-<h2 id="architecture">Концепция &quot;Цифровой Крепости&quot;</h2>
-<p>Наш homelab — это не просто набор компьютеров. Это <strong>система</strong>:</p>
-<pre><code>┌─────────────────────────────────────────────────┐
-│                 Цифровая Крепость               │
-├─────────────────────────────────────────────────┤
-│  🖥️ Сервер         │  💾 Диски                  │
-│  ├─ Ubuntu Server   │  ├─ Системный (240G)      │
-│  ├─ Docker          │  ├─ Хранилище (1TB)       │
-│  └─ Сервисы         │  ├─ Архив (2TB)           │
-│                     │  └─ Флешка (30G)           │
-├─────────────────────────────────────────────────┤
-│  🌐 Сеть            │  🔒 Безопасность          │
-│  ├─ WiFi            │  ├─ Firewall (UFW)        │
-│  ├─ SSH по ключам   │  ├─ Бэкапы (3-2-1)        │
-│  └─ VPN: план       │  └─ Мониторинг (smartd)   │
-└─────────────────────────────────────────────────┘</code></pre>
-<p>Уточнение по дискам: помимо встроенного системного накопителя (240G), рабочие данные разложены по <strong>внешним накопителям</strong>, подключённым к ноутбуку по USB — для старого ноутбука это нормальная схема. Суммарно это четыре накопителя (~3,3 ТБ), а упомянутая в старых текстах «общая ёмкость 4 ТБ» — это расчёт по номиналу дисков округлённо.</p>
-<h2 id="principles">Принципы</h2>
-<ol><li><strong>Простота</strong> — используем только проверенные решения</li><li><strong>Надёжность</strong> — всё должно работать после перезагрузки</li><li><strong>Документация</strong> — каждое действие описано</li><li><strong>Открытый код</strong> — конфиги и инструкции опубликованы, можно копировать и адаптировать под себя</li></ol>
-<h2 id="stack">Текущий стек</h2>
-<table><thead><tr><th>Компонент</th><th>Статус</th><th>Детали</th></tr></thead><tbody><tr><td><strong>Сервер</strong></td><td>✅ Готово</td><td>Ubuntu Server 24.04 на ноутбуке</td></tr><tr><td><strong>Docker</strong></td><td>✅ Готово</td><td>контейнеры, <code>docker compose</code></td></tr><tr><td><strong>Сервисы</strong></td><td>✅ Готово</td><td>Navidrome, Immich, Samba, MiniDLNA, SOPDS, Transmission, MQTT</td></tr><tr><td><strong>Хранилище</strong></td><td>⚠️ В процессе</td><td>240G + 1T + 2T + 30G внешних USB</td></tr><tr><td><strong>Мониторинг</strong></td><td>✅ Готово</td><td>smartd (диски), журналы systemd</td></tr><tr><td><strong>VPN</strong></td><td>⏳ План</td><td>WireGuard или Tailscale для доступа извне</td></tr></tbody></table>
-<h2 id="security">Безопасность и бэкапы</h2>
-<p>Homelab — это не только «как классно». Это ещё и <strong>ответственность за данные</strong>. Минимальный набор:</p>
-<ul><li><strong>SSH только по ключам</strong> — пароль для входа отключить</li><li><strong>Firewall</strong> — <code>ufw</code>, открыты только нужные порты в локальной сети</li><li><strong>Без проброса портов наружу</strong> — внешний доступ через VPN (WireGuard/Tailscale), а не открытые в интернет порты</li><li><strong>Обновления</strong> — регулярно, или автоматически через <code>unattended-upgrades</code></li><li><strong>Бэкапы 3-2-1</strong> — три копии, два носителя, одна — вне дома</li><li><strong>Fail2ban</strong> — если открыт доступ извне, блокирует перебор паролей</li></ul>
-<div class="callout callout-warning"><h4 class="callout-t">Предупреждение</h4><div class="callout-body"><p>Старый ноутбук работает 24/7 — следи за <strong>температурой</strong>, <strong>пылью</strong> и состоянием <strong>батареи</strong>. Если батарея вздулась — убери её и работай от сети.</p></div></div>
-<h2 id="services">Сервисы</h2>
-<p>Всё, что крутится на сервере, живёт в Docker и управляется одним compose-файлом. Репозиторий инфраструктуры: <code>github.com/boodhis/homelab-infra</code>.</p>
-<h3>Медиа</h3>
-<table><thead><tr><th>Сервис</th><th>Зачем</th><th>Порт</th></tr></thead><tbody>
-<tr><td><a href="navidrome.html">Navidrome</a></td><td>Музыкальный сервер — Spotify для себя</td><td>4533</td></tr>
-<tr><td><a href="jellyfin.html">Jellyfin</a></td><td>Медиа-сервер с обложками и метаданными</td><td>8096</td></tr>
-<tr><td><a href="minidlna.html">MiniDLNA</a></td><td>Медиа-сервер для ТВ</td><td>8200</td></tr>
-<tr><td><a href="transmission.html">Transmission</a></td><td>Торрент-клиент</td><td>9091</td></tr>
-</tbody></table>
-<h3>Фото и файлы</h3>
-<table><thead><tr><th>Сервис</th><th>Зачем</th><th>Порт</th></tr></thead><tbody>
-<tr><td><a href="immich.html">Immich</a></td><td>Фотохранилище — свой Google Photos</td><td>2283</td></tr>
-<tr><td><a href="samba.html">Samba</a></td><td>Сетевые папки, видны из Windows</td><td>445</td></tr>
-<tr><td><a href="sopds.html">SOPDS</a> и <a href="sopds-web.html">веб-каталог</a></td><td>Каталог книг с чтением прямо в браузере</td><td>—</td></tr>
-</tbody></table>
-<h3>Автоматизация и контейнеры</h3>
-<table><thead><tr><th>Сервис</th><th>Зачем</th><th>Порт</th></tr></thead><tbody>
-<tr><td><a href="docker.html">Docker</a></td><td>Контейнеризация всего остального</td><td>—</td></tr>
-<tr><td><a href="mqtt.html">MQTT / ESPHome</a></td><td>Умный дом и датчики</td><td>1883</td></tr>
-</tbody></table>
-<div class="callout"><div class="callout-t">Запуск любого сервиса</div><div class="callout-body"><p>Клонируешь репозиторий, заходишь в папку сервиса и поднимаешь compose-файл. <code>docker compose up -d</code> — флаг <code>-d</code> отцепляет контейнеры от терминала, чтобы связка жила после закрытия SSH.</p></div></div>
+<div class="wrap">
+<div class="tbar">
+  <span><span class="dot"></span>офлайн · без трекеров · бесплатно</span>
+  <span>своими руками, с резервными копиями</span>
+</div>
 
-<h2 id="guides">Практические гайды</h2>
-<p>Пошаговые инструкции для типовых задач: всё проверено на этом же сервере.</p>
-<h3>Сервер и железо</h3>
-<table><thead><tr><th>Гайд</th><th>Что делает</th></tr></thead><tbody>
-<tr><td><a href="auto-setup.html">Автосборка сервера</a></td><td>Быстрая настройка свежего Ubuntu Server с нуля</td></tr>
-<tr><td><a href="inxi.html">INXI</a></td><td>Информация о системе и железе одной командой</td></tr>
-<tr><td><a href="auto-shutdown.html">Авто-выключение</a></td><td>Гашение сервера по таймеру</td></tr>
-</tbody></table>
-<h3>Данные и диски</h3>
-<table><thead><tr><th>Гайд</th><th>Что делает</th></tr></thead><tbody>
-<tr><td><a href="disk-health.html">Диски и SMART</a></td><td>Мониторинг состояния дисков, усыпление</td></tr>
-<tr><td><a href="backup.html">Бекапы</a></td><td>Резервное копирование: rsync + tmux</td></tr>
-</tbody></table>
-<h3>Диагностика и сеть</h3>
-<table><thead><tr><th>Гайд</th><th>Что делает</th></tr></thead><tbody>
-<tr><td><a href="journalctl.html">Журналы system/journalctl</a></td><td>Разбор системных логов</td></tr>
-<tr><td><a href="diagnostics.html">Диагностика</a></td><td>Поиск и решение проблем</td></tr>
-<tr><td><a href="wifi-fix.html">Wi-Fi фикс</a></td><td>Если сеть отвалилась</td></tr>
-</tbody></table>
-<h2 id="start">Как начать?</h2>
-<ol><li><strong>Выбери железо</strong> — подойдёт даже старый ноутбук или мини-ПК</li><li><strong>Установи Ubuntu Server</strong> — инструкция в <a href="../getting-started/install-ubuntu.html">разделе «С чего начать»</a></li><li><strong>Настрой SSH и UFW</strong> — <a href="../study/ssh.html">гайд по SSH</a></li><li><strong>Поставь Docker</strong> — <a href="../homelab/docker.html">как запустить свой первый сервис</a></li><li><strong>Настрой бэкапы</strong> — <a href="../homelab/backup.html">гайд по резервному копированию</a></li><li><strong>Документируй</strong> — записывай, что делаешь, чтобы повторить на новом железе</li></ol>
-<h2>Дальше по плану</h2>
-<ul><li><strong>VPN</strong> — WireGuard или Tailscale для доступа снаружи дома</li><li><strong>Мониторинг</strong> — Uptime Kuma / Netdata для наглядности</li><li><strong>Умный дом</strong> — связка MQTT + ESPHome уже работает, расширяем</li>
-<li><strong>Развернуть всё без сети</strong> — готовый <a href="homelab-kit.html">homelab-kit</a>: оффлайн-стек на одном диске</li></ul>
-<hr/>
-<p><em>Обновлено 20.09.2026: диски описаны честно, добавлен раздел «Безопасность и бэкапы», стек разложен по статусам.</em></p>
-<footer>Цифровая Крепость — образовательный сайт о Linux и homelab. Все примеры проверены на реальном сервере.</footer>
+<header class="hero">
+  <div>
+    <div class="brand">Homelab</div>
+    <p class="lede">Железо, сеть, сервисы. Как собрать домашний сервер, запустить полезные сервисы и не утонуть в конфигах.</p>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>22</b><span>материала</span></div>
+    <div class="stat"><b>4</b><span>группы</span></div>
+    <div class="stat"><b>↻</b><span>практично</span></div>
+  </div>
+</header>
+
+<main class="groups">
+  <section class="group" id="hardware" style="--c:#0a5c52">
+    <div class="group-head">
+      <span class="group-num">Раздел 02 · Гр. A</span>
+      <h2 class="group-title"><a href="../homelab/index.html">Железо</a></h2>
+      <span class="group-count">4 материала</span>
+    </div>
+    <p class="group-desc">Выбор сервера, диагностика, диски, автоматика выключения.</p>
+    <div class="tiles">
+      <a class="tile" href="../homelab/server.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Сервер</span><span class="t-tag">железо</span></div><div class="t-desc">Выбор и конфигурация</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/hardware.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Железо</span><span class="t-tag">диагн.</span></div><div class="t-desc">Тестирование железа</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/disk-health.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Состояние дисков</span><span class="t-tag">smart</span></div><div class="t-desc">SMART, здоровье HDD/SSD</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/auto-shutdown.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Автовыключение</span><span class="t-tag">авто</span></div><div class="t-desc">Smart UPS / автоотключение</div><i class="t-arw">→</i></a>
+    </div>
+  </section>
+
+  <section class="group" id="network" style="--c:#0a5c52">
+    <div class="group-head">
+      <span class="group-num">Раздел 02 · Гр. B</span>
+      <h2 class="group-title"><a href="../homelab/index.html">Сеть</a></h2>
+      <span class="group-count">2 материала</span>
+    </div>
+    <p class="group-desc">Базовые сетевые настройки и правка WiFi.</p>
+    <div class="tiles">
+      <a class="tile" href="../homelab/network.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Сеть</span><span class="t-tag">lan/vlan</span></div><div class="t-desc">Роутер, VLAN, DNS</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/wifi-fix.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Fix WiFi</span><span class="t-tag">fix</span></div><div class="t-desc">Решение проблем WiFi</div><i class="t-arw">→</i></a>
+    </div>
+  </section>
+
+  <section class="group" id="services" style="--c:#0a5c52">
+    <div class="group-head">
+      <span class="group-num">Раздел 02 · Гр. C</span>
+      <h2 class="group-title"><a href="../homelab/index.html">Сервисы</a></h2>
+      <span class="group-count">12 материалов</span>
+    </div>
+    <p class="group-desc">Docker, reverse-proxy, медиасервисы, файлы, умный дом.</p>
+    <div class="tiles">
+      <a class="tile" href="../homelab/proxmox.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Proxmox</span><span class="t-tag">vm/lxc</span></div><div class="t-desc">VM и LXC с нуля</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/docker.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Docker</span><span class="t-tag">compose</span></div><div class="t-desc">Docker и compose</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/nginx.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Nginx</span><span class="t-tag">proxy</span></div><div class="t-desc">Reverse proxy, HTTPS</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/samba.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Samba</span><span class="t-tag">share</span></div><div class="t-desc">Файловый шар</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/navidrome.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Navidrome</span><span class="t-tag">music</span></div><div class="t-desc">Музыкальный стриминг</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/jellyfin.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Jellyfin</span><span class="t-tag">media</span></div><div class="t-desc">Медиасервер</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/immich.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Immich</span><span class="t-tag">photos</span></div><div class="t-desc">Фотобиблиотека</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/transmission.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Transmission</span><span class="t-tag">torrent</span></div><div class="t-desc">Торрент-клиент</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/minidlna.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">MiniDLNA</span><span class="t-tag">dlna</span></div><div class="t-desc">DLNA для ТВ</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/sopds.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">SOPDS</span><span class="t-tag">books</span></div><div class="t-desc">Книжный сервер</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/sopds-web.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">SOPDS Web</span><span class="t-tag">web</span></div><div class="t-desc">Клиент SOPDS</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/mqtt.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">MQTT</span><span class="t-tag">iot</span></div><div class="t-desc">Брокер для умного дома</div><i class="t-arw">→</i></a>
+    </div>
+  </section>
+
+  <section class="group" id="guides" style="--c:#0a5c52">
+    <div class="group-head">
+      <span class="group-num">Раздел 02 · Гр. D</span>
+      <h2 class="group-title"><a href="../homelab/index.html">Гайды</a></h2>
+      <span class="group-count">4 материала</span>
+    </div>
+    <p class="group-desc">Бэкапы, диагностика, справочники, автонастройка.</p>
+    <div class="tiles">
+      <a class="tile" href="../homelab/backup.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Бэкапы</span><span class="t-tag">важно</span></div><div class="t-desc">3-2-1, Borg/Restic</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/diagnostics.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Диагностика</span><span class="t-tag">debug</span></div><div class="t-desc">Поиск и анализ проблем</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/inxi.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">inxi</span><span class="t-tag">info</span></div><div class="t-desc">Сбор инфо о системе</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/journalctl.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">journalctl</span><span class="t-tag">logs</span></div><div class="t-desc">Анализ логов</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/server-reference.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Справочник сервера</span><span class="t-tag">ref</span></div><div class="t-desc">Конкретный сервер</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/homelab-kit.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Homelab Kit</span><span class="t-tag">checklist</span></div><div class="t-desc">Чек-лист старта</div><i class="t-arw">→</i></a>
+      <a class="tile" href="../homelab/auto-setup.html" style="--c:#0a5c52"><div class="t-head"><span class="t-name">Автонастройка</span><span class="t-tag">scripts</span></div><div class="t-desc">Скрипты раскатки</div><i class="t-arw">→</i></a>
+    </div>
+  </section>
 </main>
-</div><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
 
+<footer>
+  <span>© 2025 Цифровая Крепость</span>
+  <span><a href="../index.html">Главная</a></span>
+</footer>
+</div>
+<div id="wordday"><div class="wd-w" aria-live="polite"></div></div>
+<script src="../study/data/srs.js"></script>
+<script src="../study/data/widget.js"></script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("../sw.js");}</script>
 </body>
 </html>
