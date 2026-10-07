@@ -1,12 +1,81 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Обучение"><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="CI/CD на GitHub Actions: workflow, триггеры, джобы и деплой на сервер по ssh."><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
 <body>
 <div class="fnav"><nav class="frow"><a href="../index.html" style="--c:#0a5c52"><span class="td"></span>Главная</a><a href="../getting-started/index.html" style="--c:#3d5c2c"><span class="td"></span>Крепость</a><a href="../homelab/index.html" style="--c:#0a5c52"><span class="td"></span>Homelab</a><a href="../electric/index.html" style="--c:#7a2f6b"><span class="td"></span>Электрика</a><a href="../study/index.html" class="on" style="--c:#7d611b"><span class="td"></span>Обучение</a><a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav></div>
 <div class="wrap"><div class="tbar"><span><span class="dot"></span>офлайн · без трекеров · бесплатно</span><span>своими руками, с резервными копиями</span></div>
 <nav class="crumbs"><a href="../index.html">Главная</a><span class="sep">/</span><a href="index.html">Обучение</a><span class="sep">/</span><span>Материал</span></nav>
-<h1>Обучение</h1><p class="desc">Страница приведена к единому стилю.</p>
-<main><p>Содержимое будет доработано при необходимости.</p></main>
+<h1>Обучение</h1><p class="desc">CI/CD на GitHub Actions: workflow, триггеры, джобы и деплой на сервер по ssh.</p>
+<main><p>CI — автоматическая проверка каждого коммита: тесты, линтер, сборка. CD — автоматический деплой после проверки. Руками это делать больно, поэтому — GitHub Actions (или GitLab CI).</p>
+<h2>Понятия</h2>
+<ul>
+<li><strong>workflow</strong> — файл <code>.github/workflows/*.yml</code>.</li>
+<li><strong>job</strong> — набор шагов, выполняется на отдельной машине.</li>
+<li><strong>step</strong> — один шаг: команда или готовый action.</li>
+<li><strong>trigger</strong> — событие, по которому запускается workflow.</li>
+</ul>
+<h2>Триггеры</h2>
+<pre><code>on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:</code></pre>
+<h2>Пример workflow</h2>
+<pre><code>name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: pytest -q
+
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: deploy
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" &gt; ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan app.local &gt;&gt; ~/.ssh/known_hosts
+          ssh deploy@app.local 'cd /srv/app &amp;&amp; git pull &amp;&amp; docker compose up -d --build'</code></pre>
+<h2>Секреты и окружения</h2>
+<p>Ключи и пароли — только в <code>Settings → Secrets</code>, в репозитории их нет. Окружения (<em>environments</em>) дают отдельные секреты для staging и prod и ручное подтверждение деплоя.</p>
+<h2>Что проверять в CI</h2>
+<ol>
+<li>Установка зависимостей — ловит битый requirements.</li>
+<li>Линтер (<code>ruff</code>, <code>shellcheck</code>) — стиль и явные ошибки.</li>
+<li>Тесты (<code>pytest</code>) — поведение.</li>
+<li>Сборка образа — Dockerfile живой.</li>
+<li>Деплой — только на main и только после зелёного теста.</li>
+</ol>
+<div class="callout callout-note">
+<div class="callout-t">Быстрый фидбек</div>
+<div class="callout-body"><p>Сначала лёгкие шаги (линтер), потом тяжёлые (тесты, сборка). Разработчик узнаёт об ошибке за минуту, а не за десять.</p></div>
+</div>
+<div class="callout callout-warning">
+<div class="callout-t">Не деплой без ревью</div>
+<div class="callout-body"><p>Автодеплой с push в main — удобно, но добавь защиту ветки: PR + зелёный CI. Иначе одна опечатка уйдёт в прод.</p></div>
+</div>
+<hr>
+<p>См. также <a href="devops-docker.html">Docker</a>, <a href="devops-git.html">Git</a>, <a href="devops-ansible.html">Ansible</a>.</p></main>
 <footer><span>© 2025 Цифровая Крепость</span><span><a href="../index.html">Главная</a></span></footer>
 </div>
 <div id="wordday"><div class="wd-w" aria-live="polite"></div></div><script src="../study/data/srs.js"></script><script src="../study/data/widget.js"></script>

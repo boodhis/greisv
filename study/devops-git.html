@@ -1,12 +1,63 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Обучение"><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Git: init, ветки, коммиты, remote, merge и rebase — разбор дневного цикла разработчика."><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
 <body>
 <div class="fnav"><nav class="frow"><a href="../index.html" style="--c:#0a5c52"><span class="td"></span>Главная</a><a href="../getting-started/index.html" style="--c:#3d5c2c"><span class="td"></span>Крепость</a><a href="../homelab/index.html" style="--c:#0a5c52"><span class="td"></span>Homelab</a><a href="../electric/index.html" style="--c:#7a2f6b"><span class="td"></span>Электрика</a><a href="../study/index.html" class="on" style="--c:#7d611b"><span class="td"></span>Обучение</a><a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav></div>
 <div class="wrap"><div class="tbar"><span><span class="dot"></span>офлайн · без трекеров · бесплатно</span><span>своими руками, с резервными копиями</span></div>
 <nav class="crumbs"><a href="../index.html">Главная</a><span class="sep">/</span><a href="index.html">Обучение</a><span class="sep">/</span><span>Материал</span></nav>
-<h1>Обучение</h1><p class="desc">Страница приведена к единому стилю.</p>
-<main><p>Содержимое будет доработано при необходимости.</p></main>
+<h1>Обучение</h1><p class="desc">Git: init, ветки, коммиты, remote, merge и rebase — дневной цикл разработчика.</p>
+<main><p>Git — не «сохранение версий», а инструмент мышления о коде: ветки, история, откат. Без него ни CI, ни деплой, ни командная работа. Здесь — база и типичный дневной цикл.</p>
+<h2>Инициализация и первый коммит</h2>
+<pre><code>git init
+git config user.name "Иван"
+git config user.email "ivan@app.local"
+git add .
+git commit -m "первый коммит"</code></pre>
+<h2>Ветки</h2>
+<pre><code>git branch                       # список
+git switch -c feature/vpn        # создать и перейти
+git switch main                  # вернуться
+git branch -d feature/vpn        # удалить после мержа</code></pre>
+<h2>Remote</h2>
+<pre><code>git remote add origin git@git.app.local:me/project.git
+git push -u origin main
+git pull</code></pre>
+<h2>Merge и rebase</h2>
+<p>Merge сохраняет историю ветвления, rebase переносит коммиты на свежую базу — линейно и чище, но переписывает историю. На общей ветке rebase не делай.</p>
+<pre><code># merge
+git switch main
+git merge feature/vpn
+
+# rebase своей ветки на свежий main
+git switch feature/vpn
+git rebase main</code></pre>
+<h2>Дневной цикл</h2>
+<ol>
+<li><code>git pull</code> — подтянуть чужие изменения.</li>
+<li><code>git switch -c feature/x</code> — новая ветка под задачу.</li>
+<li>Правишь код, проверяешь.</li>
+<li><code>git add -p</code> — складываешь в индекс только осмысленные куски.</li>
+<li><code>git commit -m "..."</code> — мелкий понятный коммит.</li>
+<li><code>git push -u origin feature/x</code>.</li>
+<li>Merge request / pull request, ревью, merge в main.</li>
+</ol>
+<h2>Отмена</h2>
+<table>
+<thead><tr><th>Задача</th><th>Команда</th></tr></thead>
+<tbody>
+<tr><td>Отменить правки файла</td><td><code>git restore file</code></td></tr>
+<tr><td>Убрать из индекса</td><td><code>git restore --staged file</code></td></tr>
+<tr><td>Поправить последний коммит</td><td><code>git commit --amend</code></td></tr>
+<tr><td>Откатить коммит, сохранив историю</td><td><code>git revert &lt;sha&gt;</code></td></tr>
+<tr><td>Спрятать правки</td><td><code>git stash</code> / <code>git stash pop</code></td></tr>
+</tbody>
+</table>
+<div class="callout callout-note">
+<div class="callout-t">Коммит — это единица смысла</div>
+<div class="callout-body"><p>Один коммит — одно изменение. «Починил всё» не пройдёт ревью и не откатится.</p></div>
+</div>
+<hr>
+<p>Дальше — <a href="devops-docker.html">Docker</a>, <a href="devops-ci.html">CI/CD</a>, <a href="devops-ansible.html">Ansible</a>. Шпаргалка — <a href="cheats-git.html">Git команды</a>.</p></main>
 <footer><span>© 2025 Цифровая Крепость</span><span><a href="../index.html">Главная</a></span></footer>
 </div>
 <div id="wordday"><div class="wd-w" aria-live="polite"></div></div><script src="../study/data/srs.js"></script><script src="../study/data/widget.js"></script>

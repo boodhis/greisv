@@ -1,12 +1,107 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Обучение"><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Шпаргалка Bash: навигация, файлы, процессы, пайпы, переменные, sudo и горячие клавиши."><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
 <body>
 <div class="fnav"><nav class="frow"><a href="../index.html" style="--c:#0a5c52"><span class="td"></span>Главная</a><a href="../getting-started/index.html" style="--c:#3d5c2c"><span class="td"></span>Крепость</a><a href="../homelab/index.html" style="--c:#0a5c52"><span class="td"></span>Homelab</a><a href="../electric/index.html" style="--c:#7a2f6b"><span class="td"></span>Электрика</a><a href="../study/index.html" class="on" style="--c:#7d611b"><span class="td"></span>Обучение</a><a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav></div>
 <div class="wrap"><div class="tbar"><span><span class="dot"></span>офлайн · без трекеров · бесплатно</span><span>своими руками, с резервными копиями</span></div>
 <nav class="crumbs"><a href="../index.html">Главная</a><span class="sep">/</span><a href="index.html">Обучение</a><span class="sep">/</span><span>Материал</span></nav>
-<h1>Обучение</h1><p class="desc">Страница приведена к единому стилю.</p>
-<main><p>Содержимое будет доработано при необходимости.</p></main>
+<h1>Обучение</h1><p class="desc">Шпаргалка Bash: навигация, файлы, процессы, пайпы, переменные и sudo.</p>
+<main><p>Шпаргалка по Bash: навигация, файлы, процессы, пайпы, переменные. Держи открытой рядом с терминалом.</p>
+<h2>Навигация</h2>
+<table>
+<thead><tr><th>Команда</th><th>Что делает</th></tr></thead>
+<tbody>
+<tr><td><code>pwd</code></td><td>текущий каталог</td></tr>
+<tr><td><code>cd /etc/nginx</code></td><td>перейти</td></tr>
+<tr><td><code>cd -</code></td><td>назад в предыдущий</td></tr>
+<tr><td><code>ls -lah</code></td><td>список с размерами и правами</td></tr>
+<tr><td><code>tree -L 2</code></td><td>дерево до двух уровней</td></tr>
+<tr><td><code>find /var/log -name "*.log"</code></td><td>поиск файлов</td></tr>
+<tr><td><code>find . -type f -size +100M</code></td><td>большие файлы</td></tr>
+</tbody>
+</table>
+<h2>Файлы</h2>
+<table>
+<thead><tr><th>Команда</th><th>Что делает</th></tr></thead>
+<tbody>
+<tr><td><code>cp -a src dst</code></td><td>копия с правами и временем</td></tr>
+<tr><td><code>mv a b</code></td><td>переместить/переименовать</td></tr>
+<tr><td><code>rm -rf dir</code></td><td>удалить рекурсивно (осторожно)</td></tr>
+<tr><td><code>mkdir -p a/b/c</code></td><td>создать с родителями</td></tr>
+<tr><td><code>ln -s target link</code></td><td>символическая ссылка</td></tr>
+<tr><td><code>du -sh *</code></td><td>размер по элементам</td></tr>
+<tr><td><code>df -h</code></td><td>место на дисках</td></tr>
+<tr><td><code>tar -czf a.tgz dir/</code></td><td>архив gzip</td></tr>
+<tr><td><code>tar -xzf a.tgz</code></td><td>распаковать</td></tr>
+</tbody>
+</table>
+<h2>Просмотр</h2>
+<table>
+<thead><tr><th>Команда</th><th>Что делает</th></tr></thead>
+<tbody>
+<tr><td><code>cat f</code></td><td>вывести файл</td></tr>
+<tr><td><code>less f</code></td><td>постранично, <code>/</code> поиск</td></tr>
+<tr><td><code>head -n 20 f</code></td><td>первые строки</td></tr>
+<tr><td><code>tail -f f</code></td><td>следить за логом</td></tr>
+<tr><td><code>grep -rn "err" .</code></td><td>поиск по файлам рекурсивно</td></tr>
+<tr><td><code>grep -v "^#" f</code></td><td>исключить комментарии</td></tr>
+<tr><td><code>wc -l f</code></td><td>число строк</td></tr>
+</tbody>
+</table>
+<h2>Пайпы и перенаправления</h2>
+<pre><code>ps aux | grep nginx
+cat access.log | awk '{print $1}' | sort | uniq -c | sort -rn | head
+echo "text" &gt; f          # перезаписать
+echo "text" &gt;&gt; f         # дописать
+cmd 2&gt;&amp;1 | tee out.log
+cmd &gt; out.log 2&gt;&amp;1</code></pre>
+<h2>Процессы</h2>
+<table>
+<thead><tr><th>Команда</th><th>Что делает</th></tr></thead>
+<tbody>
+<tr><td><code>ps aux</code></td><td>все процессы</td></tr>
+<tr><td><code>top</code> / <code>htop</code></td><td>интерактивно</td></tr>
+<tr><td><code>pgrep -a nginx</code></td><td>найти PID по имени</td></tr>
+<tr><td><code>kill PID</code></td><td>мягко завершить</td></tr>
+<tr><td><code>kill -9 PID</code></td><td>жёстко</td></tr>
+<tr><td><code>pkill -f script.py</code></td><td>убить по шаблону команды</td></tr>
+<tr><td><code>jobs</code> / <code>fg</code> / <code>bg</code></td><td>управление задачами</td></tr>
+<tr><td><code>nohup cmd &amp;</code></td><td>запустить в фоне</td></tr>
+</tbody>
+</table>
+<h2>Переменные и окружение</h2>
+<pre><code>NAME="app"
+echo "$NAME"
+export PATH="$HOME/bin:$PATH"
+echo $?
+env | sort
+unset NAME</code></pre>
+<h2>Права и sudo</h2>
+<table>
+<thead><tr><th>Команда</th><th>Что делает</th></tr></thead>
+<tbody>
+<tr><td><code>chmod 640 f</code></td><td>rw-r-----</td></tr>
+<tr><td><code>chmod +x script.sh</code></td><td>сделать исполняемым</td></tr>
+<tr><td><code>chown user:group f</code></td><td>сменить владельца</td></tr>
+<tr><td><code>sudo -i</code></td><td>root-шелл</td></tr>
+<tr><td><code>sudo -u deploy cmd</code></td><td>от имени пользователя</td></tr>
+<tr><td><code>visudo</code></td><td>править sudoers безопасно</td></tr>
+</tbody>
+</table>
+<h2>История и шорткаты</h2>
+<table>
+<thead><tr><th>Клавиши</th><th>Действие</th></tr></thead>
+<tbody>
+<tr><td><code>Ctrl+R</code></td><td>поиск по истории</td></tr>
+<tr><td><code>!!</code></td><td>прошлая команда</td></tr>
+<tr><td><code>!$</code></td><td>последний аргумент</td></tr>
+<tr><td><code>Ctrl+A</code> / <code>Ctrl+E</code></td><td>в начало / в конец строки</td></tr>
+<tr><td><code>Ctrl+U</code> / <code>Ctrl+K</code></td><td>удалить до / после курсора</td></tr>
+<tr><td><code>Ctrl+L</code></td><td>очистить экран</td></tr>
+</tbody>
+</table>
+<hr>
+<p>См. также <a href="cheats-git.html">шпаргалку Git</a>, <a href="cheats-docker.html">шпаргалку Docker</a>.</p></main>
 <footer><span>© 2025 Цифровая Крепость</span><span><a href="../index.html">Главная</a></span></footer>
 </div>
 <div id="wordday"><div class="wd-w" aria-live="polite"></div></div><script src="../study/data/srs.js"></script><script src="../study/data/widget.js"></script>

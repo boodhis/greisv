@@ -1,12 +1,96 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Обучение"><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Шпаргалка Git: init, add, commit, log, branch, merge, remote и отмена изменений."><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
 <body>
 <div class="fnav"><nav class="frow"><a href="../index.html" style="--c:#0a5c52"><span class="td"></span>Главная</a><a href="../getting-started/index.html" style="--c:#3d5c2c"><span class="td"></span>Крепость</a><a href="../homelab/index.html" style="--c:#0a5c52"><span class="td"></span>Homelab</a><a href="../electric/index.html" style="--c:#7a2f6b"><span class="td"></span>Электрика</a><a href="../study/index.html" class="on" style="--c:#7d611b"><span class="td"></span>Обучение</a><a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav></div>
 <div class="wrap"><div class="tbar"><span><span class="dot"></span>офлайн · без трекеров · бесплатно</span><span>своими руками, с резервными копиями</span></div>
 <nav class="crumbs"><a href="../index.html">Главная</a><span class="sep">/</span><a href="index.html">Обучение</a><span class="sep">/</span><span>Материал</span></nav>
-<h1>Обучение</h1><p class="desc">Страница приведена к единому стилю.</p>
-<main><p>Содержимое будет доработано при необходимости.</p></main>
+<h1>Обучение</h1><p class="desc">Шпаргалка Git: init, add, commit, log, branch, merge, remote и отмена изменений.</p>
+<main><p>Шпаргалка Git: от init до отмены. Всё, что нужно в ежедневной работе.</p>
+<h2>Старт</h2>
+<table>
+<thead><tr><th>Команда</th><th>Что делает</th></tr></thead>
+<tbody>
+<tr><td><code>git init</code></td><td>создать репозиторий</td></tr>
+<tr><td><code>git clone URL</code></td><td>склонировать</td></tr>
+<tr><td><code>git config --global user.name "..."</code></td><td>имя</td></tr>
+<tr><td><code>git config --global user.email "..."</code></td><td>почта</td></tr>
+<tr><td><code>git config --global init.defaultBranch main</code></td><td>ветка по умолчанию</td></tr>
+</tbody>
+</table>
+<h2>Состояние и индекс</h2>
+<table>
+<thead><tr><th>Команда</th><th>Что делает</th></tr></thead>
+<tbody>
+<tr><td><code>git status</code></td><td>что изменено</td></tr>
+<tr><td><code>git diff</code></td><td>незастейдженные правки</td></tr>
+<tr><td><code>git diff --staged</code></td><td>в индексе</td></tr>
+<tr><td><code>git add file</code></td><td>в индекс</td></tr>
+<tr><td><code>git add -p</code></td><td>по кускам</td></tr>
+<tr><td><code>git add .</code></td><td>всё из текущего каталога</td></tr>
+</tbody>
+</table>
+<h2>Коммиты</h2>
+<table>
+<thead><tr><th>Команда</th><th>Что делает</th></tr></thead>
+<tbody>
+<tr><td><code>git commit -m "msg"</code></td><td>закоммитить</td></tr>
+<tr><td><code>git commit --amend</code></td><td>поправить последний</td></tr>
+<tr><td><code>git log --oneline --graph --decorate</code></td><td>красивая история</td></tr>
+<tr><td><code>git log -p file</code></td><td>история файла с диффами</td></tr>
+<tr><td><code>git show &lt;sha&gt;</code></td><td>что в коммите</td></tr>
+<tr><td><code>git blame file</code></td><td>кто и когда менял строки</td></tr>
+</tbody>
+</table>
+<h2>Ветки</h2>
+<table>
+<thead><tr><th>Команда</th><th>Что делает</th></tr></thead>
+<tbody>
+<tr><td><code>git branch</code></td><td>список</td></tr>
+<tr><td><code>git branch -a</code></td><td>включая remote</td></tr>
+<tr><td><code>git switch -c feat</code></td><td>создать и перейти</td></tr>
+<tr><td><code>git switch main</code></td><td>перейти</td></tr>
+<tr><td><code>git merge feat</code></td><td>влить в текущую</td></tr>
+<tr><td><code>git rebase main</code></td><td>перенести свои коммиты на main</td></tr>
+<tr><td><code>git branch -d feat</code></td><td>удалить</td></tr>
+</tbody>
+</table>
+<h2>Remote</h2>
+<table>
+<thead><tr><th>Команда</th><th>Что делает</th></tr></thead>
+<tbody>
+<tr><td><code>git remote -v</code></td><td>список remote</td></tr>
+<tr><td><code>git remote add origin URL</code></td><td>добавить</td></tr>
+<tr><td><code>git fetch</code></td><td>забрать без слияния</td></tr>
+<tr><td><code>git pull</code></td><td>fetch + merge</td></tr>
+<tr><td><code>git pull --rebase</code></td><td>fetch + rebase</td></tr>
+<tr><td><code>git push -u origin main</code></td><td>первый push</td></tr>
+<tr><td><code>git push --force-with-lease</code></td><td>безопасный force</td></tr>
+</tbody>
+</table>
+<h2>Отмена изменений</h2>
+<table>
+<thead><tr><th>Задача</th><th>Команда</th></tr></thead>
+<tbody>
+<tr><td>Вернуть файл</td><td><code>git restore file</code></td></tr>
+<tr><td>Убрать из индекса</td><td><code>git restore --staged file</code></td></tr>
+<tr><td>Откатить коммит с сохранением истории</td><td><code>git revert &lt;sha&gt;</code></td></tr>
+<tr><td>Сбросить ветку к коммиту, потеряв правки</td><td><code>git reset --hard &lt;sha&gt;</code></td></tr>
+<tr><td>Сбросить, оставив правки в рабочем каталоге</td><td><code>git reset --soft &lt;sha&gt;</code></td></tr>
+</tbody>
+</table>
+<h2>Stash</h2>
+<pre><code>git stash        # спрятать
+git stash list
+git stash pop    # вернуть и удалить из стека
+git stash apply  # вернуть, оставив в стеке
+git stash drop   # удалить</code></pre>
+<div class="callout callout-warning">
+<div class="callout-t">force только с lease</div>
+<div class="callout-body"><p><code>--force</code> затирает чужие коммиты. Используй <code>--force-with-lease</code>: он упадёт, если кто-то успел запушить.</p></div>
+</div>
+<hr>
+<p>См. также <a href="devops-git.html">Git: разбор</a>, <a href="cheats-bash.html">шпаргалку Bash</a>.</p></main>
 <footer><span>© 2025 Цифровая Крепость</span><span><a href="../index.html">Главная</a></span></footer>
 </div>
 <div id="wordday"><div class="wd-w" aria-live="polite"></div></div><script src="../study/data/srs.js"></script><script src="../study/data/widget.js"></script>

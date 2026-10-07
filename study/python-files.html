@@ -1,12 +1,76 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Обучение"><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Работа с файлами в Python: open/with, режимы, pathlib, JSON и пример записи отчёта."><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
 <body>
 <div class="fnav"><nav class="frow"><a href="../index.html" style="--c:#0a5c52"><span class="td"></span>Главная</a><a href="../getting-started/index.html" style="--c:#3d5c2c"><span class="td"></span>Крепость</a><a href="../homelab/index.html" style="--c:#0a5c52"><span class="td"></span>Homelab</a><a href="../electric/index.html" style="--c:#7a2f6b"><span class="td"></span>Электрика</a><a href="../study/index.html" class="on" style="--c:#7d611b"><span class="td"></span>Обучение</a><a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav></div>
 <div class="wrap"><div class="tbar"><span><span class="dot"></span>офлайн · без трекеров · бесплатно</span><span>своими руками, с резервными копиями</span></div>
 <nav class="crumbs"><a href="../index.html">Главная</a><span class="sep">/</span><a href="index.html">Обучение</a><span class="sep">/</span><span>Материал</span></nav>
-<h1>Обучение</h1><p class="desc">Страница приведена к единому стилю.</p>
-<main><p>Содержимое будет доработано при необходимости.</p></main>
+<h1>Обучение</h1><p class="desc">Работа с файлами в Python: open/with, режимы, pathlib, JSON и пример записи отчёта.</p>
+<main><p>Почти любой скрипт рано или поздно читает или пишет файл: конфиг, лог, отчёт. Здесь — <code>open</code>, <code>with</code>, режимы, <code>pathlib</code> и JSON, плюс пример «записать отчёт».</p>
+<h2>open и with</h2>
+<pre><code>with open("notes.txt", "r", encoding="utf-8") as f:
+    text = f.read()</code></pre>
+<p><code>with</code> закрывает файл даже при ошибке. Всегда указывай <code>encoding="utf-8"</code> — иначе на чужой машине получишь кракозябры.</p>
+<h2>Режимы</h2>
+<table>
+<thead><tr><th>Режим</th><th>Что делает</th></tr></thead>
+<tbody>
+<tr><td><code>r</code></td><td>чтение, файл должен существовать</td></tr>
+<tr><td><code>w</code></td><td>запись, старый файл стирается</td></tr>
+<tr><td><code>a</code></td><td>дозапись в конец</td></tr>
+<tr><td><code>x</code></td><td>создать, упадёт если файл есть</td></tr>
+<tr><td><code>rb</code> / <code>wb</code></td><td>бинарный режим</td></tr>
+</tbody>
+</table>
+<h2>Чтение по строкам</h2>
+<pre><code>with open("access.log", "r", encoding="utf-8") as f:
+    for line in f:
+        if " 500 " in line:
+            print(line.rstrip())</code></pre>
+<p>Для больших файлов не читай целиком — итерация по строкам не грузит память.</p>
+<h2>pathlib</h2>
+<p>Современный способ работы с путями. Кроссплатформенно и читаемо.</p>
+<pre><code>from pathlib import Path
+
+base = Path("/var/log/app")
+report = base / "report.txt"
+base.mkdir(parents=True, exist_ok=True)
+
+report.write_text("ok
+", encoding="utf-8")
+print(report.read_text(encoding="utf-8"))
+
+for p in base.glob("*.log"):
+    print(p.name, p.stat().st_size)</code></pre>
+<h2>JSON</h2>
+<pre><code>import json
+
+data = {"host": "app.local", "ok": True}
+
+with open("state.json", "w", encoding="utf-8") as f:
+    json.dump(data, f, ensure_ascii=False, indent=2)
+
+with open("state.json", "r", encoding="utf-8") as f:
+    loaded = json.load(f)</code></pre>
+<h2>Пример: отчёт</h2>
+<pre><code>from pathlib import Path
+from datetime import datetime
+
+def write_report(path, rows):
+    lines = [f"# отчёт {datetime.now():%Y-%m-%d %H:%M}", ""]
+    for name, status in rows:
+        lines.append(f"- {name}: {status}")
+    Path(path).write_text("
+".join(lines) + "
+", encoding="utf-8")
+
+write_report("report.md", [("nginx", "ok"), ("docker", "ok"), ("vpn", "down")])</code></pre>
+<div class="callout callout-note">
+<div class="callout-t">Атомарная запись</div>
+<div class="callout-body"><p>Пиши во временный файл и переименовывай: <code>tmp.replace(target)</code>. Так читатель не увидит половину отчёта.</p></div>
+</div>
+<hr>
+<p>Смотри также: <a href="python-automation.html">запуск скриптов по расписанию</a>, <a href="python-functions.html">модули</a>.</p></main>
 <footer><span>© 2025 Цифровая Крепость</span><span><a href="../index.html">Главная</a></span></footer>
 </div>
 <div id="wordday"><div class="wd-w" aria-live="polite"></div></div><script src="../study/data/srs.js"></script><script src="../study/data/widget.js"></script>

@@ -1,17 +1,67 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Proxmox — Цифровая Крепость</title><meta name="description" content="Proxmox VE: VM и LXC с нуля"><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Proxmox — Цифровая Крепость</title><meta name="description" content="Proxmox: установка, VM, LXC, бэкапы vzdump и снапшоты для домашней лаборатории."><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
 <body>
 <div class="fnav"><nav class="frow"><a href="../index.html" style="--c:#0a5c52"><span class="td"></span>Главная</a><a href="../getting-started/index.html" style="--c:#3d5c2c"><span class="td"></span>Крепость</a><a href="../homelab/index.html" class="on" style="--c:#0a5c52"><span class="td"></span>Homelab</a><a href="../electric/index.html" style="--c:#7a2f6b"><span class="td"></span>Электрика</a><a href="../study/index.html" style="--c:#7d611b"><span class="td"></span>Обучение</a><a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav></div>
 <div class="wrap"><div class="tbar"><span><span class="dot"></span>офлайн · без трекеров · бесплатно</span><span>своими руками, с резервными копиями</span></div>
 <nav class="crumbs"><a href="../index.html">Главная</a><span class="sep">/</span><a href="index.html">Homelab</a><span class="sep">/</span><span>Proxmox</span></nav>
 <h1>Proxmox VE</h1><p class="desc">Виртуальные машины (VM) и контейнеры (LXC) для homelab.</p>
-<main>
-<h2>Базовые принципы</h2>
-<ul><li>VM — полноценная ОС с виртуальным железом</li><li>LXC — лёгкие контейнеры, меньше накладных расходов</li></ul>
-<h2>Типовые задачи</h2>
-<ul><li>Создание VM: ISO, диски, сеть (bridge)</li><li>Создание LXC: шаблон, ресурсы, сеть</li><li>Резервные копии (Backups) критичных ВМ</li></ul>
-</main>
+<main><p>Proxmox VE — гипервизор на Debian с веб-интерфейсом. На одном сервере — виртуалки, LXC-контейнеры, бэкапы и снапшоты. Заменяет VMware в домашней лаборатории без лицензий.</p>
+<h2>Установка</h2>
+<ol>
+<li>Скачай ISO Proxmox VE, запиши на флешку.</li>
+<li>В BIOS включи виртуализацию (VT-x/AMD-V).</li>
+<li>Загрузись с флешки, выбери диск, задай hostname и пароль root.</li>
+<li>Сеть: статический IP, шлюз, DNS. Адрес откроется по <code>https://192.168.0.x:8006</code>.</li>
+<li>После установки подключись по SSH и обнови: <code>apt update &amp;&amp; apt full-upgrade</code>.</li>
+</ol>
+<div class="callout callout-note">
+<div class="callout-t">Репозитории</div>
+<div class="callout-body"><p>Из коробки включён enterprise-репозиторий, требующий подписки. Для дома отключи его и включи <code>pve-no-subscription</code> в <code>/etc/apt/sources.list.d/</code>.</p></div>
+</div>
+<h2>Дашборд</h2>
+<p>Слева — дерево: узел, VM, LXC, хранилища. Сверху — нагрузка CPU/RAM и графики. В <code>Datacenter → Permissions</code> создай пользователя вместо работы под root.</p>
+<h2>Создание VM</h2>
+<ol>
+<li>Загрузи ISO в <code>local → ISO Images</code> (или через ссылку, если есть интернет).</li>
+<li><code>Create VM</code>: имя, ID, тип ОС.</li>
+<li>Диск: шина <code>VirtIO SCSI</code>, кэш <code>Write back</code>, размер 20–32 ГБ.</li>
+<li>CPU: 2–4 ядра, тип <code>host</code> для производительности.</li>
+<li>Память: 2–4 ГБ, отключи Ballooning, если нужен стабильный отклик.</li>
+<li>Сеть: <code>vmbr0</code>, модель <code>VirtIO</code>.</li>
+<li>После установки — <code>qemu-guest-agent</code> внутри гостя для корректного шатдауна.</li>
+</ol>
+<h2>LXC</h2>
+<p>Контейнеры легче: без своего ядра, делят ресурсы хоста. Идеальны под nginx, базы, домашние сервисы.</p>
+<ol>
+<li><code>local → CT Templates</code> → скачай <code>debian-12-standard</code>.</li>
+<li><code>Create CT</code>: hostname, пароль, шаблон.</li>
+<li>Диск 8 ГБ, RAM 512 МБ, 1 ядро.</li>
+<li>Сеть — DHCP или статический IP в <code>vmbr0</code>.</li>
+<li>Особенности: <code>unprivileged</code> по умолчанию; для монтирования NFS включи <code>Features → NFS</code>.</li>
+</ol>
+<h2>Бэкапы и снапшоты</h2>
+<pre><code># вручную через CLI
+vzdump 100 --storage backup --mode snapshot --compress zstd
+
+# расписание: Datacenter → Backup → Add
+# хранение: keep-last 7, keep-weekly 4</code></pre>
+<table>
+<thead><tr><th>Тип</th><th>Когда использовать</th></tr></thead>
+<tbody>
+<tr><td>Snapshot</td><td>быстро откатить перед обновлением; не заменяет бэкап</td></tr>
+<tr><td>vzdump</td><td>полный бэкап VM/CT на хранилище</td></tr>
+<tr><td>Replication</td><td>копия на второй узел кластера</td></tr>
+</tbody>
+</table>
+<h2>Хранилища</h2>
+<p>В <code>Datacenter → Storage</code> добавь NFS/SMB-шару или локальный диск под бэкапы. Для бэкапов лучше отдельный физический диск — <a href="storage.html">см. ZFS и 3-2-1</a>.</p>
+<div class="callout callout-warning">
+<div class="callout-t">Снапшот ≠ бэкап</div>
+<div class="callout-body"><p>Снапшот живёт на том же диске, что и VM. Умер диск — умерли и снапшоты. Держи vzdump на другом носителе.</p></div>
+</div>
+<hr>
+<p>Дальше — <a href="storage.html">хранилище и ZFS</a>, <a href="server.html">сервер как машина услуг</a>, <a href="monitoring.html">мониторинг</a>.</p></main>
 <footer><span>© 2025 Цифровая Крепость</span><span><a href="../index.html">Главная</a></span></footer>
 </div>
 <div id="wordday"><div class="wd-w" aria-live="polite"></div></div><script src="../study/data/srs.js"></script><script src="../study/data/widget.js"></script>

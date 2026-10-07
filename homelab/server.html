@@ -1,15 +1,68 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Сервер — Цифровая Крепость</title><meta name="description" content="Выбор сервера для homelab"><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Сервер — Цифровая Крепость</title><meta name="description" content="Роли домашнего сервера: NFS, DNS, контейнеры, VPN — требования и автозапуск."><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
 <body>
 <div class="fnav"><nav class="frow"><a href="../index.html" style="--c:#0a5c52"><span class="td"></span>Главная</a><a href="../getting-started/index.html" style="--c:#3d5c2c"><span class="td"></span>Крепость</a><a href="../homelab/index.html" class="on" style="--c:#0a5c52"><span class="td"></span>Homelab</a><a href="../electric/index.html" style="--c:#7a2f6b"><span class="td"></span>Электрика</a><a href="../study/index.html" style="--c:#7d611b"><span class="td"></span>Обучение</a><a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav></div>
 <div class="wrap"><div class="tbar"><span><span class="dot"></span>офлайн · без трекеров · бесплатно</span><span>своими руками, с резервными копиями</span></div>
 <nav class="crumbs"><a href="../index.html">Главная</a><span class="sep">/</span><a href="index.html">Homelab</a><span class="sep">/</span><span>Сервер</span></nav>
 <h1>Сервер</h1><p class="desc">Критерии выбора домашнего сервера: энергопотребление, шум, надёжность, расширяемость.</p>
-<main>
-<h2>Критерии</h2>
-<ul><li><strong>Потребление</strong>: важнее для круглосуточной работы</li><li><strong>Тишина</strong>: пассивное охлаждение или тихие кулеры</li><li><strong>Диски</strong>: количество слотов, поддержка ZFS</li><li><strong>ОЗУ</strong>: минимум под задачи, с запасом</li></ul>
-</main>
+<main><p>Домашний сервер — это не «одна большая машина», а набор ролей: файлы, DNS, контейнеры, VPN, мониторинг. Поняв роли, проще выбрать железо и не смешивать всё в кучу. Здесь — карта ролей, требования и автозапуск.</p>
+<h2>Карта ролей</h2>
+<table>
+<thead><tr><th>Роль</th><th>Что делает</th><th>Как запускать</th><th>Разбор</th></tr></thead>
+<tbody>
+<tr><td>Виртуализация</td><td>VM и LXC</td><td>Proxmox на железе</td><td><a href="proxmox.html">Proxmox</a></td></tr>
+<tr><td>Файлы</td><td>NFS/SMB-шары</td><td>LXC или VM</td><td><a href="storage.html">Хранилище</a></td></tr>
+<tr><td>Веб/прокси</td><td>reverse-proxy, TLS</td><td>LXC с nginx</td><td><a href="nginx.html">Nginx</a></td></tr>
+<tr><td>DNS</td><td>локальные имена</td><td>LXC с dnsmasq/Pi-hole</td><td>—</td></tr>
+<tr><td>Контейнеры</td><td>приложения</td><td>Docker на VM</td><td><a href="../study/devops-docker.html">Docker</a></td></tr>
+<tr><td>VPN</td><td>доступ извне</td><td>LXC с WireGuard</td><td><a href="vpn.html">VPN</a></td></tr>
+<tr><td>Мониторинг</td><td>метрики и алерты</td><td>LXC с Prometheus+Grafana</td><td><a href="monitoring.html">Мониторинг</a></td></tr>
+</tbody>
+</table>
+<h2>Системные требования</h2>
+<ul>
+<li><strong>CPU:</strong> 4 ядра минимум, 8 — комфортно. VT-x/AMD-V обязателен.</li>
+<li><strong>RAM:</strong> 16 ГБ для начала, 32 ГБ если держишь несколько VM.</li>
+<li><strong>Диск:</strong> SSD под систему и VM, HDD под бэкапы и медиа.</li>
+<li><strong>Сеть:</strong> гигабит, статический IP или резервация на роутере.</li>
+</ul>
+<h2>Автозапуск</h2>
+<p>Порядок важен: сначала хранилище и сеть, потом сервисы.</p>
+<pre><code># Proxmox: VM/CT стартуют при загрузке
+# Datacenter → VM → Options → Start at boot
+# On boot order: 1, 2, 3
+
+# внутри LXC — systemd
+sudo systemctl enable --now nginx
+sudo systemctl enable --now wg-quick@wg0</code></pre>
+<p>Для compose-стека:</p>
+<pre><code># /etc/systemd/system/app.service
+[Unit]
+Description=app compose stack
+After=network-online.target docker.service
+Requires=docker.service
+
+[Service]
+WorkingDirectory=/srv/app
+ExecStart=/usr/bin/docker compose up
+ExecStop=/usr/bin/docker compose down
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+<h2>Разделение ролей</h2>
+<p>Одна роль — один LXC/VM. Падает nginx — Docker-стек продолжает работать. Обновляешь Prometheus — не трогаешь VPN. Это дороже по RAM, но дешевле по нервам.</p>
+<div class="callout callout-note">
+<div class="callout-t">Именование</div>
+<div class="callout-body"><p>Держи понятные имена: <code>ct-nginx</code>, <code>ct-dns</code>, <code>vm-docker</code>. Через год ты не вспомнишь, что такое <code>test2</code>.</p></div>
+</div>
+<div class="callout callout-warning">
+<div class="callout-t">Не выставляй сервисы в интернет</div>
+<div class="callout-body"><p>Наружу — только VPN-порт. Всё остальное доступно внутри сети через <a href="vpn.html">WireGuard</a> и <a href="nginx.html">nginx</a>.</p></div>
+</div>
+<hr>
+<p>См. также <a href="proxmox.html">Proxmox</a>, <a href="storage.html">хранилище</a>, <a href="monitoring.html">мониторинг</a>.</p></main>
 <footer><span>© 2025 Цифровая Крепость</span><span><a href="../index.html">Главная</a></span></footer>
 </div>
 <div id="wordday"><div class="wd-w" aria-live="polite"></div></div><script src="../study/data/srs.js"></script><script src="../study/data/widget.js"></script>

@@ -1,31 +1,80 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nginx — Цифровая Крепость</title><meta name="description" content="Nginx reverse proxy, TLS"><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nginx — Цифровая Крепость</title><meta name="description" content="Nginx: TLS через certbot, upstream, gzip, заголовки безопасности и redirect http→https."><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css">
 </head>
 <body>
 <div class="fnav"><nav class="frow"><a href="../index.html" style="--c:#0a5c52"><span class="td"></span>Главная</a><a href="../getting-started/index.html" style="--c:#3d5c2c"><span class="td"></span>Крепость</a><a href="../homelab/index.html" class="on" style="--c:#0a5c52"><span class="td"></span>Homelab</a><a href="../electric/index.html" style="--c:#7a2f6b"><span class="td"></span>Электрика</a><a href="../study/index.html" style="--c:#7d611b"><span class="td"></span>Обучение</a><a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav></div>
 <div class="wrap"><div class="tbar"><span><span class="dot"></span>офлайн · без трекеров · бесплатно</span><span>своими руками, с резервными копиями</span></div>
 <nav class="crumbs"><a href="../index.html">Главная</a><span class="sep">/</span><a href="index.html">Homelab</a><span class="sep">/</span><span>Nginx</span></nav>
 <h1>Nginx</h1><p class="desc">Reverse proxy, TLS, базовая настройка в homelab.</p>
-<main>
-<h2>Установка</h2>
-<pre><code>sudo apt install nginx
-sudo systemctl enable --now nginx</code></pre>
-<h2>Проверка конфигурации</h2>
+<main><p>Nginx — reverse-proxy и веб-сервер. Принимает трафик на 80/443, терминирует TLS, раздаёт статику и проксирует приложения. Здесь — то, что чаще всего нужно после базовой установки.</p>
+<h2>TLS через certbot</h2>
+<pre><code>sudo apt install certbot python3-certbot-nginx
+sudo certbot --nginx -d app.local -d www.app.local
+sudo systemctl status certbot.timer</code></pre>
+<p>Certbot сам правит конфиг, добавляет редирект и настраивает автообновление. Проверка:</p>
+<pre><code>sudo certbot renew --dry-run</code></pre>
+<h2>Redirect http → https</h2>
+<pre><code>server {
+    listen 80;
+    server_name app.local;
+    return 301 https://$host$request_uri;
+}</code></pre>
+<h2>Upstream</h2>
+<p>Проксирование на приложение, в том числе на несколько инстансов:</p>
+<pre><code>upstream app_backend {
+    server 127.0.0.1:8000;
+    server 127.0.0.1:8001;
+    keepalive 16;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name app.local;
+
+    ssl_certificate /etc/letsencrypt/live/app.local/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/app.local/privkey.pem;
+
+    location / {
+        proxy_pass http://app_backend;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}</code></pre>
+<h2>gzip</h2>
+<pre><code>gzip on;
+gzip_comp_level 5;
+gzip_min_length 1024;
+gzip_types text/plain text/css application/json application/javascript application/xml image/svg+xml;
+gzip_vary on;</code></pre>
+<h2>Заголовки безопасности</h2>
+<pre><code>add_header X-Content-Type-Options "nosniff" always;
+add_header X-Frame-Options "SAMEORIGIN" always;
+add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+add_header Content-Security-Policy "default-src 'self'" always;</code></pre>
+<h2>Проверка и reload</h2>
 <pre><code>sudo nginx -t
 sudo systemctl reload nginx</code></pre>
-<h2>Reverse proxy (базовый)</h2>
-<pre><code>server {
-  listen 80;
-  server_name app.local;
-  location / {
-    proxy_pass http://127.0.0.1:8080;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-  }
-}</code></pre>
-</main>
+<table>
+<thead><tr><th>Директива</th><th>Зачем</th></tr></thead>
+<tbody>
+<tr><td><code>return 301</code></td><td>постоянный редирект</td></tr>
+<tr><td><code>proxy_pass</code></td><td>передать запрос приложению</td></tr>
+<tr><td><code>add_header</code></td><td>заголовки ответа</td></tr>
+<tr><td><code>gzip_types</code></td><td>что сжимать</td></tr>
+<tr><td><code>ssl_certificate</code></td><td>цепочка сертификата</td></tr>
+</tbody>
+</table>
+<div class="callout callout-warning">
+<div class="callout-t">HSTS включай последним</div>
+<div class="callout-body"><p>Строгий HSTS заставляет браузер ходить только по https. Если сертификат сломается, откатиться будет тяжело. Сначала убедись, что автопродление работает.</p></div>
+</div>
+<hr>
+<p>См. также <a href="server.html">сервер как машина услуг</a>, <a href="vpn.html">VPN</a>, <a href="monitoring.html">мониторинг</a>.</p></main>
 <footer><span>© 2025 Цифровая Крепость</span><span><a href="../index.html">Главная</a></span></footer>
 </div>
 <div id="wordday"><div class="wd-w" aria-live="polite"></div></div><script src="../study/data/srs.js"></script><script src="../study/data/widget.js"></script>

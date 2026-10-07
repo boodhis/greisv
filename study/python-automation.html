@@ -1,12 +1,89 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Обучение"><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Автоматизация в Python: argparse, логирование, cron и systemd-timer с примерами."><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
 <body>
 <div class="fnav"><nav class="frow"><a href="../index.html" style="--c:#0a5c52"><span class="td"></span>Главная</a><a href="../getting-started/index.html" style="--c:#3d5c2c"><span class="td"></span>Крепость</a><a href="../homelab/index.html" style="--c:#0a5c52"><span class="td"></span>Homelab</a><a href="../electric/index.html" style="--c:#7a2f6b"><span class="td"></span>Электрика</a><a href="../study/index.html" class="on" style="--c:#7d611b"><span class="td"></span>Обучение</a><a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav></div>
 <div class="wrap"><div class="tbar"><span><span class="dot"></span>офлайн · без трекеров · бесплатно</span><span>своими руками, с резервными копиями</span></div>
 <nav class="crumbs"><a href="../index.html">Главная</a><span class="sep">/</span><a href="index.html">Обучение</a><span class="sep">/</span><span>Материал</span></nav>
-<h1>Обучение</h1><p class="desc">Страница приведена к единому стилю.</p>
-<main><p>Содержимое будет доработано при необходимости.</p></main>
+<h1>Обучение</h1><p class="desc">Автоматизация в Python: argparse, логирование, cron и systemd-timer с примерами.</p>
+<main><p>Скрипт, который запускается руками, — это хобби. Скрипт, который запускается по расписанию и пишет лог, — это автоматизация. Здесь: <code>argparse</code>, логирование, cron и systemd-timer.</p>
+<h2>argparse</h2>
+<pre><code>import argparse
+
+def main():
+    p = argparse.ArgumentParser(description="Проверка сервисов")
+    p.add_argument("--host", default="app.local")
+    p.add_argument("--timeout", type=int, default=5)
+    p.add_argument("--dry", action="store_true")
+    args = p.parse_args()
+    print(args.host, args.timeout, args.dry)
+
+if __name__ == "__main__":
+    main()</code></pre>
+<p>Запуск: <code>python check.py --host app.local --timeout 10 --dry</code>. <code>--help</code> собирается сам.</p>
+<h2>Логирование</h2>
+<pre><code>import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s",
+    filename="/var/log/checker.log",
+)
+log = logging.getLogger("checker")
+
+log.info("старт")
+log.warning("сервис %s не отвечает", "vpn")</code></pre>
+<p>Не используй <code>print</code> в продакшене: логирование даёт уровни, время и запись в файл без ручной возни.</p>
+<h2>cron</h2>
+<p>Простой способ — строка в crontab. Открой <code>crontab -e</code> и добавь:</p>
+<pre><code># каждые 5 минут
+*/5 * * * * /usr/bin/python3 /opt/checker/check.py &gt;&gt; /var/log/checker.cron.log 2&gt;&amp;1
+
+# каждый день в 03:15
+15 3 * * * /usr/bin/python3 /opt/checker/backup.py</code></pre>
+<p>Пять полей: минута, час, день, месяц, день недели. <code>2&gt;&amp;1</code> важен — иначе ошибки уйдут в никуда.</p>
+<h2>systemd-timer</h2>
+<p>Гибче cron: юнит-файл и таймер отдельно, логи идут в journald.</p>
+<pre><code># /etc/systemd/system/checker.service
+[Unit]
+Description=Service checker
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /opt/checker/check.py
+User=root
+
+# /etc/systemd/system/checker.timer
+[Unit]
+Description=Run checker every 5 min
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+Unit=checker.service
+
+[Install]
+WantedBy=timers.target</code></pre>
+<p>Активация:</p>
+<pre><code>sudo systemctl daemon-reload
+sudo systemctl enable --now checker.timer
+systemctl list-timers | grep checker
+journalctl -u checker.service -n 50</code></pre>
+<table>
+<thead><tr><th></th><th>cron</th><th>systemd-timer</th></tr></thead>
+<tbody>
+<tr><td>Порог входа</td><td>одна строка</td><td>два юнита</td></tr>
+<tr><td>Логи</td><td>в файл вручную</td><td>journald</td></tr>
+<tr><td>Зависимости</td><td>нет</td><td>After/Requires</td></tr>
+<tr><td>Пропуск при выключке</td><td>теряется</td><td><code>Persistent=true</code></td></tr>
+</tbody>
+</table>
+<div class="callout callout-warning">
+<div class="callout-t">Путь к python3</div>
+<div class="callout-body"><p>В cron и systemd нет твоего PATH. Пиши полный путь: <code>/usr/bin/python3</code>. Проверь через <code>which python3</code>.</p></div>
+</div>
+<hr>
+<p>См. также <a href="python-files.html">файлы и логи</a>, <a href="../homelab/monitoring.html">мониторинг</a>.</p></main>
 <footer><span>© 2025 Цифровая Крепость</span><span><a href="../index.html">Главная</a></span></footer>
 </div>
 <div id="wordday"><div class="wd-w" aria-live="polite"></div></div><script src="../study/data/srs.js"></script><script src="../study/data/widget.js"></script>

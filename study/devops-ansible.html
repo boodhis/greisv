@@ -1,12 +1,94 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Обучение"><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Ansible: инвентарь, playbook, модули apt/service/copy/template и первый запуск."><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
 <body>
 <div class="fnav"><nav class="frow"><a href="../index.html" style="--c:#0a5c52"><span class="td"></span>Главная</a><a href="../getting-started/index.html" style="--c:#3d5c2c"><span class="td"></span>Крепость</a><a href="../homelab/index.html" style="--c:#0a5c52"><span class="td"></span>Homelab</a><a href="../electric/index.html" style="--c:#7a2f6b"><span class="td"></span>Электрика</a><a href="../study/index.html" class="on" style="--c:#7d611b"><span class="td"></span>Обучение</a><a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav></div>
 <div class="wrap"><div class="tbar"><span><span class="dot"></span>офлайн · без трекеров · бесплатно</span><span>своими руками, с резервными копиями</span></div>
 <nav class="crumbs"><a href="../index.html">Главная</a><span class="sep">/</span><a href="index.html">Обучение</a><span class="sep">/</span><span>Материал</span></nav>
-<h1>Обучение</h1><p class="desc">Страница приведена к единому стилю.</p>
-<main><p>Содержимое будет доработано при необходимости.</p></main>
+<h1>Обучение</h1><p class="desc">Ansible: инвентарь, playbook, модули apt/service/copy/template и первый запуск.</p>
+<main><p>Ansible настраивает серверы по описанию: инвентарь, playbook, идемпотентность. Один и тот же playbook поднимает nginx на десяти машинах и не ломается при повторном запуске. Агентов ставить не надо — только SSH и Python.</p>
+<h2>Инвентарь</h2>
+<pre><code># inventory.ini
+[web]
+app.local ansible_host=192.168.0.10
+
+[db]
+db.local ansible_host=192.168.0.20
+
+[all:vars]
+ansible_user=deploy
+ansible_ssh_private_key_file=~/.ssh/id_ed25519</code></pre>
+<p>Проверка связи:</p>
+<pre><code>ansible all -i inventory.ini -m ping</code></pre>
+<h2>Playbook</h2>
+<pre><code># site.yml
+- name: базовый веб-сервер
+  hosts: web
+  become: true
+  tasks:
+    - name: обновить кэш apt
+      apt:
+        update_cache: true
+    - name: поставить nginx
+      apt:
+        name: nginx
+        state: present
+    - name: положить конфиг
+      copy:
+        src: files/nginx.conf
+        dest: /etc/nginx/nginx.conf
+        mode: "0644"
+      notify: reload nginx
+    - name: шаблон index
+      template:
+        src: templates/index.html.j2
+        dest: /var/www/html/index.html
+    - name: включить сервис
+      service:
+        name: nginx
+        state: started
+        enabled: true
+  handlers:
+    - name: reload nginx
+      service:
+        name: nginx
+        state: reloaded</code></pre>
+<h2>Модули</h2>
+<table>
+<thead><tr><th>Модуль</th><th>Для чего</th></tr></thead>
+<tbody>
+<tr><td><code>apt</code> / <code>dnf</code></td><td>пакеты</td></tr>
+<tr><td><code>service</code> / <code>systemd</code></td><td>сервисы</td></tr>
+<tr><td><code>copy</code></td><td>файл как есть</td></tr>
+<tr><td><code>template</code></td><td>файл с переменными Jinja2</td></tr>
+<tr><td><code>file</code></td><td>каталоги, права, ссылки</td></tr>
+<tr><td><code>user</code> / <code>group</code></td><td>пользователи</td></tr>
+<tr><td><code>ufw</code></td><td>фаервол</td></tr>
+</tbody>
+</table>
+<h2>Роль</h2>
+<p>Роль — папка с задачами, шаблонами, дефолтами. Раскладка:</p>
+<pre><code>roles/nginx/
+    tasks/main.yml
+    handlers/main.yml
+    templates/index.html.j2
+    files/nginx.conf
+    defaults/main.yml</code></pre>
+<p>Подключение:</p>
+<pre><code>- hosts: web
+  roles:
+    - nginx</code></pre>
+<h2>Первый запуск</h2>
+<pre><code>ansible-playbook -i inventory.ini site.yml --check
+ansible-playbook -i inventory.ini site.yml --diff
+ansible-playbook -i inventory.ini site.yml</code></pre>
+<p><code>--check</code> показывает, что изменится, не трогая систему. <code>--diff</code> печатает разницу в файлах. Первый прогон на новом хосте — всегда с ними.</p>
+<div class="callout callout-note">
+<div class="callout-t">Идемпотентность</div>
+<div class="callout-body"><p>Playbook можно запускать сколько угодно раз: если состояние уже нужное, задача ничего не делает. Не пиши <code>shell: ...</code> там, где есть модуль.</p></div>
+</div>
+<hr>
+<p>См. также <a href="devops-docker.html">Docker</a>, <a href="devops-ci.html">CI/CD</a>, <a href="../homelab/server.html">сервер как машина услуг</a>.</p></main>
 <footer><span>© 2025 Цифровая Крепость</span><span><a href="../index.html">Главная</a></span></footer>
 </div>
 <div id="wordday"><div class="wd-w" aria-live="polite"></div></div><script src="../study/data/srs.js"></script><script src="../study/data/widget.js"></script>

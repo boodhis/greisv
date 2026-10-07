@@ -1,15 +1,71 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Хранилище — Цифровая Крепость</title><meta name="description" content="Хранилище в homelab: ZFS, RAID, бэкапы"><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Хранилище — Цифровая Крепость</title><meta name="description" content="ZFS: пул, датасеты, снапшоты, скрабы, RAIDZ1/2 и бэкап по правилу 3-2-1."><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
 <body>
 <div class="fnav"><nav class="frow"><a href="../index.html" style="--c:#0a5c52"><span class="td"></span>Главная</a><a href="../getting-started/index.html" style="--c:#3d5c2c"><span class="td"></span>Крепость</a><a href="../homelab/index.html" class="on" style="--c:#0a5c52"><span class="td"></span>Homelab</a><a href="../electric/index.html" style="--c:#7a2f6b"><span class="td"></span>Электрика</a><a href="../study/index.html" style="--c:#7d611b"><span class="td"></span>Обучение</a><a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav></div>
 <div class="wrap"><div class="tbar"><span><span class="dot"></span>офлайн · без трекеров · бесплатно</span><span>своими руками, с резервными копиями</span></div>
 <nav class="crumbs"><a href="../index.html">Главная</a><span class="sep">/</span><a href="index.html">Homelab</a><span class="sep">/</span><span>Хранилище</span></nav>
 <h1>Хранилище</h1><p class="desc">ZFS, RAID, контроль целостности и бэкапы.</p>
-<main>
-<h2>Подход</h2>
-<ul><li><strong>ZFS</strong>: контроль целостности, снимки, пул</li><li><strong>RAID</strong>: отказоустойчивость vs ёмкость</li><li><strong>3-2-1</strong>: 3 копии, 2 носителя, 1 офлайн</li></ul>
-</main>
+<main><p>Хранилище — фундамент homelab: бэкапы, медиа, данные VM. Если диск умрёт без копий, всё остальное неважно. Здесь — ZFS, снапшоты, скрабы, RAIDZ и правило 3-2-1.</p>
+<h2>ZFS: пул</h2>
+<pre><code>sudo apt install zfsutils-linux
+
+# один диск
+sudo zpool create tank /dev/disk/by-id/ata-XXXX
+
+# зеркало из двух дисков
+sudo zpool create tank mirror \
+    /dev/disk/by-id/ata-AAA \
+    /dev/disk/by-id/ata-BBB</code></pre>
+<p>Используй <code>by-id</code>, а не <code>/dev/sda</code>: буквы меняются после перезагрузки.</p>
+<h2>Датасеты</h2>
+<pre><code>sudo zfs create tank/data
+sudo zfs create tank/backup
+sudo zfs set compression=lz4 tank/data
+sudo zfs set atime=off tank
+zfs list</code></pre>
+<h2>Снапшоты и скрабы</h2>
+<pre><code>sudo zfs snapshot tank/data@2026-01-01
+sudo zfs list -t snapshot
+sudo zfs rollback tank/data@2026-01-01
+sudo zfs destroy tank/data@2026-01-01
+
+# проверка целостности
+sudo zpool scrub tank
+zpool status tank</code></pre>
+<p>Скраб гоняй раз в месяц через cron или systemd-timer. Он читает все блоки и чинит повреждения по контрольным суммам.</p>
+<h2>RAIDZ</h2>
+<table>
+<thead><tr><th>Схема</th><th>Диски</th><th>Переживает</th><th>Ёмкость</th></tr></thead>
+<tbody>
+<tr><td>stripe</td><td>1+</td><td>0 отказов</td><td>100%</td></tr>
+<tr><td>mirror</td><td>2+</td><td>1</td><td>50%</td></tr>
+<tr><td>RAIDZ1</td><td>3+</td><td>1</td><td>(n-1)</td></tr>
+<tr><td>RAIDZ2</td><td>4+</td><td>2</td><td>(n-2)</td></tr>
+<tr><td>RAIDZ3</td><td>5+</td><td>3</td><td>(n-3)</td></tr>
+</tbody>
+</table>
+<p>Для 4+ дисков бери RAIDZ2: пока идёт rebuild, второй диск тоже может умереть. Для двух дисков — зеркало.</p>
+<h2>3-2-1</h2>
+<ul>
+<li><strong>3</strong> копии данных.</li>
+<li><strong>2</strong> разных носителя.</li>
+<li><strong>1</strong> копия вне дома.</li>
+</ul>
+<p>RAID — это не бэкап. Он спасает от смерти диска, но не от <code>rm -rf</code>, шифровальщика и пожара.</p>
+<h2>Бэкап на внешний диск</h2>
+<pre><code>sudo zfs snapshot tank/data@backup
+sudo zfs send tank/data@backup | sudo zfs receive backup/data
+
+# инкрементально
+sudo zfs send -i tank/data@backup tank/data@now | sudo zfs receive backup/data</code></pre>
+<p>Внешний диск держи выключенным между бэкапами — так его не заденет шифровальщик.</p>
+<div class="callout callout-warning">
+<div class="callout-t">Проверяй восстановление</div>
+<div class="callout-body"><p>Бэкап, который никогда не разворачивали, — не бэкап. Раз в квартал восстанавливай файл из копии и убеждайся, что он читается.</p></div>
+</div>
+<hr>
+<p>См. также <a href="proxmox.html">Proxmox</a>, <a href="server.html">сервер как машина услуг</a>, <a href="monitoring.html">мониторинг</a>.</p></main>
 <footer><span>© 2025 Цифровая Крепость</span><span><a href="../index.html">Главная</a></span></footer>
 </div>
 <div id="wordday"><div class="wd-w" aria-live="polite"></div></div><script src="../study/data/srs.js"></script><script src="../study/data/widget.js"></script>

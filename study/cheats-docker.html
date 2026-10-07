@@ -1,12 +1,100 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Обучение"><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Шпаргалка Docker: build, run, exec, logs, compose, чистка и лимиты памяти."><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
 <body>
 <div class="fnav"><nav class="frow"><a href="../index.html" style="--c:#0a5c52"><span class="td"></span>Главная</a><a href="../getting-started/index.html" style="--c:#3d5c2c"><span class="td"></span>Крепость</a><a href="../homelab/index.html" style="--c:#0a5c52"><span class="td"></span>Homelab</a><a href="../electric/index.html" style="--c:#7a2f6b"><span class="td"></span>Электрика</a><a href="../study/index.html" class="on" style="--c:#7d611b"><span class="td"></span>Обучение</a><a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav></div>
 <div class="wrap"><div class="tbar"><span><span class="dot"></span>офлайн · без трекеров · бесплатно</span><span>своими руками, с резервными копиями</span></div>
 <nav class="crumbs"><a href="../index.html">Главная</a><span class="sep">/</span><a href="index.html">Обучение</a><span class="sep">/</span><span>Материал</span></nav>
-<h1>Обучение</h1><p class="desc">Страница приведена к единому стилю.</p>
-<main><p>Содержимое будет доработано при необходимости.</p></main>
+<h1>Обучение</h1><p class="desc">Шпаргалка Docker: build, run, exec, logs, compose, чистка и лимиты памяти.</p>
+<main><p>Шпаргалка Docker: образы, контейнеры, compose, чистка. Всё, что нужно в терминале.</p>
+<h2>Образы</h2>
+<table>
+<thead><tr><th>Команда</th><th>Что делает</th></tr></thead>
+<tbody>
+<tr><td><code>docker pull nginx:alpine</code></td><td>скачать образ</td></tr>
+<tr><td><code>docker images</code></td><td>список</td></tr>
+<tr><td><code>docker build -t app:0.1 .</code></td><td>собрать</td></tr>
+<tr><td><code>docker image rm app:0.1</code></td><td>удалить</td></tr>
+<tr><td><code>docker tag app:0.1 registry/app:0.1</code></td><td>тег для registry</td></tr>
+<tr><td><code>docker push registry/app:0.1</code></td><td>запушить</td></tr>
+<tr><td><code>docker history app:0.1</code></td><td>слои образа</td></tr>
+</tbody>
+</table>
+<h2>Контейнеры</h2>
+<table>
+<thead><tr><th>Команда</th><th>Что делает</th></tr></thead>
+<tbody>
+<tr><td><code>docker run -d --name web -p 8080:80 nginx</code></td><td>запустить</td></tr>
+<tr><td><code>docker ps</code></td><td>запущенные</td></tr>
+<tr><td><code>docker ps -a</code></td><td>включая остановленные</td></tr>
+<tr><td><code>docker stop web</code></td><td>остановить</td></tr>
+<tr><td><code>docker start web</code></td><td>запустить снова</td></tr>
+<tr><td><code>docker rm web</code></td><td>удалить</td></tr>
+<tr><td><code>docker rm -f web</code></td><td>убить и удалить</td></tr>
+</tbody>
+</table>
+<h2>Отладка</h2>
+<table>
+<thead><tr><th>Команда</th><th>Что делает</th></tr></thead>
+<tbody>
+<tr><td><code>docker logs -f web</code></td><td>логи в реальном времени</td></tr>
+<tr><td><code>docker logs --tail 100 web</code></td><td>последние 100 строк</td></tr>
+<tr><td><code>docker exec -it web sh</code></td><td>шелл внутри</td></tr>
+<tr><td><code>docker exec web cat /etc/hosts</code></td><td>одна команда</td></tr>
+<tr><td><code>docker inspect web</code></td><td>JSON с настройками</td></tr>
+<tr><td><code>docker stats</code></td><td>CPU/RAM в реальном времени</td></tr>
+<tr><td><code>docker top web</code></td><td>процессы контейнера</td></tr>
+<tr><td><code>docker port web</code></td><td>проброс портов</td></tr>
+</tbody>
+</table>
+<h2>Volumes и сеть</h2>
+<table>
+<thead><tr><th>Команда</th><th>Что делает</th></tr></thead>
+<tbody>
+<tr><td><code>docker volume ls</code></td><td>тома</td></tr>
+<tr><td><code>docker volume create data</code></td><td>создать</td></tr>
+<tr><td><code>docker volume rm data</code></td><td>удалить</td></tr>
+<tr><td><code>docker network ls</code></td><td>сети</td></tr>
+<tr><td><code>docker network create appnet</code></td><td>создать</td></tr>
+<tr><td><code>docker network inspect appnet</code></td><td>кто подключён</td></tr>
+</tbody>
+</table>
+<h2>Ограничения памяти и CPU</h2>
+<pre><code>docker run -d --name app \
+    --memory 512m --memory-swap 512m \
+    --cpus 1.5 \
+    --restart unless-stopped \
+    app:0.1</code></pre>
+<h2>Compose</h2>
+<table>
+<thead><tr><th>Команда</th><th>Что делает</th></tr></thead>
+<tbody>
+<tr><td><code>docker compose up -d</code></td><td>поднять в фоне</td></tr>
+<tr><td><code>docker compose up -d --build</code></td><td>пересобрать и поднять</td></tr>
+<tr><td><code>docker compose ps</code></td><td>статус</td></tr>
+<tr><td><code>docker compose logs -f web</code></td><td>логи сервиса</td></tr>
+<tr><td><code>docker compose exec web sh</code></td><td>зайти внутрь</td></tr>
+<tr><td><code>docker compose down</code></td><td>остановить и удалить</td></tr>
+<tr><td><code>docker compose pull</code></td><td>обновить образы</td></tr>
+</tbody>
+</table>
+<h2>Чистка</h2>
+<table>
+<thead><tr><th>Команда</th><th>Что делает</th></tr></thead>
+<tbody>
+<tr><td><code>docker system df</code></td><td>сколько места занимает</td></tr>
+<tr><td><code>docker system prune</code></td><td>удалить остановленные, сети, кэш</td></tr>
+<tr><td><code>docker system prune -a</code></td><td>плюс неиспользуемые образы</td></tr>
+<tr><td><code>docker image prune -a</code></td><td>только образы</td></tr>
+<tr><td><code>docker volume prune</code></td><td>неиспользуемые тома</td></tr>
+</tbody>
+</table>
+<div class="callout callout-warning">
+<div class="callout-t">prune -a заденет лишнее</div>
+<div class="callout-body"><p><code>docker system prune -a</code> удалит все образы, которые сейчас не используются контейнерами. Не запускай на прод-хосте без понимания последствий.</p></div>
+</div>
+<hr>
+<p>См. также <a href="devops-docker.html">Docker: разбор</a>, <a href="cheats-bash.html">шпаргалку Bash</a>.</p></main>
 <footer><span>© 2025 Цифровая Крепость</span><span><a href="../index.html">Главная</a></span></footer>
 </div>
 <div id="wordday"><div class="wd-w" aria-live="polite"></div></div><script src="../study/data/srs.js"></script><script src="../study/data/widget.js"></script>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Мониторинг — Цифровая Крепость</title>
-<meta name="description" content="Мониторинг homelab: ресурсы, сеть, логи, процессы">
+<meta name="description" content="Prometheus, node_exporter и Grafana: установка, scrape_config, дашборд и алерты.">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="manifest" href="../manifest.webmanifest">
 <meta name="theme-color" content="#f4f1e8">
@@ -37,30 +37,63 @@
 <h1>Мониторинг</h1>
 <p class="desc">Быстрая проверка состояния сервера: CPU, ОЗУ, диски, сеть, логи.</p>
 
-<main>
-<h2>Системные ресурсы</h2>
-<pre><code>htop
-free -h
-uptime</code></pre>
+<main><p>Мониторинг отвечает на вопросы «что сломалось», «когда» и «почему». Prometheus собирает метрики, node_exporter отдаёт их с сервера, Grafana рисует графики. Всё локально, без облака.</p>
+<h2>Установка</h2>
+<p>Prometheus и node_exporter ставятся из бинарников или пакетов. Пример на Debian:</p>
+<pre><code>sudo apt install prometheus prometheus-node-exporter
+sudo systemctl enable --now prometheus prometheus-node-exporter</code></pre>
+<p>Проверка: <code>http://192.168.0.x:9090</code> — веб-интерфейс Prometheus, <code>http://192.168.0.x:9100/metrics</code> — метрики узла.</p>
+<h2>scrape_config</h2>
+<pre><code># /etc/prometheus/prometheus.yml
+global:
+  scrape_interval: 15s
 
-<h2>Диски</h2>
-<pre><code>df -hT
-lsblk
-du -sh /* 2>/dev/null | sort -h</code></pre>
+scrape_configs:
+  - job_name: node
+    static_configs:
+      - targets: ["localhost:9100"]
+  - job_name: proxmox
+    static_configs:
+      - targets: ["192.168.0.10:9100"]</code></pre>
+<pre><code>sudo systemctl reload prometheus</code></pre>
+<p>В <code>Status → Targets</code> должно быть <code>UP</code>. Если <code>DOWN</code> — проверь фаервол и порт.</p>
+<h2>Grafana</h2>
+<pre><code>sudo apt install grafana
+sudo systemctl enable --now grafana-server</code></pre>
+<p>Открой <code>http://192.168.0.x:3000</code>, смени пароль admin. Добавь datasource: <code>Configuration → Data Sources → Prometheus</code>, URL <code>http://localhost:9090</code>.</p>
+<h2>Первый дашборд</h2>
+<p>Импортируй готовый дашборд node_exporter (ID 1860) или собери свой. Полезные запросы:</p>
+<pre><code># загрузка CPU
+100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
 
-<h2>Сеть</h2>
-<pre><code>ip addr show
-ss -tulnp
-ping -c 4 1.1.1.1</code></pre>
+# свободная память, ГБ
+node_memory_MemAvailable_bytes / 1024 / 1024 / 1024
 
-<h2>Логи</h2>
-<pre><code>journalctl -p err -b --since "1h ago"
-journalctl -u &lt;service&gt;.service -n 20</code></pre>
-
-<h2>Контейнеры</h2>
-<pre><code>docker ps
-docker stats --no-stream</code></pre>
-</main>
+# место на корне, ГБ
+node_filesystem_avail_bytes{mountpoint="/"} / 1024 / 1024 / 1024</code></pre>
+<h2>Алерты</h2>
+<p>В Prometheus — правило, в Alertmanager — маршрут. Минимальный набор:</p>
+<ul>
+<li>диск заполнен &gt; 85%;</li>
+<li>сервис недоступен &gt; 2 минут;</li>
+<li>нагрузка CPU &gt; 90% пять минут подряд.</li>
+</ul>
+<h2>Альтернативы</h2>
+<table>
+<thead><tr><th></th><th>Prometheus + Grafana</th><th>Netdata</th></tr></thead>
+<tbody>
+<tr><td>Установка</td><td>несколько компонентов</td><td>одна команда</td></tr>
+<tr><td>Гибкость</td><td>высокая, свои запросы</td><td>готовые графики</td></tr>
+<tr><td>Хранение</td><td>TSDB, ретеншен настраивается</td><td>своё, короче</td></tr>
+<tr><td>Когда брать</td><td>несколько узлов, алерты</td><td>быстро посмотреть один сервер</td></tr>
+</tbody>
+</table>
+<div class="callout callout-note">
+<div class="callout-t">Мониторинг без алертов бесполезен</div>
+<div class="callout-body"><p>График, на который никто не смотрит, ничего не ловит. Настрой хотя бы уведомление в мессенджер на падение узла.</p></div>
+</div>
+<hr>
+<p>См. также <a href="server.html">сервер как машина услуг</a>, <a href="storage.html">хранилище</a>, <a href="proxmox.html">Proxmox</a>.</p></main>
 
 <footer>
   <span>© 2025 Цифровая Крепость</span>

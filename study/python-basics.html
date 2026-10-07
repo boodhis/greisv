@@ -1,12 +1,64 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Обучение"><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Переменные, типы, условия и циклы Python — база с примерами и таблицей типов."><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
 <body>
 <div class="fnav"><nav class="frow"><a href="../index.html" style="--c:#0a5c52"><span class="td"></span>Главная</a><a href="../getting-started/index.html" style="--c:#3d5c2c"><span class="td"></span>Крепость</a><a href="../homelab/index.html" style="--c:#0a5c52"><span class="td"></span>Homelab</a><a href="../electric/index.html" style="--c:#7a2f6b"><span class="td"></span>Электрика</a><a href="../study/index.html" class="on" style="--c:#7d611b"><span class="td"></span>Обучение</a><a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav></div>
 <div class="wrap"><div class="tbar"><span><span class="dot"></span>офлайн · без трекеров · бесплатно</span><span>своими руками, с резервными копиями</span></div>
 <nav class="crumbs"><a href="../index.html">Главная</a><span class="sep">/</span><a href="index.html">Обучение</a><span class="sep">/</span><span>Материал</span></nav>
-<h1>Обучение</h1><p class="desc">Страница приведена к единому стилю.</p>
-<main><p>Содержимое будет доработано при необходимости.</p></main>
+<h1>Обучение</h1><p class="desc">Переменные, типы, условия и циклы Python — база с примерами и таблицей типов.</p>
+<main><p>Python — язык, с которого проще всего начать автоматизацию: читаемый синтаксис, огромная стандартная библиотека, работает на любом сервере. Здесь — база, без которой не двинуться дальше: переменные, типы, ветвления, циклы.</p>
+<h2>Переменные и типы</h2>
+<p>Переменная — имя, привязанное к объекту. Тип определяется значением, объявлять его не нужно.</p>
+<pre><code>host = "app.local"          # str
+port = 8080                 # int
+ratio = 0.75                # float
+enabled = True              # bool
+tags = ["web", "prod"]      # list
+cfg = {"port": 8080}        # dict
+pair = (1, 2)               # tuple
+uniq = {1, 2, 3}            # set
+nothing = None              # NoneType</code></pre>
+<table>
+<thead><tr><th>Тип</th><th>Пример</th><th>Когда брать</th></tr></thead>
+<tbody>
+<tr><td><code>str</code></td><td><code>"nginx"</code></td><td>текст, имена, пути</td></tr>
+<tr><td><code>int</code></td><td><code>22</code></td><td>порты, счётчики</td></tr>
+<tr><td><code>float</code></td><td><code>1.5</code></td><td>метрики, доли</td></tr>
+<tr><td><code>bool</code></td><td><code>True</code></td><td>флаги, проверки</td></tr>
+<tr><td><code>list</code></td><td><code>[1, 2]</code></td><td>упорядоченный набор, меняется</td></tr>
+<tr><td><code>tuple</code></td><td><code>(1, 2)</code></td><td>фиксированная пара</td></tr>
+<tr><td><code>dict</code></td><td><code>{"a": 1}</code></td><td>ключ → значение</td></tr>
+<tr><td><code>set</code></td><td><code>{1, 2}</code></td><td>уникальные элементы</td></tr>
+</tbody>
+</table>
+<h2>Условия</h2>
+<p>Отступы в Python — часть синтаксиса. Тело блока отделяется четырьмя пробелами.</p>
+<pre><code>port = 8080
+if port &lt; 1024:
+    print("привилегированный порт")
+elif port == 8080:
+    print("типовой веб-порт")
+else:
+    print("нестандартный порт")</code></pre>
+<p>Пустое значение, ноль и пустая строка считаются ложью: <code>if not tags: ...</code> сработает на пустом списке.</p>
+<h2>Циклы</h2>
+<pre><code>services = ["nginx", "docker", "sshd"]
+for name in services:
+    print(f"проверяю {name}")
+
+for i in range(3):
+    print(i)  # 0 1 2
+
+n = 0
+while n &lt; 3:
+    n += 1</code></pre>
+<p>Для словаря удобно идти по парам: <code>for k, v in cfg.items(): ...</code>. Для списка с индексом — <code>enumerate(services)</code>.</p>
+<div class="callout callout-note">
+<div class="callout-t">Проверка типов</div>
+<div class="callout-body"><p><code>type(x)</code> и <code>isinstance(x, int)</code> — первый для отладки, второй для условий. В продакшене лучше <code>isinstance</code>: он учитывает наследование.</p></div>
+</div>
+<hr>
+<p>Дальше — <a href="python-functions.html">функции и модули</a>, потом <a href="python-files.html">работа с файлами</a> и <a href="python-automation.html">скрипты по расписанию</a>.</p></main>
 <footer><span>© 2025 Цифровая Крепость</span><span><a href="../index.html">Главная</a></span></footer>
 </div>
 <div id="wordday"><div class="wd-w" aria-live="polite"></div></div><script src="../study/data/srs.js"></script><script src="../study/data/widget.js"></script>

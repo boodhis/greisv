@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VPN — Цифровая Крепость</title>
-<meta name="description" content="VPN в homelab: WireGuard, Tailscale">
+<meta name="description" content="WireGuard: ключи, конфиги сервера и клиента, systemd, ufw и сравнение с Tailscale.">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="manifest" href="../manifest.webmanifest">
 <meta name="theme-color" content="#f4f1e8">
@@ -24,10 +24,66 @@
 <nav class="crumbs" aria-label="Хлебные крошки"><a href="../index.html">Главная</a><span class="sep">/</span><a href="index.html">Homelab</a><span class="sep">/</span><span>VPN</span></nav>
 <h1>VPN</h1>
 <p class="desc">WireGuard, Tailscale — настройка безопасного доступа.</p>
-<main>
-<h2>Обзор</h2>
-<p>Базовые заметки по настройке VPN для доступа к homelab из внешней сети.</p>
-</main>
+<main><p>WireGuard — современный VPN: быстрый, простой конфиг, встроен в ядро Linux. Нужен, чтобы попадать в домашнюю сеть извне и не выставлять сервисы в интернет. Здесь — установка, ключи, конфиги, systemd, ufw.</p>
+<h2>Установка</h2>
+<pre><code>sudo apt install wireguard</code></pre>
+<h2>Генерация ключей</h2>
+<pre><code>umask 077
+wg genkey | tee server.key | wg pubkey &gt; server.pub
+wg genkey | tee client1.key | wg pubkey &gt; client1.pub</code></pre>
+<p>Приватные ключи — только на своей машине, права <code>600</code>. Публичные можно передавать.</p>
+<h2>Конфиг сервера</h2>
+<pre><code># /etc/wireguard/wg0.conf
+[Interface]
+Address = 10.10.0.1/24
+ListenPort = 51820
+PrivateKey = &lt;server.key&gt;
+
+[Peer]
+PublicKey = &lt;client1.pub&gt;
+AllowedIPs = 10.10.0.2/32</code></pre>
+<h2>Конфиг клиента</h2>
+<pre><code>[Interface]
+Address = 10.10.0.2/32
+PrivateKey = &lt;client1.key&gt;
+DNS = 10.10.0.1
+
+[Peer]
+PublicKey = &lt;server.pub&gt;
+Endpoint = vpn.example.local:51820
+AllowedIPs = 10.10.0.0/24, 192.168.0.0/24
+PersistentKeepalive = 25</code></pre>
+<p><code>AllowedIPs</code> решает, какой трафик идёт в туннель. Только внутренние сети — VPN для доступа. <code>0.0.0.0/0</code> — весь трафик через сервер.</p>
+<h2>Запуск через systemd</h2>
+<pre><code>sudo systemctl enable --now wg-quick@wg0
+sudo systemctl status wg-quick@wg0
+sudo wg show</code></pre>
+<h2>ufw</h2>
+<pre><code>sudo ufw allow 51820/udp
+sudo ufw allow in on wg0
+sudo ufw enable</code></pre>
+<p>Форвардинг для выхода в интернет:</p>
+<pre><code># /etc/sysctl.d/99-wg.conf
+net.ipv4.ip_forward=1
+
+sudo sysctl --system
+sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</code></pre>
+<h2>Когда Tailscale</h2>
+<table>
+<thead><tr><th></th><th>WireGuard</th><th>Tailscale</th></tr></thead>
+<tbody>
+<tr><td>Настройка</td><td>ключи и конфиги вручную</td><td>логин и всё</td></tr>
+<tr><td>NAT traversal</td><td>нужен проброс порта</td><td>сам пробивается</td></tr>
+<tr><td>Контроль</td><td>полный, всё у тебя</td><td>координатор у вендора</td></tr>
+<tr><td>Сеть</td><td>своя, на любом железе</td><td>зависит от аккаунта</td></tr>
+</tbody>
+</table>
+<div class="callout callout-note">
+<div class="callout-t">Правило выбора</div>
+<div class="callout-body"><p>Есть статический IP и желание контролировать — WireGuard. Нет IP, несколько устройств за NAT, нужен zero-config — Tailscale.</p></div>
+</div>
+<hr>
+<p>См. также <a href="nginx.html">Nginx</a>, <a href="server.html">сервер как машина услуг</a>, <a href="monitoring.html">мониторинг</a>.</p></main>
 <footer><span>© 2025 Цифровая Крепость</span><span><a href="../index.html">Главная</a></span></footer>
 </div>
 <div id="wordday"><div class="wd-w" aria-live="polite"></div></div>

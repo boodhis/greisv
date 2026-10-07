@@ -1,12 +1,81 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Обучение"><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Обучение — Цифровая Крепость</title><meta name="description" content="Docker: образы, контейнеры, Dockerfile и docker-compose — типичный стек на примерах."><link rel="icon" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><meta name="theme-color" content="#f4f1e8"><link rel="stylesheet" href="../style.css"></head>
 <body>
 <div class="fnav"><nav class="frow"><a href="../index.html" style="--c:#0a5c52"><span class="td"></span>Главная</a><a href="../getting-started/index.html" style="--c:#3d5c2c"><span class="td"></span>Крепость</a><a href="../homelab/index.html" style="--c:#0a5c52"><span class="td"></span>Homelab</a><a href="../electric/index.html" style="--c:#7a2f6b"><span class="td"></span>Электрика</a><a href="../study/index.html" class="on" style="--c:#7d611b"><span class="td"></span>Обучение</a><a href="../articles/index.html" style="--c:#6b6659"><span class="td"></span>Заметки</a></nav></div>
 <div class="wrap"><div class="tbar"><span><span class="dot"></span>офлайн · без трекеров · бесплатно</span><span>своими руками, с резервными копиями</span></div>
 <nav class="crumbs"><a href="../index.html">Главная</a><span class="sep">/</span><a href="index.html">Обучение</a><span class="sep">/</span><span>Материал</span></nav>
-<h1>Обучение</h1><p class="desc">Страница приведена к единому стилю.</p>
-<main><p>Содержимое будет доработано при необходимости.</p></main>
+<h1>Обучение</h1><p class="desc">Docker: образы, контейнеры, Dockerfile и docker-compose — типичный стек.</p>
+<main><p>Docker упаковывает приложение со всеми зависимостями в образ. Один и тот же контейнер работает на ноутбуке и на сервере — исчезает «у меня запускается». Здесь: образы, контейнеры, Dockerfile, compose.</p>
+<h2>Образы и контейнеры</h2>
+<pre><code>docker pull nginx:alpine
+docker images
+docker run -d --name web -p 8080:80 nginx:alpine
+docker ps
+docker logs -f web
+docker exec -it web sh
+docker stop web &amp;&amp; docker rm web</code></pre>
+<p>Образ — шаблон, контейнер — запущенный экземпляр. Данные внутри контейнера живут до удаления — для сохранения нужен volume.</p>
+<h2>Dockerfile</h2>
+<pre><code>FROM python:3.12-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+
+EXPOSE 8000
+CMD ["python", "-m", "app"]</code></pre>
+<p>Собирай и запускай:</p>
+<pre><code>docker build -t app:0.1 .
+docker run -d --name app -p 8000:8000 app:0.1</code></pre>
+<p>Порядок слоёв важен: <code>COPY requirements.txt</code> до <code>COPY . .</code>, тогда кэш зависимостей не сбрасывается на каждую правку кода.</p>
+<h2>Volumes и сеть</h2>
+<pre><code>docker run -d \
+    -v /srv/app/data:/data \
+    --network appnet \
+    --name app app:0.1</code></pre>
+<h2>docker-compose</h2>
+<pre><code>services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DB_HOST: db
+    depends_on:
+      - db
+    volumes:
+      - ./data:/data
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:</code></pre>
+<pre><code>docker compose up -d
+docker compose logs -f
+docker compose down</code></pre>
+<h2>Типичный стек</h2>
+<table>
+<thead><tr><th>Сервис</th><th>Образ</th><th>Порт</th></tr></thead>
+<tbody>
+<tr><td>Reverse-proxy</td><td><code>nginx:alpine</code></td><td>80/443</td></tr>
+<tr><td>Приложение</td><td>свой Dockerfile</td><td>8000</td></tr>
+<tr><td>БД</td><td><code>postgres:16-alpine</code></td><td>5432 (внутр.)</td></tr>
+<tr><td>Кэш</td><td><code>redis:7-alpine</code></td><td>6379 (внутр.)</td></tr>
+<tr><td>Мониторинг</td><td><code>grafana/grafana</code></td><td>3000</td></tr>
+</tbody>
+</table>
+<div class="callout callout-warning">
+<div class="callout-t">Не запускай всё от root на хосте</div>
+<div class="callout-body"><p>Создай пользователя и добавь в группу <code>docker</code>. Но помни: членство в группе <code>docker</code> = root на хосте. На критичных машинах используй rootless-режим.</p></div>
+</div>
+<hr>
+<p>Дальше — <a href="devops-ci.html">CI/CD</a>, <a href="devops-ansible.html">Ansible</a>, шпаргалка <a href="cheats-docker.html">Docker</a>. Хостинг — <a href="../homelab/server.html">сервер как машина услуг</a>.</p></main>
 <footer><span>© 2025 Цифровая Крепость</span><span><a href="../index.html">Главная</a></span></footer>
 </div>
 <div id="wordday"><div class="wd-w" aria-live="polite"></div></div><script src="../study/data/srs.js"></script><script src="../study/data/widget.js"></script>
