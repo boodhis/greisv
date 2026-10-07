@@ -139,3 +139,33 @@ footer a{color:var(--dim)}
   *{transition:none!important;animation:none!important}
   html{scroll-behavior:auto}
 }
+
+/* =========================================================
+   ФАКТУРА. «Тёплая бумага»: микрозернистость фона (SVG-шум)
+   ========================================================= */
+body{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='paper-noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper-noise)'/%3E%3C/svg%3E");
+}
+
+/* =========================================================
+   ФАКТУРА. Скобы-бойницы по углам блоков кода
+   ========================================================= */
+pre{position:relative}
+pre::before,pre::after{content:"";position:absolute;width:12px;height:12px;pointer-events:none}
+pre::before{top:4px;left:4px;border-top:3px solid var(--accent);border-left:3px solid var(--accent)}
+pre::after{bottom:4px;right:4px;border-bottom:3px solid var(--accent);border-right:3px solid var(--accent)}
+
+/* =========================================================
+   ФАКТУРА. Квадратные маркеры-камни в списках контента
+   ========================================================= */
+main ul{list-style:none;padding-left:1.25rem}
+main ul li{position:relative;margin-bottom:.5rem}
+main ul li::before{content:"";position:absolute;left:-1.25rem;top:.55em;width:6px;height:6px;background:var(--accent);border-radius:var(--radius);box-shadow:1px 1px 0 var(--line-2)}
+
+/* =========================================================
+   ФАКТУРА. Печать Крепости (сухой штамп в футере)
+   ========================================================= */
+.fortress-seal{flex:1 1 100%;display:block;text-align:center;margin-top:12px}
+.fortress-seal svg{width:60px;height:60px;opacity:.22;color:var(--dim);mix-blend-mode:multiply}
+.fortress-seal:hover svg{opacity:.4}
+@media (prefers-reduced-motion:reduce){.fortress-seal svg{transition:none}}
