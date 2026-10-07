@@ -57,9 +57,6 @@ main{flex:1;max-width:68ch;margin:0 auto;padding:clamp(24px,5vw,48px);width:100%
 .fnav .td{width:8px;height:8px;background:var(--c);display:inline-block;border-radius:50%}
 .layout main{padding-top:calc(var(--fnav-h) + 12px)}
 
-.tbar{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 16px;color:var(--dim);font-size:12px;letter-spacing:.04em;border-bottom:1px dashed var(--line);padding-bottom:8px}
-.tbar .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);vertical-align:middle;margin-right:6px}
-
 header.hero{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:36px;align-items:end;margin:36px 0 0}
 .brand{font-size:44px;font-weight:700;line-height:1.1;color:var(--accent);letter-spacing:.5px}
 .lede{margin:14px 0 0;max-width:620px;font-size:18px;color:var(--dim)}
